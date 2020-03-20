@@ -21,5 +21,8 @@ class Formula extends CI_Controller{
         $this->load->view("req_include/script");
         $this->load->view("plugin/datatable/datatable-js");
     }
+    public function register(){
+        
+    }
 }
 ?>

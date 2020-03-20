@@ -13,3 +13,9 @@ create table mstr_formula_attr(
     formula_attr_last_modified datetime,
     id_last_modified int
 );
+create table tbl_formula_combination(
+	id_submit_formula int primary key auto_increment,
+    id_mstr_formula int,
+    id_formula_attr int,
+    combination_formula varchar(100)
+);

@@ -61,8 +61,15 @@
         <div>
             <div>
                 <ul class="site-menu" data-plugin="menu">
+                    <li class="site-menu-category"></li>
+                    <li class="site-menu-item">
+                        <a class="animsition-link" href="<?php echo base_url();?>welcome/dashboard">
+                            <i class="site-menu-icon md-view-dashboard" aria-hidden="true"></i>
+                            <span class="site-menu-title">Dashboard</span>
+                        </a>
+                    </li>
                     <li class="site-menu-category">Master Data</li>
-                    <li class="site-menu-item active">
+                    <li class="site-menu-item">
                         <a class="animsition-link" href="<?php echo base_url();?>formula">
                             <i class="site-menu-icon md-collection-text" aria-hidden="true"></i>
                             <span class="site-menu-title">Formula</span>
@@ -70,7 +77,7 @@
                     </li>
                     <li class="site-menu-item">
                         <a class="animsition-link" href="<?php echo base_url();?>formula">
-                            <i class="site-menu-icon md-view-dashboard" aria-hidden="true"></i>
+                            <i class="site-menu-icon md-receipt" aria-hidden="true"></i>
                             <span class="site-menu-title">Formula Attributes</span>
                         </a>
                     </li>

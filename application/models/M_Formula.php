@@ -14,8 +14,7 @@ class M_Formula extends CI_Model{
                 "formula_last_modified" => date("Y-m-d H:i:s"),
                 "id_last_modified" => $id_acc
             );
-            insertRow("mstr_formula",$data);
-            return true;
+            return insertRow("mstr_formula",$data);
         }
         else{
             return false;
@@ -31,6 +30,5 @@ class M_Formula extends CI_Model{
         $result = selectRow("mstr_formula",$where,$field);
         return $result;
     }
-    
 }
 ?>
