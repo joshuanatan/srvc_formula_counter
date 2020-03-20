@@ -34,6 +34,7 @@ class M_Formula_attr extends CI_Model{
             return false;
         }
     }
+    
     public function execute(){
 
     }
@@ -75,5 +76,14 @@ class M_Formula_attr extends CI_Model{
     }
     public function remove_attr_combination(){
 
+    }
+    public function formula_attr($id_submit_formula){
+        $sql = "
+        select id_formula_attr,combination_formula,formula_attr_name 
+        from tbl_formula_combination 
+        inner join mstr_formula_attr on mstr_formula_attr.id_submit_formula_attr = tbl_formula_combination.id_formula_attr 
+        where id_mstr_formula = ? and status_formula_attr = 'ACTIVE'";
+        $result = $this->db->query($sql,$id_submit_formula);
+        return $result;
     }
 }
