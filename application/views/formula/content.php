@@ -32,7 +32,7 @@
     </table>
 </div>
 <div class = "modal fade" id = "addFormula">
-    <div class = "modal-center modal-lg">
+    <div class = "modal-dialog modal-lg">
         <div class = "modal-content">
             <div class = "modal-header">
                 <h4 class = "modal-title">Add Formula</h4>
@@ -41,11 +41,11 @@
                 <form action = "<?php echo base_url();?>formula/register" method = "POST">
                     <div class = "form-group">
                         <h5>Formula Name</h5>
-                        <input type = "text" class = "form-control" required>
+                        <input type = "text" class = "form-control" required name = "formula_name">
                     </div>
                     <div class = "form-group">
-                        <h5>Formula Desc</h5>
-                        <textarea class = "form-control" required></textarea>
+                        <h5>Formula Description</h5>
+                        <textarea class = "form-control" required name = "formula_desc"></textarea>
                     </div>
                     <div class = "form-group">
                         <h5>Attribute Table</h5>
@@ -64,8 +64,8 @@
                                 </tr>
                             </tbody>
                         </table>
-                        <button type = "button" class = "btn btn-sm btn-danger">Cancel</button>
-                        <button type = "button" class = "btn btn-sm btn-primary">Submit</button>
+                        <button type = "button" class = "btn btn-sm btn-danger" data-dismiss = "modal">Cancel</button>
+                        <button type = "submit" class = "btn btn-sm btn-primary">Submit</button>
                     </div>
                 </form>
             </div>

@@ -158,5 +158,11 @@ class Welcome extends CI_Controller{
             redirect("welcome/sign_up");
         }
     }
+    public function logout(){
+        $msg = "Session removed, please re-login";
+        $this->session->set_flashdata("msg",$msg);
+        $this->session->set_flashdata("type","success");
+        redirect("welcome");
+    }
 }
 ?>

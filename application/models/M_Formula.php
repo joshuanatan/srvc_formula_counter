@@ -3,21 +3,35 @@ defined("BASEPATH") or exit("No Direct Script Access is Allowed");
 
 class M_Formula extends CI_Model{
     public function insert($name = "",$desc = "",$id_acc = ""){
-        $check = array(
-            $name,$desc,$id_acc
+        $where = array(
+            "formula_name" => $name,
+            "id_last_modified" => $id_acc
         );
-        if(!in_array("",$check)){
-            $data = array(
-                "formula_name" => $name,
-                "formula_desc" => $desc,
-                "formula_status" => "ACTIVE",
-                "formula_last_modified" => date("Y-m-d H:i:s"),
-                "id_last_modified" => $id_acc
+        $field = array(
+            "id_submit_formula"
+        );
+        $result = selectRow("mstr_formula",$where,$field);
+        if(!$result->num_rows() > 0){
+            $check = array(
+                $name,$desc,$id_acc
             );
-            return insertRow("mstr_formula",$data);
+            if(!in_array("",$check)){
+                $data = array(
+                    "formula_name" => $name,
+                    "formula_desc" => $desc,
+                    "formula_status" => "ACTIVE",
+                    "formula_last_modified" => date("Y-m-d H:i:s"),
+                    "id_last_modified" => $id_acc
+                );
+                return insertRow("mstr_formula",$data);
+            }
+            else{
+                return false;
+            }
         }
         else{
-            return false;
+            $result = $result->result_array();
+            return $result[0]["id_submit_formula"];
         }
     }
     public function list(){
@@ -25,7 +39,7 @@ class M_Formula extends CI_Model{
             "formula_status != " => "DELETED" 
         );
         $field = array(
-            "formula_name","formula_desc"
+            "formula_name","formula_desc","formula_status","formula_last_modified"
         );
         $result = selectRow("mstr_formula",$where,$field);
         return $result;

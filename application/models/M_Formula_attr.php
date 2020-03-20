@@ -8,13 +8,27 @@ class M_Formula_attr extends CI_Model{
             $attr_name,$id_last_modified
         );
         if(!in_array("",$test)){
-            $data = array(
+            $where = array(
                 "formula_attr_name" => $attr_name,
-                "status_formula_attr" => "ACTIVE",
-                "formula_attr_last_modified" => date("Y-m-d H:i:s"),
                 "id_last_modified" => $id_last_modified
             );
-            return insertRow("mstr_formula_attr",$data);
+            $field = array(
+                "id_submit_formula_attr"
+            );
+            $result = selectRow("mstr_formula_attr",$where,$field);
+            if(!$result->num_rows() > 0){
+                $data = array(
+                    "formula_attr_name" => $attr_name,
+                    "status_formula_attr" => "ACTIVE",
+                    "formula_attr_last_modified" => date("Y-m-d H:i:s"),
+                    "id_last_modified" => $id_last_modified
+                );
+                return insertRow("mstr_formula_attr",$data);
+            }
+            else{
+                $result = $result->result_array();
+                return $result[0]["id_submit_formula_attr"];
+            }
         }
         else{
             return false;
@@ -32,12 +46,25 @@ class M_Formula_attr extends CI_Model{
             $id_formula,$id_attr,$comb_formula
         );
         if(!in_array("",$test)){
-            $data = array(
+            $where = array(
                 "id_mstr_formula" => $id_formula,
-                "id_formula_attr" => $id_attr,
-                "combination_formula" => $comb_formula
+                "id_formula_attr" => $id_attr
             );
-            return insertRow("tbl_formula_combination",$data);
+            if(isExistsInTable("tbl_formula_combination",$where)){
+                $data = array(
+                    "combination_formula" => $comb_formula
+                );
+                updateRow("tbl_formula_combination",$data,$where);
+                return true;
+            }
+            else{
+                $data = array(
+                    "id_mstr_formula" => $id_formula,
+                    "id_formula_attr" => $id_attr,
+                    "combination_formula" => $comb_formula
+                );
+                return insertRow("tbl_formula_combination",$data);
+            }
         }
         else{
             return false;

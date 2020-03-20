@@ -37,17 +37,15 @@
             <ul class="nav navbar-toolbar navbar-right navbar-toolbar-right">
                 <li class="nav-item dropdown">
                     <a class="nav-link navbar-avatar" data-toggle="dropdown" href="#" aria-expanded="false" data-animation="scale-up" role="button">
-                        <span class="avatar avatar-online">
-                            <img src="<?php echo base_url();?>assets/global/portraits/5.jpg" alt="...">
-                            <i></i>
-                        </span>
+                        
+                        <?php echo $this->session->acc_name;?>
                     </a>
                     <div class="dropdown-menu" role="menu">
                         <a class="dropdown-item" href="javascript:void(0)" role="menuitem">
                             <i class="icon md-account" aria-hidden="true"></i> Profile
                         </a>
                         <div class="dropdown-divider" role="presentation"></div>
-                        <a class="dropdown-item" href="javascript:void(0)" role="menuitem">
+                        <a class="dropdown-item" href="<?php echo base_url();?>welcome/logout" role="menuitem">
                             <i class="icon md-power" aria-hidden="true"></i> Logout
                         </a>
                     </div>
