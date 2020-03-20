@@ -1,7 +1,7 @@
 <?php
 defined("BASEPATH") or exit("No Direct Script Allowed");
 date_default_timezone_set("Asia/Jakarta");
-class Account extends CI_Model{
+class M_Account extends CI_Model{
     public function login($email,$password){
         $where = array(
             "acc_email" => $email,
