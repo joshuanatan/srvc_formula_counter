@@ -19,7 +19,7 @@
                     <a href = "#" data-toggle = "modal" data-target = "#editFormula" onclick = "load_content(<?php echo $a->id_submit_formula;?>)" class = "btn btn-primary btn-sm">
                         <i class = "md-edit"></i>
                     </a>
-                    <a href = "#" class = "btn btn-danger btn-sm">
+                    <a href = "#" data-toggle = "modal" data-target = "#deleteFormula" onclick = "load_delete_id(<?php echo $a->id_submit_formula;?>);load_delete_content(<?php echo $a->id_submit_formula;?>)" class = "btn btn-danger btn-sm">
                         <i class = "md-delete"></i>
                     </a>
                     <a href = "#" class = "btn btn-success btn-sm">
@@ -67,6 +67,41 @@
                         </table>
                         <button type = "button" class = "btn btn-sm btn-danger" data-dismiss = "modal">Cancel</button>
                         <button type = "submit" class = "btn btn-sm btn-primary">Submit</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+<div class = "modal fade" id = "deleteFormula">
+    <div class = "modal-dialog modal-lg">
+        <div class = "modal-content">
+            <div class = "modal-header">
+                <h4 class = "modal-title">Delete Formula</h4>
+            </div>
+            <div class = "modal-body">
+                <form action = "<?php echo base_url();?>formula/delete" method = "POST">
+                    <input type = "hidden" name = "id_formula" value = "" id = "id_formula_delete">
+                    <h4 align = "center">Are you sure want to delete this formula?</h4>
+                    <table class = "table table-bordered table-striped table-hover">
+                        <thead>
+                            <th style = "width:50%">Attributes</th>
+                            <th style = "width:50%">Values</th>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>Formula Name</td>
+                                <td id = "formula_name_delete"></td>
+                            </tr>
+                            <tr>
+                                <td>Formula Description</td>
+                                <td id = "formula_desc_delete"></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <div class = "row">
+                        <button type = "button" class = "btn btn-sm btn-primary col-lg-3 col-sm-12 offset-lg-3" data-dismiss = "modal">Cancel</button>
+                        <button type = "submit" class = "btn btn-sm btn-danger col-lg-3">Delete</button>
                     </div>
                 </form>
             </div>
@@ -125,8 +160,11 @@
     }
     function add_attr_row_edit(){
         var counter = $(".attr_row").length;
-        var html = '<tr class = "attr_row"><td vertical-align = "middle" colspan = 2><input checked type = "checkbox" name = "checks[]" value = '+counter+'></td><td vertical-align = "middle"><input type = "text" class = "form-control" name = "attr_name'+counter+'"></td><td vertical-align = "middle"><textarea class = "form-control" name = "rumus'+counter+'"></textarea></td></tr>';
+        var html = '<tr class = "attr_row"><td vertical-align = "middle" colspan = 2><input checked type = "checkbox" name = "check[]" value = '+counter+'></td><td vertical-align = "middle"><input type = "text" class = "form-control" name = "attr_name'+counter+'"></td><td vertical-align = "middle"><textarea class = "form-control" name = "rumus'+counter+'"></textarea></td></tr>';
         $("#add_row_container_edit").before(html);
+    }
+    function load_delete_id(id_submit_formula){
+        $("#id_formula_delete").val(id_submit_formula);
     }
 </script>
 <script>
@@ -142,9 +180,21 @@
                 
                 var html = "";
                 for(var a = 0; a<respond["attr"].length; a++){
-                    html += "<tr class = 'attr_row'><td><input type = 'hidden' name = 'id_formula_attr' value = '"+respond["attr"][a]["id_formula_attr"]+"'><input type = 'checkbox' name = 'edit[]' value = '"+a+"'></td><td><input type = 'checkbox' name = 'delete[]' value = '"+a+"'></td><td><input type = 'text' class = 'form-control' value = '"+respond["attr"][a]["attr_name"]+"' name = 'attr_name"+a+"'></td><td><textarea class = 'form-control' name = 'rumus"+a+"'>"+respond["attr"][a]["attr_formula"]+"</textarea></td></tr>";
+                    html += "<tr class = 'attr_row'><td><input type = 'hidden' name = 'id_formula_comb"+a+"' value = '"+respond["attr"][a]["id_formula_comb"]+"'><input type = 'hidden' name = 'id_formula_attr"+a+"' value = '"+respond["attr"][a]["id_formula_attr"]+"'><input type = 'checkbox' name = 'edit[]' value = '"+a+"'></td><td><input type = 'checkbox' name = 'delete[]' value = '"+a+"'></td><td><input type = 'text' class = 'form-control' value = '"+respond["attr"][a]["attr_name"]+"' name = 'attr_name"+a+"'></td><td><textarea class = 'form-control' name = 'rumus"+a+"'>"+respond["attr"][a]["attr_formula"]+"</textarea></td></tr>";
                 }
+                $(".attr_row").remove();
                 $("#add_row_container_edit").before(html);
+            }
+        });
+    }
+    function load_delete_content(id_submit_formula){
+        $.ajax({
+            url:"<?php echo base_url();?>ws/formula/get_formula/"+id_submit_formula,
+            dataType:"JSON",
+            type:"GET",
+            success:function(respond){
+                $("#formula_name_delete").html(respond["main"]["formula_name"]);
+                $("#formula_desc_delete").html(respond["main"]["formula_desc"]);
             }
         });
     }

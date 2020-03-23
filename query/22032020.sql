@@ -1,0 +1,1 @@
+alter table tbl_formula_combination change id_submit_formula id_submit_formula_comb int

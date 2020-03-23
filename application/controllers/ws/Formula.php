@@ -25,6 +25,7 @@ class Formula extends CI_Controller{
                 $row = count($result);
                 for($a = 0; $a<$row; $a++){
                     $respond["attr"][$a] = array(
+                        "id_formula_comb" => $result[$a]["id_submit_formula_comb"],
                         "id_formula_attr" => $result[$a]["id_formula_attr"],
                         "attr_name" => $result[$a]["formula_attr_name"],
                         "attr_formula" => $result[$a]["combination_formula"]

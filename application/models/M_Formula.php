@@ -54,7 +54,7 @@ class M_Formula extends CI_Model{
         $result = selectRow("mstr_formula",$where,$field);
         return $result;
     }
-    public function update($id_submit_formula,$formula_name,$formula_desc,$id_last_modified){
+    public function update($id_submit_formula = "",$formula_name = "",$formula_desc = "",$id_last_modified = ""){
         $test = array(
             $id_submit_formula,$formula_name,$formula_desc,$id_last_modified
         );
@@ -65,6 +65,26 @@ class M_Formula extends CI_Model{
             $data = array(
                 "formula_name" => $formula_name,
                 "formula_desc" => $formula_desc,
+                "formula_last_modified" => date("Y-m-d H:i:s"),
+                "id_last_modified" => $id_last_modified
+            );
+            updateRow("mstr_formula",$data,$where);
+            return true;
+        }
+        else{
+            return false;
+        }
+    }
+    public function delete($id_submit_formula = "",$id_last_modified = ""){
+        $test = array(
+            $id_submit_formula,$id_last_modified
+        );
+        if(!in_array("",$test)){
+            $where = array(
+                "id_submit_formula" => $id_submit_formula
+            );
+            $data = array(
+                "formula_status" => "DELETED" ,
                 "formula_last_modified" => date("Y-m-d H:i:s"),
                 "id_last_modified" => $id_last_modified
             );
