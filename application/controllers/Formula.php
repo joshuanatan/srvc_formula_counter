@@ -192,5 +192,74 @@ class Formula extends CI_Controller{
         }
         redirect("formula");
     }
+    public function execute(){
+        $check = $this->input->post("check");
+        $id_formula = $this->input->post("id_formula");
+        $variable = $this->input->post("variables");
+        $detail = array(
+            "formula_name" => $this->input->post("formula_name"),
+            "formula_desc" => $this->input->post("formula_desc"),
+        );
+        if($check != ""){
+            $a = 0;
+            $formula = array();
+            foreach($check as $for_var){
+                $formula[$a]["attr"] = $this->input->post("attr_name".$for_var);
+                $where = array(
+                    "formula_attr_name" => $formula[$a]["attr"]
+                );
+                $field = array(
+                    "satuan_attr"
+                );
+                $result = selectRow("mstr_formula_attr",$where,$field);
+                $result = $result->result_array();
+                $formula[$a]["satuan"] = $result[0]["satuan_attr"];
+                $formula[$a]["formula_ctrl"] = $this->input->post("rumus".$for_var);
+                $formula[$a]["formula"] = $this->input->post("rumus".$for_var);
+                $a++;
+            }
+            $variable = explode(";",$variable);
+            for($a = 0; $a<count($variable);$a++){
+                if($variable[$a] != ""){
+                    $args = explode("=",$variable[$a]);
+                    for($b = 0; $b<count($formula); $b++){
+                        $formula[$b]["formula"] = str_replace("@".$args[0],$args[1],$formula[$b]["formula"]);
+                    }
+                }
+            }
+            $regex = "^([-+]? ?(\d+|\(\g<1>\))( ?[-+*\/] ?\g<1>)?)$^";
+            for($a = 0; $a<count($formula); $a++){
+                if(preg_match($regex,$formula[$a]["formula"])){
+                    eval('$formula[$a]["answer"]= '.$formula[$a]["formula"].';');
+                    
+                }
+                else{
+                    $formula[$a]["answer"] = "Invalid Formula";
+                }
+            }
+            $data = array(
+                "formula" => $formula,
+                "detail" => $detail,
+                "variable" => $variable
+            );
+            $this->load->view("req_include/head");
+            $this->load->view("plugin/datatable/datatable-css");
+            $this->load->view("req_include/page_open");
+            $this->load->view("req_include/navbar");
+            $this->load->view("formula/page_open");
+            $this->load->view("formula/result",$data);
+            $this->load->view("formula/page_close");
+            $this->load->view("req_include/page_close");
+            $this->load->view("req_include/script");
+            $this->load->view("plugin/datatable/datatable-js");
+        }
+        else{
+            echo '<script type="text/javascript">',
+                'close();',
+                '</script>'
+            ;
+        }
+    }
 }
+
 ?>

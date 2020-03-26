@@ -9,6 +9,7 @@ create table mstr_formula(
 create table mstr_formula_attr(
 	id_submit_formula_attr int primary key auto_increment,
     formula_attr_name varchar(100),
+    satuan_attr varchar(100),
     status_formula_attr varchar(10),
     formula_attr_last_modified datetime,
     id_last_modified int
@@ -19,15 +20,6 @@ create table tbl_formula_combination(
     id_formula_attr int,
     combination_formula varchar(100)
 );
+select * from mstr_formula_attr
 
-select * from mstr_formula;
-select * from mstr_formula_attr;
-select * from tbl_formula_combination;
-
-select combination_formula,formula_attr_name 
-from tbl_formula_combination 
-inner join mstr_formula_attr on mstr_formula_attr.id_submit_formula_attr = tbl_formula_combination.id_formula_attr 
-where id_mstr_formula = '1' and status_formula_attr = 'ACTIVE'
-
-select * from tbl_formula_combination
-inner join mstr_formula_attr on mstr_formula_attr.id_submit_formula_attr = tbl_formula_combination.id_formula_attr where id_mstr_formula = 1
+update mstr_formula_attr set satuan_attr = 'KILO' where formula_attr_name = 'BATU'

@@ -22,7 +22,7 @@
                     <a href = "#" data-toggle = "modal" data-target = "#deleteFormula" onclick = "load_delete_id(<?php echo $a->id_submit_formula;?>);load_delete_content(<?php echo $a->id_submit_formula;?>)" class = "btn btn-danger btn-sm">
                         <i class = "md-delete"></i>
                     </a>
-                    <a href = "#" class = "btn btn-success btn-sm">
+                    <a href = "#" data-toggle = "modal" data-target = "#executeFormula" onclick = "load_execute_content(<?php echo $a->id_submit_formula;?>)" class = "btn btn-success btn-sm">
                         <i class = "md-assignment"></i>
                     </a>
                 </td>
@@ -151,7 +151,48 @@
         </div>
     </div>
 </div>
-
+<div class = "modal fade" id = "executeFormula">
+    <div class = "modal-dialog modal-lg">
+        <div class = "modal-content">
+            <div class = "modal-header">
+                <h4 class = "modal-title">Run Formula</h4>
+            </div>
+            <div class = "modal-body">
+                <form action = "<?php echo base_url();?>formula/execute" method = "POST" target = "_blank">
+                    <input type = "hidden" id = "formula_id_run" name = "id_formula">
+                    <div class = "form-group">
+                        <h5>Formula Name</h5>
+                        <input type = "text" class = "form-control" id = "formula_name_run" name = "formula_name" readonly>
+                        
+                    </div>
+                    <div class = "form-group">
+                        <h5>Formula Description</h5>
+                        <textarea class = "form-control" readonly id = "formula_desc_run" name = "formula_desc"></textarea>
+                    </div>
+                    <div class = "form-group">
+                        <h5>Variables</h5>
+                        <p>Put your variables with this format. variablename=5;variablename2=10 [variable_name=variable_value;]</p>
+                        <input type = "text" class = "form-control" name = "variables">
+                    </div>
+                    <div class = "form-group">
+                        <h5>Attribute Table</h5>
+                        <table class = "table table-striped table-hover table-bordered">
+                            <thead>
+                                <th style = "width:5%">#</th>
+                                <th>Attribute</th>
+                                <th>Formula</th>
+                            </thead>
+                            <tbody id = "attribute_container_run">
+                            </tbody>
+                        </table>
+                        <button type = "button" class = "btn btn-sm btn-danger" data-dismiss = "modal">Cancel</button>
+                        <button type = "submit" class = "btn btn-sm btn-primary">Run</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
 <script>
     function add_attr_row(){
         var counter = $(".attr_row").length;
@@ -195,6 +236,24 @@
             success:function(respond){
                 $("#formula_name_delete").html(respond["main"]["formula_name"]);
                 $("#formula_desc_delete").html(respond["main"]["formula_desc"]);
+            }
+        });
+    }
+    function load_execute_content(id_submit_formula){
+        $.ajax({
+            url:"<?php echo base_url();?>ws/formula/get_formula/"+id_submit_formula,
+            dataType:"JSON",
+            type:"GET",
+            success:function(respond){
+                $("#formula_name_run").val(respond["main"]["formula_name"]);
+                $("#formula_desc_run").val(respond["main"]["formula_desc"]);
+                $("#formula_id_run").val(respond["main"]["id_formula"]);
+                
+                var html = "";
+                for(var a = 0; a<respond["attr"].length; a++){
+                    html += "<tr><td><input type = 'checkbox' name = 'check[]' value = '"+a+"'></td><td><input readonly type = 'text' class = 'form-control' value = '"+respond["attr"][a]["attr_name"]+"' name = 'attr_name"+a+"'></td><td><textarea readonly class = 'form-control' name = 'rumus"+a+"'>"+respond["attr"][a]["attr_formula"]+"</textarea></td></tr>";
+                }
+                $("#attribute_container_run").html(html);
             }
         });
     }
