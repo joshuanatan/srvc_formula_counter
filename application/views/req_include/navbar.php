@@ -74,7 +74,7 @@
                         </a>
                     </li>
                     <li class="site-menu-item">
-                        <a class="animsition-link" href="<?php echo base_url();?>formula">
+                        <a class="animsition-link" href="<?php echo base_url();?>attribute">
                             <i class="site-menu-icon md-receipt" aria-hidden="true"></i>
                             <span class="site-menu-title">Formula Attributes</span>
                         </a>
