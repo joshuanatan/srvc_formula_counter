@@ -1,5 +1,5 @@
     <footer class="site-footer">
-        <div class="site-footer-legal">Nusantara Adivista</div>
+        <div class="site-footer-legal">Formula Management</div>
         <div class="site-footer-right">
             ISupport
         </div>
