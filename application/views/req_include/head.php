@@ -6,7 +6,7 @@
         <meta name="description" content="bootstrap material admin template">
         <meta name="author" content="">
 
-        <title>Dashboard | Remark Material Admin Template</title>
+        <title>Formula Management | ISUPPORT</title>
         <link rel="apple-touch-icon" href="<?php echo base_url();?>assets/main/images/apple-touch-icon.png">
         <link rel="shortcut icon" href="<?php echo base_url();?>assets/main/images/favicon.ico">
 
