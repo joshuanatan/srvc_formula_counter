@@ -152,10 +152,14 @@ if(! function_exists('selectLike')){
     }
 }
 if(! function_exists('executeQuery')){
-    function executeQuery($query){
-        
+    function executeQuery($query,$args = ""){
         $CI =& get_instance();
-        return $CI->db->query($query);
+        if($args != ""){
+            return $CI->db->query($query,$args);
+        }
+        else{
+            return $CI->db->query($query);
+        }
     }
 }
 
