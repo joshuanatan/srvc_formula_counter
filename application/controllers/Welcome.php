@@ -4,7 +4,6 @@ defined("BASEPATH") or exit("No Direct Script is Allowed");
 class Welcome extends CI_Controller{
     public function __construct(){
         parent::__construct();
-        $this->load->model("m_account");
     }
     private function check_session(){
         if($this->session->id_submit_acc == ""){
@@ -13,12 +12,13 @@ class Welcome extends CI_Controller{
         }
     }  
     private function check_root_user(){
-
+        $this->load->model("m_account");
         $result = $this->m_account->list();
         if($result->num_rows() > 0){
             return true;
         }
         else{
+            $this->session->id_submit_acc = 0;
             return false;
         }
     }
@@ -50,9 +50,13 @@ class Welcome extends CI_Controller{
         );
         $this->form_validation->set_rules($config);
         if($this->form_validation->run()){
+            $this->load->model("m_account");
+            
             $email = $this->input->post("email");
             $pswd = $this->input->post("password");
-            $result = $this->m_account->login($email,$pswd);
+            $this->m_account->set_acc_email($email);
+            $this->m_account->set_acc_pswd($pswd);
+            $result = $this->m_account->login();
             if(!$result){
                 $msg = "Incorrect Combination, Please try again!";
                 $this->session->set_flashdata("msg",$msg);
@@ -129,11 +133,19 @@ class Welcome extends CI_Controller{
             );
             $this->form_validation->set_rules($config);
             if($this->form_validation->run()){
+                $this->load->model("m_account");
+
                 $name = $this->input->post("name");
                 $email = $this->input->post("email");
                 $pswd = $this->input->post("password");
                 $phone = $this->input->post("phone");
-                if($this->m_account->insert($name,$email,$pswd,$phone)){
+
+                $this->m_account->set_acc_name($name);
+                $this->m_account->set_acc_email($email);
+                $this->m_account->set_acc_pswd($pswd);
+                $this->m_account->set_acc_phone($phone);
+
+                if($this->m_account->insert()){
                     $msg = "Account Registered, Please Login";
                     $this->session->set_flashdata("msg",$msg);
                     $this->session->set_flashdata("type","success");

@@ -27,7 +27,7 @@ class M_Account extends CI_Model{
         $result = selectRow("mstr_acc",$where,$field);
         if($result->num_rows() > 0){
             $result = $result->result_array();
-            if (password_verify($password, $result[0]["acc_pswd"])){
+            if (password_verify($this->acc_pswd, $result[0]["acc_pswd"])){
                 $data = array(
                     "id" => $result[0]["id_submit_acc"],
                     "name" => $result[0]["acc_name"],
@@ -51,6 +51,7 @@ class M_Account extends CI_Model{
             "acc_phone" => $this->acc_phone,
             "acc_status" => "ACTIVE",
             "acc_last_modified" => $this->acc_last_modified,
+            "id_last_modified" => $this->id_last_modified,
         );
         return insertRow("mstr_acc",$data);
     }
