@@ -26,6 +26,17 @@ class M_Project extends CI_Model{
         $result = selectRow("mstr_project",$where,$field);
         return $result;
     }
+    public function detail(){
+        $where = array(
+            "id_submit_project" => $this->id_submit_project,
+            "status_project" => 'ACTIVE'
+        );
+        $field = array(
+            "id_submit_project","prj_name","prj_addrs","prj_dateline","id_client","status_project","project_last_modified"
+        );
+        $result = selectRow("mstr_project",$where,$field);
+        return $result;
+    }
     public function insert(){
         $data = array(
             "prj_name" => $this->prj_name,

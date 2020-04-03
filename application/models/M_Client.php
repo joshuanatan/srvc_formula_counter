@@ -15,7 +15,7 @@ class M_Client extends CI_Model{
         $this->clnt_last_modified = date("Y-m-d H:i:s");
         $this->id_last_modified = $this->session->id_submit_acc;
     }
-    public function search($where = "",$field = "", $search_type = "EXACT"){
+    public function search(){
         $test = array(
             $where,$field
         );
@@ -25,7 +25,6 @@ class M_Client extends CI_Model{
             }
             else{
                 if($search_type == "EXACT"){
-                    $result = selectRow("mstr_client",$where,$field);
                 }
                 else{
                     $condition = array(
@@ -39,6 +38,16 @@ class M_Client extends CI_Model{
         else{
             return false;
         }
+    }
+    public function detail(){
+        $where = array(
+            "id_submit_client" => $this->id_submit_client
+        );
+        $field = array(
+            "clnt_name","clnt_phone","clnt_email","clnt_last_modified"
+        );
+        $result = selectRow("mstr_client",$where,$field);
+        return $result;
     }
     public function list(){
         $where = array(
