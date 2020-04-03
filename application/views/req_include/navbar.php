@@ -8,8 +8,7 @@
             <i class="icon md-more" aria-hidden="true"></i>
         </button>
         <div class="navbar-brand navbar-brand-center site-gridmenu-toggle" data-toggle="gridmenu">
-            <img class="navbar-brand-logo" src="<?php echo base_url();?>assets/main/images/logo.png" title="Remark">
-            <span class="navbar-brand-text hidden-xs-down"> Remark</span>
+            <span class="navbar-brand-text hidden-xs-down"> ISUPPORT</span>
         </div>
         <button type="button" class="navbar-toggler collapsed" data-target="#site-navbar-search" data-toggle="collapse">
             <span class="sr-only">Toggle Search</span>
@@ -63,10 +62,16 @@
                     <li class="site-menu-item">
                         <a class="animsition-link" href="<?php echo base_url();?>welcome/dashboard">
                             <i class="site-menu-icon md-view-dashboard" aria-hidden="true"></i>
-                            <span class="site-menu-title">Dashboard</span>
+                            <span class="site-menu-title">Home</span>
                         </a>
                     </li>
                     <li class="site-menu-category">Master Data</li>
+                    <li class="site-menu-item">
+                        <a class="animsition-link" href="<?php echo base_url();?>project">
+                            <i class="site-menu-icon md-collection-text" aria-hidden="true"></i>
+                            <span class="site-menu-title">Project</span>
+                        </a>
+                    </li>
                     <li class="site-menu-item">
                         <a class="animsition-link" href="<?php echo base_url();?>formula">
                             <i class="site-menu-icon md-collection-text" aria-hidden="true"></i>
@@ -79,7 +84,6 @@
                             <span class="site-menu-title">Formula Attributes</span>
                         </a>
                     </li>
-                    <li class="site-menu-category">Functions</li>
                 </ul>
             </div>      
         </div>
