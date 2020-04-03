@@ -4,6 +4,7 @@
         <thead>
             <th>Attribute Name</th>
             <th>Attribute Unit (Satuan)</th>
+            <th>Attribute Price(Satuan)</th>
             <th>Attribute Status</th>
             <th>Last Modified</th>
             <th>Action</th>
@@ -13,10 +14,11 @@
             <tr>
                 <td><?php echo strtoupper($a->formula_attr_name);?></td>
                 <td><?php echo strtoupper($a->satuan_attr);?></td>
+                <td><?php echo strtoupper($a->harga_satuan_attr);?></td>
                 <td><?php echo $a->status_formula_attr;?></td>
                 <td><?php echo $a->formula_attr_last_modified;?></td>
                 <td>
-                    <a href = "#" data-toggle = "modal" data-target = "#editFormula" onclick = "load_content(<?php echo $a->id_submit_formula_attr;?>)" class = "btn btn-primary btn-sm">
+                    <a href = "#" data-toggle = "modal" data-target = "#editAttribute" onclick = "load_content(<?php echo $a->id_submit_formula_attr;?>)" class = "btn btn-primary btn-sm">
                         <i class = "md-edit"></i>
                     </a>
                     <a href = "#" data-toggle = "modal" data-target = "#deleteAttribute" onclick = "load_delete_content(<?php echo $a->id_submit_formula_attr;?>);load_delete_content(<?php echo $a->id_submit_formula_attr;?>)" class = "btn btn-danger btn-sm">
@@ -45,6 +47,10 @@
                         <input type = "text" required name = "attr_unit" class = "form-control">
                     </div>
                     <div class = "form-group">
+                        <h5>Attribute Price</h5>
+                        <input type = "text" required name = "attr_price" class = "form-control">
+                    </div>
+                    <div class = "form-group">
                         <button type = "button" class = "btn btn-sm btn-danger" data-dismiss = "modal">Cancel</button>
                         <button type = "submit" class = "btn btn-sm btn-primary">Submit</button>
                     </div>
@@ -70,6 +76,10 @@
                     <div class = "form-group">
                         <h5>Attribute Unit (Satuan)</h5>
                         <input type = "text" required name = "attr_unit" class = "form-control" id = "attr_unit_edit">
+                    </div>
+                    <div class = "form-group">
+                        <h5>Attribute Price</h5>
+                        <input type = "text" required name = "attr_price" class = "form-control" id = "attr_price_edit">
                     </div>
                     <div class = "form-group">
                         <button type = "button" class = "btn btn-sm btn-danger" data-dismiss = "modal">Cancel</button>
@@ -127,6 +137,7 @@ function load_content(id_submit_attr){
             $("#attr_name_edit").val(respond["attr"]["attr_name"]);
             $("#attr_unit_edit").val(respond["attr"]["attr_unit"]);
             $("#attr_id_edit").val(respond["attr"]["attr_id"]);
+            $("#attr_price_edit").val(respond["attr"]["attr_price"]);
         }
     });
 }
