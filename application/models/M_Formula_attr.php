@@ -25,20 +25,15 @@ class M_Formula_attr extends CI_Model{
         $result = selectRow("mstr_formula_attr",$where,$field);
         return $result;
     }
-    public function detail($id_submit_formula_attr){
-        if($this->set_id_submit_formula_attr($id_submit_formula_attr)){
-            $where = array(
-                "id_submit_formula_attr" => $id_submit_formula_attr
-            );
-            $field = array(
-                "id_submit_formula_attr","formula_attr_name","harga_satuan_attr","satuan_attr","status_formula_attr","formula_attr_last_modified","id_last_modified"
-            );
-            $result = selectRow("mstr_formula_attr",$where,$field);
-            return $result;
-        }
-        else{
-            return false;
-        }
+    public function detail(){
+        $where = array(
+            "id_submit_formula_attr" => $this->id_submit_formula_attr
+        );
+        $field = array(
+            "id_submit_formula_attr","formula_attr_name","harga_satuan_attr","satuan_attr","status_formula_attr","formula_attr_last_modified","id_last_modified"
+        );
+        $result = selectRow("mstr_formula_attr",$where,$field);
+        return $result;
     }
     public function insert(){
         $where = array(
@@ -92,8 +87,8 @@ class M_Formula_attr extends CI_Model{
     }
     #setter & #getter
     public function set_id_submit_formula_attr($id_submit_formula_attr = ""){
-        if($harga_satuan_attr != "" && is_numeric($harga_satuan_attr)){
-            $this->harga_satuan_attr = $harga_satuan_attr;
+        if($id_submit_formula_attr != "" && is_numeric($id_submit_formula_attr)){
+            $this->id_submit_formula_attr = $id_submit_formula_attr;
             return true;
         }
         else{
@@ -119,7 +114,7 @@ class M_Formula_attr extends CI_Model{
         }
     }
     public function set_satuan_attr($satuan_attr = ""){
-        if($harga_satuan_attr != ""){
+        if($satuan_attr != ""){
             $this->satuan_attr = $satuan_attr;
             return true;
         }

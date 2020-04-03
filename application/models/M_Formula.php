@@ -16,7 +16,7 @@ class M_Formula extends CI_Model{
     }
     public function list(){
         $where = array(
-            "formula_status != " => "DELETED" 
+            "formula_status" => "ACTIVE" 
         );
         $field = array(
             "formula_name","formula_desc","formula_status","formula_last_modified","id_submit_formula"

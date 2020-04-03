@@ -15,6 +15,20 @@ class M_Formula_comb extends CI_Model{
         $this->formula_comb_last_modified = date("Y-m-d H:i:s");
         $this->id_last_modified = $this->session->id_submit_acc;
     }
+    public function unassigned_attr(){
+        $sql = "
+        select id_submit_formula_attr, formula_attr_name, harga_satuan_attr, satuan_attr, status_formula_attr,formula_attr_last_modified 
+        from mstr_formula_attr 
+        where status_formula_attr = 'ACTIVE' 
+        and id_submit_formula_attr not in(
+            select id_formula_attr from tbl_formula_combination
+            where status_formula_comb = 'ACTIVE' and id_mstr_formula = ?
+        );";
+        $args = array(
+            $this->id_mstr_formula
+        );
+        return executeQuery($sql,$args);
+    }
     public function insert(){
         $where = array(
             "id_mstr_formula" => $this->id_mstr_formula,
@@ -71,13 +85,13 @@ class M_Formula_comb extends CI_Model{
         updateRow("tbl_formula_combination",$data,$where);
         return true;
     }
-    public function list($id_submit_formula){
+    public function list(){
         $sql = "
-        select id_formula_attr,combination_formula,formula_attr_name,id_submit_formula_comb 
+        select id_submit_formula_comb, id_formula_attr, koefisien, status_formula_comb, formula_attr_name, harga_satuan_attr,satuan_attr
         from tbl_formula_combination 
         inner join mstr_formula_attr on mstr_formula_attr.id_submit_formula_attr = tbl_formula_combination.id_formula_attr 
-        where id_mstr_formula = ? and status_formula_attr = 'ACTIVE'";
-        $result = $this->db->query($sql,$id_submit_formula);
+        where id_mstr_formula = ? and status_formula_attr = 'ACTIVE' and status_formula_comb = 'ACTIVE'";
+        $result = $this->db->query($sql,$this->id_mstr_formula);
         return $result;
     }
     #setter & getter

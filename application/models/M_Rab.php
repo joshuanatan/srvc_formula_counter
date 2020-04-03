@@ -15,33 +15,19 @@ class M_Rab extends CI_Model{
         $this->rab_last_modified = date("Y-m-d H:i:s");
         $this->id_last_modified = $this->session->id_submit_acc;
     }
-    public function list_prj_rab(){ 
-        $query = "select id_submit_rab,id_project,id_formula,satuan_htg,rab_last_modified,formula_name, formula_desc, formula_last_modified from tbl_project_rab
+    public function list(){ 
+        $query = "
+        select id_submit_rab,id_project,id_formula,satuan_htg,rab_last_modified,formula_name, formula_desc, formula_last_modified 
+        from tbl_project_rab
         inner join mstr_formula on mstr_formula.id_submit_formula = tbl_project_rab.id_formula
         where status_rab = 'ACTIVE' and id_project = '?'";
         $args = array(
-            $this->id_project
+            $this->id_project   
         );
         $result = executeQuery($query,$args);
         return $result;
     }
-    public function rab_list_selection($id_project){
-        if($id_project != "" && is_numeric($id_project)){
-            $query = "select * from mstr_formula 
-            where id_submit_formula not in
-            (select id_formula from tbl_project_rab where id_project = ? and status_rab = 'ACTIVE') 
-            and formula_status = 'ACTIVE';";
-            $args = array(
-                $id_project
-            );
-            $result = executeQuery($query,$args);
-            return $result;
-        }
-        else{
-            return false;
-        }
-    }
-    public function add_rab(){
+    public function insert(){
         $where = array(
             "id_project" => $this->id_project,
             "id_formula" => $this->id_formula,
@@ -62,7 +48,7 @@ class M_Rab extends CI_Model{
             return insertRow("tbl_project_rab",$data);
         }
     }
-    public function update_rab(){
+    public function update(){
         $where = array(
             "id_submit_rab !=" => $this->id_submit_rab,
             "id_formula" => $this->id_formula,
@@ -85,7 +71,7 @@ class M_Rab extends CI_Model{
             return true;
         }
     }
-    public function delete_rab(){
+    public function delete(){
         $where = array(
             "id_submit_rab" => $this->id_submit_rab
         );
