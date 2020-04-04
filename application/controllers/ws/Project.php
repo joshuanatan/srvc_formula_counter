@@ -68,4 +68,50 @@ class Project extends CI_Controller{
         }
         echo json_encode($respond); 
     }
+    public function update_rab(){
+        $respond["status"] = "SUCCESS";
+        $config = array(
+            array(
+                "field" => "id_rab",
+                "label" => "",
+                "rules" => "required|integer"
+            ),
+            array(
+                "field" => "satuan_htg",
+                "label" => "",
+                "rules" => "required"
+            ),
+            array(
+                "field" => "id_formula",
+                "label" => "",
+                "rules" => "required|integer"
+            ),
+            array(
+                "field" => "id_project",
+                "label" => "",
+                "rules" => "required|integer"
+            ),
+        );
+        $this->form_validation->set_rules($config);
+        if($this->form_validation->run()){
+            $id_rab = $this->input->post("id_rab");
+            $satuan_htg = $this->input->post("satuan_htg");
+            $id_formula = $this->input->post("id_formula");
+            $id_project = $this->input->post("id_project");
+
+            $this->load->model("m_rab");
+            $this->m_rab->set_id_submit_rab($id_rab);
+            $this->m_rab->set_id_formula($id_formula);
+            $this->m_rab->set_satuan_htg($satuan_htg);
+            $this->m_rab->set_id_project($id_project);
+            
+            if(!$this->m_rab->update()){
+                $respond["status"] = "ERROR";
+            }
+        }
+        else{
+            $respond["status"] = "ERROR";
+        }
+        echo json_encode($respond);
+    }
 }

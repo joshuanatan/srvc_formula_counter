@@ -4,7 +4,6 @@ defined("BASEPATH") or exit("No Direct Script");
 class Project extends CI_Controller{
     public function __construct(){
         parent::__construct();
-
     }
     public function index(){
         $this->load->view("req_include/head");
@@ -22,22 +21,6 @@ class Project extends CI_Controller{
         $data["cp"] = $result->result_array();
 
         $this->load->view("project/content",$data);
-        $this->load->view("project/page_close");
-        $this->load->view("req_include/page_close");
-        $this->load->view("req_include/script");
-        $this->load->view("plugin/datatable/datatable-js");
-    }
-    public function rab($id_project){
-        $this->load->view("req_include/head");
-        $this->load->view("plugin/datatable/datatable-css");
-        $this->load->view("req_include/page_open");
-        $this->load->view("req_include/navbar");
-        $this->load->view("project/page_open");
-        $result = $this->m_project->list_prj_rab($id_project);
-        $data = array(
-            "rab" => $result->result_array()
-        );
-        $this->load->view("project/rab",$data);
         $this->load->view("project/page_close");
         $this->load->view("req_include/page_close");
         $this->load->view("req_include/script");
@@ -194,43 +177,6 @@ class Project extends CI_Controller{
         }
         redirect("project");
     }
-    public function register_rab(){
-        $id_last_modified = $this->session->id_submit_acc;
-        $config = array(
-            array(
-                "field" => "id_prj",
-                "label" => "",
-                "rules" => "required"
-            )
-        );
-        $this->form_validation->set_rules($config);
-        if($this->form_validation->run()){
-            $id_prj = $this->input->post("id_prj");
-            $checks = $this->input->post("check");
-            if($checks != ""){
-                foreach($checks as $a){
-                    $config = array(
-                        array(
-                            "field" => "",
-                            "label" => "",
-                            "rules" => "required"
-                        ),
-                        array(
-                            "field" => "",
-                            "label" => "",
-                            "rules" => "required"
-                        )
-                    );
-                    $this->form_validation->set_rules($config);
-                    if($this->form_validation->run()){
-                        $id_formula = $this->input->post("id_frml".$a);
-                        $satuan_htg = $this->input->post("satuan".$a); 
-                        $this->m_project->add_rab($id_prj,$id_formula,$satuan_htg,$id_last_modified);
-                    }
-                }
-            }
-        }
-    }
     public function delete(){
         $config = array(
             array(
@@ -250,5 +196,75 @@ class Project extends CI_Controller{
 
         }
         redirect("project");
+    }
+    public function rab($id_project){
+        if($id_project == "" || !is_numeric($id_project)){
+            redirect("project");
+        }
+        $this->load->view("req_include/head");
+        $this->load->view("plugin/datatable/datatable-css");
+        $this->load->view("req_include/page_open");
+        $this->load->view("req_include/navbar");
+        $this->load->view("project/page_open");
+
+        $this->load->model("m_rab");
+        $this->load->model("m_project");
+        $this->load->model("m_formula");
+
+        $this->m_project->set_id_submit_project($id_project);
+        $result = $this->m_project->detail();
+        $data["project"] = $result->result_array();
+
+        $this->m_rab->set_id_project($id_project);
+        $result = $this->m_rab->list();
+        $data["rab"] = $result->result_array();
+        
+        $this->load->view("project/rab",$data);
+        $this->load->view("project/page_close");
+        $this->load->view("req_include/page_close");
+        $this->load->view("req_include/script");
+        $this->load->view("plugin/datatable/datatable-js");
+    }
+    public function register_rab(){
+        $config = array(
+            array(
+                "field" => "id_prj",
+                "label" => "",
+                "rules" => "required"
+            )
+        );
+        $this->form_validation->set_rules($config);
+        if($this->form_validation->run()){
+            $id_prj = $this->input->post("id_prj");
+            $checks = $this->input->post("check");
+            if($checks != ""){
+                foreach($checks as $a){
+                    $config = array(
+                        array(
+                            "field" => "formula".$a,
+                            "label" => "Formula",
+                            "rules" => "required"
+                        ),
+                        array(
+                            "field" => "satuan_htg".$a,
+                            "label" => "Count Unit",
+                            "rules" => "required"
+                        )
+                    );
+                    $this->form_validation->set_rules($config);
+                    if($this->form_validation->run()){
+                        $this->load->model("m_rab");
+                        $id_formula = $this->input->post("formula".$a);
+                        $satuan_htg = $this->input->post("satuan_htg".$a); 
+
+                        $this->m_rab->set_id_project($id_prj);
+                        $this->m_rab->set_id_formula($id_formula);
+                        $this->m_rab->set_satuan_htg($satuan_htg);
+                        $this->m_rab->insert();
+                    }
+                }
+            }
+        }
+        redirect("project/rab/".$id_prj);
     }
 }

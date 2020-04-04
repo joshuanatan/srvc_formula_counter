@@ -20,7 +20,7 @@ class M_Rab extends CI_Model{
         select id_submit_rab,id_project,id_formula,satuan_htg,rab_last_modified,formula_name, formula_desc, formula_last_modified 
         from tbl_project_rab
         inner join mstr_formula on mstr_formula.id_submit_formula = tbl_project_rab.id_formula
-        where status_rab = 'ACTIVE' and id_project = '?'";
+        where status_rab = 'ACTIVE' and id_project = ?";
         $args = array(
             $this->id_project   
         );
@@ -52,9 +52,11 @@ class M_Rab extends CI_Model{
         $where = array(
             "id_submit_rab !=" => $this->id_submit_rab,
             "id_formula" => $this->id_formula,
-            "id_project" => $this->id_project
+            "id_project" => $this->id_project,
+            "status_rab" => "ACTIVE"
         );
         if(isExistsInTable("tbl_project_rab",$where)){
+            //return $where;
             return false;
         }
         else{
