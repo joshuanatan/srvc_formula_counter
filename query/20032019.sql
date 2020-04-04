@@ -8,6 +8,7 @@ create table mstr_formula(
     id_last_modified int
 );
 drop table mstr_formula_attr;
+select * from mstr_formula_attr;
 create table mstr_formula_attr(
 	id_submit_formula_attr int primary key auto_increment,
     formula_attr_name varchar(100),
