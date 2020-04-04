@@ -22,9 +22,6 @@
                     <a href = "#" data-toggle = "modal" data-target = "#deleteFormula" onclick = "load_delete_id(<?php echo $a->id_submit_formula;?>);load_delete_content(<?php echo $a->id_submit_formula;?>)" class = "btn btn-danger btn-sm">
                         <i class = "md-delete"></i>
                     </a>
-                    <a href = "#" data-toggle = "modal" data-target = "#executeFormula" onclick = "load_execute_content(<?php echo $a->id_submit_formula;?>)" class = "btn btn-success btn-sm">
-                        <i class = "md-assignment"></i>
-                    </a>
                 </td>
             </tr>
             <?php endforeach;?>
@@ -50,12 +47,13 @@
                     </div>
                     <div class = "form-group">
                         <h5>Attribute Table</h5>
-                        <p>You can put variables inside <i>formula</i> using [ ]. ex: 2*[argument]</p>
+                        <a href = "<?php echo base_url();?>attribute" target = "_blank" class = "btn btn-primary btn-sm">Manage Formula Attributes</a>
+                        <br/><br/>
                         <table class = "table table-striped table-hover table-bordered">
                             <thead>
                                 <th style = "width:5%">#</th>
                                 <th>Attribute</th>
-                                <th>Formula</th>
+                                <th>Koefisien</th>
                             </thead>
                             <tbody>
                                 <tr id = "add_row_container">
@@ -118,8 +116,8 @@
                 <form action = "<?php echo base_url();?>formula/update" method = "POST">
                     <div class = "form-group">
                         <h5>Formula Name</h5>
-                        <input type = "text" class = "form-control" required name = "formula_name" id = "formula_name_edit">
                         <input type = "hidden" name = "id_formula" id = "formula_id_edit">
+                        <input type = "text" class = "form-control" required name = "formula_name" id = "formula_name_edit">
                     </div>
                     <div class = "form-group">
                         <h5>Formula Description</h5>
@@ -127,13 +125,12 @@
                     </div>
                     <div class = "form-group">
                         <h5>Attribute Table</h5>
-                        <p>You can put variables inside <i>formula</i> using @. ex: 2*@argument</p>
                         <table class = "table table-striped table-hover table-bordered">
                             <thead>
                                 <th style = "width:5%">Edit</th>
                                 <th style = "width:5%">Delete</th>
                                 <th>Attribute</th>
-                                <th>Formula</th>
+                                <th>Koefisien</th>
                             </thead>
                             <tbody id = "attr_table_edit">
                                 <tr id = "add_row_container_edit">
@@ -151,57 +148,39 @@
         </div>
     </div>
 </div>
-<div class = "modal fade" id = "executeFormula">
-    <div class = "modal-dialog modal-lg">
-        <div class = "modal-content">
-            <div class = "modal-header">
-                <h4 class = "modal-title">Run Formula</h4>
-            </div>
-            <div class = "modal-body">
-                <form action = "<?php echo base_url();?>formula/execute" method = "POST" target = "_blank">
-                    <input type = "hidden" id = "formula_id_run" name = "id_formula">
-                    <div class = "form-group">
-                        <h5>Formula Name</h5>
-                        <input type = "text" class = "form-control" id = "formula_name_run" name = "formula_name" readonly>
-                        
-                    </div>
-                    <div class = "form-group">
-                        <h5>Formula Description</h5>
-                        <textarea class = "form-control" readonly id = "formula_desc_run" name = "formula_desc"></textarea>
-                    </div>
-                    <div class = "form-group">
-                        <h5>Variables</h5>
-                        <p>Put your variables with this format. variablename=5;variablename2=10 [variable_name=variable_value;]</p>
-                        <input type = "text" class = "form-control" name = "variables">
-                    </div>
-                    <div class = "form-group">
-                        <h5>Attribute Table</h5>
-                        <table class = "table table-striped table-hover table-bordered">
-                            <thead>
-                                <th style = "width:5%">#</th>
-                                <th>Attribute</th>
-                                <th>Formula</th>
-                            </thead>
-                            <tbody id = "attribute_container_run">
-                            </tbody>
-                        </table>
-                        <button type = "button" class = "btn btn-sm btn-danger" data-dismiss = "modal">Cancel</button>
-                        <button type = "submit" class = "btn btn-sm btn-primary">Run</button>
-                    </div>
-                </form>
-            </div>
-        </div>
-    </div>
-</div>
 <script>
     function add_attr_row(){
         var counter = $(".attr_row").length;
-        var html = '<tr class = "attr_row"><td vertical-align = "middle"><input checked type = "checkbox" name = "check[]" value = '+counter+'></td><td vertical-align = "middle"><input type = "text" class = "form-control" name = "attr_name'+counter+'"></td><td vertical-align = "middle"><textarea class = "form-control" name = "rumus'+counter+'"></textarea></td></tr>';
+        $.ajax({
+            url:"<?php echo base_url();?>ws/attribute/list",
+            type:"GET",
+            dataType:"JSON",
+            success:function(respond){
+                var options = "";
+                for(var a = 0; a<respond["attr"].length; a++){
+                    options += "<option value = '"+respond["attr"][a]["attr_id"]+"'>"+respond["attr"][a]["attr_name"].toUpperCase()+"</option>";
+                }
+                $("#formulaListRow"+counter).html(options);
+            }
+        });
+        var html = '<tr class = "attr_row"><td vertical-align = "middle"><div class = "checkbox-custom checkbox-primary"><input checked type = "checkbox" name = "check[]" value = '+counter+'><label></label></div></td><td vertical-align = "middle"><select class = "form-control" name = "id_attr'+counter+'" id = "formulaListRow'+counter+'"></select></td><td vertical-align = "middle"><input type = "number" class = "form-control" name = "koefisien'+counter+'" step="0.0000000001"></td></tr>';
         $("#add_row_container").before(html);
     }
     function add_attr_row_edit(){
         var counter = $(".attr_row").length;
-        var html = '<tr class = "attr_row"><td vertical-align = "middle" colspan = 2><input checked type = "checkbox" name = "check[]" value = '+counter+'></td><td vertical-align = "middle"><input type = "text" class = "form-control" name = "attr_name'+counter+'"></td><td vertical-align = "middle"><textarea class = "form-control" name = "rumus'+counter+'"></textarea></td></tr>';
+        $.ajax({
+            url:"<?php echo base_url();?>ws/attribute/list",
+            type:"GET",
+            dataType:"JSON",
+            success:function(respond){
+                var options = "";
+                for(var a = 0; a<respond["attr"].length; a++){
+                    options += "<option value = '"+respond["attr"][a]["attr_id"]+"'>"+respond["attr"][a]["attr_name"].toUpperCase()+"</option>";
+                }
+                $("#formulaListRow"+counter).html(options);
+            }
+        });
+        var html = '<tr class = "attr_row"><td vertical-align = "middle" colspan = 2><div class = "checkbox-custom checkbox-primary"><input checked type = "checkbox" name = "check[]" value = '+counter+'><label></label></div></td><td vertical-align = "middle"><select class = "form-control" name = "id_attr'+counter+'" id = "formulaListRow'+counter+'"></select></td><td vertical-align = "middle"><input type = "number" class = "form-control" name = "koefisien'+counter+'" step="0.0000000001"></td></tr>';
         $("#add_row_container_edit").before(html);
     }
     function load_delete_id(id_submit_formula){
@@ -210,21 +189,37 @@
 </script>
 <script>
     function load_content(id_submit_formula){
+        var options = "";
+        $.ajax({
+            url:"<?php echo base_url();?>ws/attribute/list",
+            type:"GET",
+            dataType:"JSON",
+            success:function(respond){
+                for(var b = 0; b<respond["attr"].length; b++){
+                    options += "<option value = '"+respond["attr"][b]["attr_id"]+"'>"+respond["attr"][b]["attr_name"].toUpperCase()+"</option>";
+                }
+            }
+        });
         $.ajax({
             url:"<?php echo base_url();?>ws/formula/get_formula/"+id_submit_formula,
             dataType:"JSON",
             type:"GET",
             success:function(respond){
+                
                 $("#formula_name_edit").val(respond["main"]["formula_name"]);
                 $("#formula_desc_edit").val(respond["main"]["formula_desc"]);
                 $("#formula_id_edit").val(respond["main"]["id_formula"]);
                 
                 var html = "";
                 for(var a = 0; a<respond["attr"].length; a++){
-                    html += "<tr class = 'attr_row'><td><input type = 'hidden' name = 'id_formula_comb"+a+"' value = '"+respond["attr"][a]["id_formula_comb"]+"'><input type = 'hidden' name = 'id_formula_attr"+a+"' value = '"+respond["attr"][a]["id_formula_attr"]+"'><input type = 'checkbox' name = 'edit[]' value = '"+a+"'></td><td><input type = 'checkbox' name = 'delete[]' value = '"+a+"'></td><td><input type = 'text' class = 'form-control' value = '"+respond["attr"][a]["attr_name"]+"' name = 'attr_name"+a+"'></td><td><textarea class = 'form-control' name = 'rumus"+a+"'>"+respond["attr"][a]["attr_formula"]+"</textarea></td></tr>";
+                    html += '<tr class = "attr_row"><input type = "hidden" name = "id_formula_comb'+a+'" value = "'+respond["attr"][a]["id_formula_comb"]+'"><td><div class = "checkbox-custom checkbox-primary"><input checked type = "checkbox" name = "edit[]" value = '+a+'><label></label></div></td><td><div class = "checkbox-custom checkbox-danger"><input type = "checkbox" name = "delete[]" value = '+a+'><label></label></td><td vertical-align = "middle"><select class = "form-control" name = "id_attr'+a+'" id = "formulaListRowEdit'+a+'">'+options+'</select></td><td vertical-align = "middle"><input required value = "'+respond["attr"][a]["koefisien"]+'" type = "number" class = "form-control" name = "koefisien'+a+'" step="0.0000000001"></td></tr>';
                 }
                 $(".attr_row").remove();
                 $("#add_row_container_edit").before(html);
+
+                for(var a = 0; a<respond["attr"].length; a++){
+                    $("#formulaListRowEdit"+a).val(respond["attr"][a]["id_formula_attr"]);
+                }
             }
         });
     }
@@ -236,24 +231,6 @@
             success:function(respond){
                 $("#formula_name_delete").html(respond["main"]["formula_name"]);
                 $("#formula_desc_delete").html(respond["main"]["formula_desc"]);
-            }
-        });
-    }
-    function load_execute_content(id_submit_formula){
-        $.ajax({
-            url:"<?php echo base_url();?>ws/formula/get_formula/"+id_submit_formula,
-            dataType:"JSON",
-            type:"GET",
-            success:function(respond){
-                $("#formula_name_run").val(respond["main"]["formula_name"]);
-                $("#formula_desc_run").val(respond["main"]["formula_desc"]);
-                $("#formula_id_run").val(respond["main"]["id_formula"]);
-                
-                var html = "";
-                for(var a = 0; a<respond["attr"].length; a++){
-                    html += "<tr><td><input type = 'checkbox' name = 'check[]' value = '"+a+"'></td><td><input readonly type = 'text' class = 'form-control' value = '"+respond["attr"][a]["attr_name"]+"' name = 'attr_name"+a+"'></td><td><textarea readonly class = 'form-control' name = 'rumus"+a+"'>"+respond["attr"][a]["attr_formula"]+"</textarea></td></tr>";
-                }
-                $("#attribute_container_run").html(html);
             }
         });
     }
