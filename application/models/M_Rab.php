@@ -78,7 +78,7 @@ class M_Rab extends CI_Model{
             "id_submit_rab" => $this->id_submit_rab
         );
         $data = array(
-            "status_rab" => "ACTIVE",
+            "status_rab" => "NOT ACTIVE",
             "rab_last_modified" => $this->rab_last_modified,
             "id_last_modified" => $this->id_last_modified
         );

@@ -9,7 +9,7 @@
         </thead>
         <tbody>
             <?php for($a = 0; $a<count($rab); $a++):?>
-            <tr>
+            <tr id = "row<?php echo $a;?>">
                 <input type = 'hidden' id = "id_rab<?php echo $a;?>" value = "<?php echo $rab[$a]["id_submit_rab"];?>">
                 <td>
                     <input type = 'hidden' id = 'id_formula<?php echo $a;?>' value = "<?php echo $rab[$a]["id_formula"];?>">
@@ -30,7 +30,7 @@
                     <a href = "#" style = "display:none" onclick = "save_update(<?php echo $a;?>);" id = "saveButton<?php echo $a;?>" class = "btn btn-success btn-sm">
                         <i class = "md-check"></i>
                     </a>
-                    <a href = "#" onclick = "load_delete_content(<?php echo $a;?>)" id = "deleteButton<?php echo $a;?>" class = "btn btn-danger btn-sm">
+                    <a href = "#" onclick = "load_delete_content(<?php echo $a;?>)" data-toggle = "modal" data-target = "#deleteRab" id = "deleteButton<?php echo $a;?>" class = "btn btn-danger btn-sm">
                         <i class = "md-delete"></i>
                     </a>
                 </td>
@@ -38,6 +38,7 @@
             <?php endfor;?>
         </tbody>
     </table>
+    <a href = "<?php echo base_url();?>project" class = "btn btn-primary btn-sm">BACK</a>
 </div>
 <div class = "modal fade" id = "addRab">
     <div class = "modal-dialog modal-lg">
@@ -68,6 +69,35 @@
                         <button type = "submit" class = "btn btn-sm btn-primary">Submit</button>
                     </div>
                 </form>
+            </div>
+        </div>
+    </div>
+</div>
+<div class = "modal fade" id = "deleteRab">
+    <div class = "modal-dialog modal-lg">
+        <div class = "modal-content">
+            <div class = "modal-header">
+                <h4 class = "modal-title">Dekete RAB Confirmation</h4>
+            </div>
+            <div class = "modal-body">
+                <h4 align = "center">Are you sure want to remove this formula?</h4>
+                <table class = "table table-bordered table-stripped table-hover offset-lg-2 col-lg-8">
+                    <thead>
+                        <th style = "width:50%">Formula Name</th>
+                        <th style = "width:50%">Satuan Hitung</th>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <input type = "hidden" id = "id_rab_delete">
+                            <td id = "formulaNameContainer"></td>
+                            <td id = "satuanHitungContainer"></td>
+                        </tr>
+                    </tbody>
+                </table>
+                <div class = "row">
+                    <button type = "button" class = "btn btn-sm btn-primary col-lg-3 col-sm-12 offset-lg-3" data-dismiss = "modal">Cancel</button>
+                    <button type = "button" id = "deleteConfirmationButton" onclick = "submit_delete()" data-dismiss = "modal" class = "btn btn-sm btn-danger col-lg-3">Delete</button>
+                </div>
             </div>
         </div>
     </div>
@@ -143,13 +173,26 @@ function save_update(row){
         }
     });
 }
-function deactiveEdit(row){
-    $(".row"+row).css("display","block");
-    $(".rowEdit"+row).css("display","none");
-    $(".rowButton"+row).css("display","inline-block");
-    $(".rowButtonEdit"+row).css("display","none");
+function load_delete_content(row){
+    var formula_name = $("#formula_name"+row).text();
+    var satuan_htg = $("#satuan_htg"+row).text();
+    var id_rab = $("#id_rab"+row).val();
+    
+    $("#formulaNameContainer").html(formula_name);
+    $("#satuanHitungContainer").html(satuan_htg);
+    $("#id_rab_delete").val(id_rab);
+    $("#deleteConfirmationButton").attr("onclick","submit_delete("+row+")")
+
 }
-function displayFormulaDetail(row){
-    $(".detailFormulaRow"+row).css("display","block");
+function submit_delete(row){
+    var id_rab = $("#id_rab_delete").val();
+    $.ajax({
+        url:"<?php echo base_url();?>ws/project/remove_rab/"+id_rab,
+        type:"DELETE",
+        dataType:"JSON",
+        success:function(respond){
+            $("#row"+row).remove();
+        }
+    })
 }
 </script>

@@ -114,4 +114,16 @@ class Project extends CI_Controller{
         }
         echo json_encode($respond);
     }
+    public function remove_rab($id_rab){
+        $respond["status"] = "SUCCESS";
+        if($id_rab != "" && is_numeric($id_rab)){
+            $this->load->model("m_rab");
+            $this->m_rab->set_id_submit_rab($id_rab);
+            $this->m_rab->delete();
+        }
+        else{
+            $respond["status"] = "ERROR";
+        }
+        echo json_encode($respond);
+    }
 }
