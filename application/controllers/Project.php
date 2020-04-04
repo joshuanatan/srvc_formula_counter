@@ -273,7 +273,19 @@ class Project extends CI_Controller{
             $this->m_rab->set_id_project($id_project);
             $result = $this->m_rab->detail_rab();
             if($result->num_rows() > 0){
-                
+                $this->load->view("req_include/head");
+                $this->load->view("plugin/datatable/datatable-css");
+                $this->load->view("req_include/page_open");
+                $this->load->view("req_include/navbar");
+                $this->load->view("project/page_open");
+
+                $data["rab"] = $result->result_array();
+
+                $this->load->view("project/result",$data);
+                $this->load->view("project/page_close");
+                $this->load->view("req_include/page_close");
+                $this->load->view("req_include/script");
+                $this->load->view("plugin/datatable/datatable-js");
             }
             else{
                 echo "<script type='text/javascript'>";
