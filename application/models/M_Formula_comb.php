@@ -32,7 +32,8 @@ class M_Formula_comb extends CI_Model{
     public function insert(){
         $where = array(
             "id_mstr_formula" => $this->id_mstr_formula,
-            "id_formula_attr" => $this->id_formula_attr
+            "id_formula_attr" => $this->id_formula_attr,
+            "status_formula_comb" => "ACTIVE"
         );
         if(!isExistsInTable("tbl_formula_combination",$where)){
             $data = array(
@@ -55,15 +56,14 @@ class M_Formula_comb extends CI_Model{
             "id_mstr_formula" => $this->id_mstr_formula,
             "id_formula_attr" => $this->id_formula_attr,
         );
-        if(!isExistsInTable("tbl_formula_combination",$where)){
+        if(isExistsInTable("tbl_formula_combination",$where)){
             return false;
         }
         else{
             $where = array(
-                "id_submit_formula_comb" => $id_submit_formula_comb,
+                "id_submit_formula_comb" => $this->id_submit_formula_comb,
             );
             $data = array(
-                "id_mstr_formula" => $this->id_mstr_formula,
                 "id_formula_attr" => $this->id_formula_attr,
                 "koefisien" => $this->koefisien,
                 "formula_comb_last_modified" => $this->formula_comb_last_modified,
@@ -75,7 +75,7 @@ class M_Formula_comb extends CI_Model{
     }
     public function delete(){
         $where = array(
-            "id_submit_formula_comb" => $id_submit_formula_comb,
+            "id_submit_formula_comb" => $this->id_submit_formula_comb,
         );
         $data = array(
             "status_formula_comb" => "NOT ACTIVE",

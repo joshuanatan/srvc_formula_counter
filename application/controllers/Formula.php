@@ -5,10 +5,7 @@ class Formula extends CI_Controller{
     private $id_last_modified;
     public function __construct(){
         parent::__construct();
-        $this->load->model("m_formula");
         $this->load->model("m_formula_attr");
-        
-        $this->id_last_modified = $this->session->id_submit_acc;
     }
     public function index(){
         $this->load->view("req_include/head");
@@ -17,8 +14,14 @@ class Formula extends CI_Controller{
         $this->load->view("req_include/navbar");
         $this->load->view("formula/page_open");
 
+        $this->load->model("m_formula");
         $result = $this->m_formula->list();
         $data["formula"] = $result->result();
+
+        $this->load->model("m_formula_attr");
+        $result = $this->m_formula->list();
+        $data["attr"] = $result->result();
+
         $this->load->view("formula/content",$data);
         $this->load->view("formula/page_close");
         $this->load->view("req_include/page_close");
@@ -40,39 +43,40 @@ class Formula extends CI_Controller{
         );
         $this->form_validation->set_rules($config);
         if($this->form_validation->run()){
+            $this->load->model("m_formula");
             $formula_name = $this->input->post("formula_name");
             $formula_desc = $this->input->post("formula_desc");
-            $id_submit_acc = $this->session->id_submit_acc;
-            $id_formula = $this->m_formula->insert($formula_name,$formula_desc,$id_submit_acc);
-            if($id_formula){
+
+            $this->m_formula->set_formula_name($formula_name);
+            $this->m_formula->set_formula_desc($formula_desc);
+            $id_mstr_formula = $this->m_formula->insert();
+
+            if($id_mstr_formula){
                 $check = $this->input->post("check");
                 if($check != ""){
                     foreach($check as $a){
                         $config = array(
                             array(
-                                "field" => "attr_name".$a,
-                                "label" => "Attribute Name",
+                                "field" => "id_attr".$a,
+                                "label" => "Attribute",
+                                "rules" => "required"
+                            ),
+                            array(
+                                "field" => "koefisien".$a,
+                                "label" => "Koefisien",
                                 "rules" => "required"
                             )
                         );
                         $this->form_validation->set_rules($config);
                         if($this->form_validation->run()){
-                            $attr_name = $this->input->post("attr_name".$a);
-                            $id_attr = $this->m_formula_attr->insert($attr_name,$id_submit_acc);
-                            if($id_attr){
-                                $config = array(
-                                    array(
-                                        "field" => "rumus".$a,
-                                        "label" => "Attribute Formula",
-                                        "rules" => "required"
-                                    )
-                                );
-                                $this->form_validation->set_rules($config);
-                                if($this->form_validation->run()){
-                                    $rumus = $this->input->post("rumus".$a);
-                                    $this->m_formula_attr->insert_attr_combination($id_formula,$id_attr,$rumus); 
-                                }
-                            }
+                            $this->load->model("m_formula_comb");
+
+                            $id_formula_attr = $this->input->post("id_attr".$a);
+                            $koefisien = $this->input->post("koefisien".$a);
+                            $this->m_formula_comb->set_id_mstr_formula($id_mstr_formula);
+                            $this->m_formula_comb->set_id_formula_attr($id_formula_attr);
+                            $this->m_formula_comb->set_koefisien($koefisien);
+                            $this->m_formula_comb->insert();
                         }
                     }
                 }
@@ -83,13 +87,13 @@ class Formula extends CI_Controller{
     public function update(){
         $config = array(
             array(
-                "field" => "formula_name",
-                "label" => "Formula Name",
-                "rules" => "required"
-            ), 
-            array(
                 "field" => "id_formula",
                 "label" => "Formula ID",
+                "rules" => "required"
+            ),
+            array(
+                "field" => "formula_name",
+                "label" => "Formula Name",
                 "rules" => "required"
             ), 
             array(
@@ -100,71 +104,101 @@ class Formula extends CI_Controller{
         );
         $this->form_validation->set_rules($config);
         if($this->form_validation->run()){
+            $this->load->model("m_formula");
             $id_submit_formula = $this->input->post("id_formula");
             $formula_name = $this->input->post("formula_name");
             $formula_desc = $this->input->post("formula_desc");
-            if($this->m_formula->update($id_submit_formula,$formula_name,$formula_desc,$this->id_last_modified)){
-                $edit = $this->input->post("edit");
-                if($edit != ""){
-                    foreach($edit as $a){
-                        $id_formula_attr = $this->input->post("id_formula_attr".$a); 
-                        $formula_attr_name = $this->input->post("attr_name".$a); 
-                        $this->m_formula_attr->update($id_formula_attr,$formula_attr_name,$this->id_last_modified);
+            
+            $this->m_formula->set_id_submit_formula($id_submit_formula);
+            $this->m_formula->set_formula_name($formula_name);
+            $this->m_formula->set_formula_desc($formula_desc);
+            $this->m_formula->update();
 
-                        $combination_formula = $this->input->post("rumus".$a);
-                        $this->m_formula_attr->update_formula("",$id_submit_formula,$id_formula_attr,$combination_formula);
+            $edit = $this->input->post("edit");
+            if($edit != ""){
+                foreach($edit as $a){
+                    $config = array(
+                        array(
+                            "field" => "id_formula_comb".$a,
+                            "label" => "ID Formula Combination",
+                            "rules" => "required|integer" 
+                        ),
+                        array(
+                            "field" => "id_attr".$a,
+                            "label" => "ID Formula Attribute",
+                            "rules" => "required|integer"
+                        ),
+                        array(
+                            "field" => "koefisien".$a,
+                            "label" => "Koefisien",
+                            "rules" => "required"
+                        )
+                    );
+                    $this->form_validation->set_rules($config);
+                    if($this->form_validation->run()){
+                        $this->load->model("m_formula_comb");
+
+                        $id_formula_comb = $this->input->post("id_formula_comb".$a);
+                        $id_formula_attr = $this->input->post("id_attr".$a);
+                        $koefisien = $this->input->post("koefisien".$a);
+                        
+                        $this->m_formula_comb->set_id_mstr_formula($id_submit_formula);
+                        $this->m_formula_comb->set_id_submit_formula_comb($id_formula_comb);
+                        $this->m_formula_comb->set_id_formula_attr($id_formula_attr);
+                        $this->m_formula_comb->set_koefisien($koefisien);
+                        $this->m_formula_comb->update();
                     }
                 }
+            }
+            $delete = $this->input->post("delete");
+            if($delete != ""){
+                foreach($delete as $a){
+                    $config = array(
+                        array(
+                            "field" => "id_formula_comb".$a,
+                            "label" => "ID Formula Combination",
+                            "rules" => "required|integer" 
+                        )
+                    );
+                    $this->form_validation->set_rules($config);
+                    if($this->form_validation->run()){
+                        $this->load->model("m_formula_comb");
 
-                $delete = $this->input->post("delete");
-                if($delete != ""){
-                    foreach($delete as $a){
-                        /*formula attrnya ga hapus disini, hapusnya di master. Bagian ini untuk menghapus atribut yang terpakai saja*/
-                        $id_submit_formula_comb = $this->input->post("id_formula_comb".$a);
-                        $this->m_formula_attr->delete_formula($id_submit_formula_comb);
+                        $id_formula_comb = $this->input->post("id_formula_comb".$a);
+
+                        $this->m_formula_comb->set_id_submit_formula_comb($id_formula_comb);
+                        $this->m_formula_comb->delete();
                     }
                 }
-
-                $check = $this->input->post("check");
+            }
+            $check = $this->input->post("check");
                 if($check != ""){
                     foreach($check as $a){
-                        foreach($check as $a){
-                            $config = array(
-                                array(
-                                    "field" => "attr_name".$a,
-                                    "label" => "Attribute Name",
-                                    "rules" => "required"
-                                )
-                            );
-                            $this->form_validation->set_rules($config);
-                            if($this->form_validation->run()){
-                                $attr_name = $this->input->post("attr_name".$a);
-                                $id_attr = $this->m_formula_attr->insert($attr_name,$this->id_last_modified);
-                                if($id_attr){
-                                    $config = array(
-                                        array(
-                                            "field" => "rumus".$a,
-                                            "label" => "Attribute Formula",
-                                            "rules" => "required"
-                                        )
-                                    );
-                                    $this->form_validation->set_rules($config);
-                                    if($this->form_validation->run()){
-                                        $rumus = $this->input->post("rumus".$a);
-                                        $this->m_formula_attr->insert_attr_combination($id_submit_formula,$id_attr,$rumus); 
-                                    }
-                                }
-                            }
+                        $config = array(
+                            array(
+                                "field" => "id_attr".$a,
+                                "label" => "Attribute",
+                                "rules" => "required"
+                            ),
+                            array(
+                                "field" => "koefisien".$a,
+                                "label" => "Koefisien",
+                                "rules" => "required"
+                            )
+                        );
+                        $this->form_validation->set_rules($config);
+                        if($this->form_validation->run()){
+                            $this->load->model("m_formula_comb");
+
+                            $id_formula_attr = $this->input->post("id_attr".$a);
+                            $koefisien = $this->input->post("koefisien".$a);
+                            $this->m_formula_comb->set_id_mstr_formula($id_submit_formula);
+                            $this->m_formula_comb->set_id_formula_attr($id_formula_attr);
+                            $this->m_formula_comb->set_koefisien($koefisien);
+                            $this->m_formula_comb->insert();
                         }
                     }
                 }
-            }
-            else{
-
-            }
-        }
-        else{
-
         }
         redirect("formula");
     }
@@ -178,87 +212,12 @@ class Formula extends CI_Controller{
         );
         $this->form_validation->set_rules($config);
         if($this->form_validation->run()){
+            $this->load->model("m_formula");
             $id_formula = $this->input->post("id_formula");
-            $result = $this->m_formula->delete($id_formula,$this->id_last_modified);
-            if($result){
-
-            }
-            else{
-
-            }
-        }
-        else{
-
+            $this->m_formula->set_id_submit_formula($id_formula);
+            $this->m_formula->delete();
         }
         redirect("formula");
-    }
-    public function execute(){
-        $check = $this->input->post("check");
-        $id_formula = $this->input->post("id_formula");
-        $variable = $this->input->post("variables");
-        $detail = array(
-            "formula_name" => $this->input->post("formula_name"),
-            "formula_desc" => $this->input->post("formula_desc"),
-        );
-        if($check != ""){
-            $a = 0;
-            $formula = array();
-            foreach($check as $for_var){
-                $formula[$a]["attr"] = $this->input->post("attr_name".$for_var);
-                $where = array(
-                    "formula_attr_name" => $formula[$a]["attr"]
-                );
-                $field = array(
-                    "satuan_attr"
-                );
-                $result = selectRow("mstr_formula_attr",$where,$field);
-                $result = $result->result_array();
-                $formula[$a]["satuan"] = $result[0]["satuan_attr"];
-                $formula[$a]["formula_ctrl"] = $this->input->post("rumus".$for_var);
-                $formula[$a]["formula"] = $this->input->post("rumus".$for_var);
-                $a++;
-            }
-            $variable = explode(";",$variable);
-            for($a = 0; $a<count($variable);$a++){
-                if($variable[$a] != ""){
-                    $args = explode("=",$variable[$a]);
-                    for($b = 0; $b<count($formula); $b++){
-                        $formula[$b]["formula"] = str_replace("@".$args[0],$args[1],$formula[$b]["formula"]);
-                    }
-                }
-            }
-            $regex = "^([-+]? ?(\d+|\(\g<1>\))( ?[-+*\/] ?\g<1>)?)$^";
-            for($a = 0; $a<count($formula); $a++){
-                if(preg_match($regex,$formula[$a]["formula"])){
-                    eval('$formula[$a]["answer"]= '.$formula[$a]["formula"].';');
-                    
-                }
-                else{
-                    $formula[$a]["answer"] = "Invalid Formula";
-                }
-            }
-            $data = array(
-                "formula" => $formula,
-                "detail" => $detail,
-                "variable" => $variable
-            );
-            $this->load->view("req_include/head");
-            $this->load->view("plugin/datatable/datatable-css");
-            $this->load->view("req_include/page_open");
-            $this->load->view("req_include/navbar");
-            $this->load->view("formula/page_open");
-            $this->load->view("formula/result",$data);
-            $this->load->view("formula/page_close");
-            $this->load->view("req_include/page_close");
-            $this->load->view("req_include/script");
-            $this->load->view("plugin/datatable/datatable-js");
-        }
-        else{
-            echo '<script type="text/javascript">',
-                'close();',
-                '</script>'
-            ;
-        }
     }
 }
 
