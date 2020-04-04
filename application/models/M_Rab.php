@@ -27,6 +27,19 @@ class M_Rab extends CI_Model{
         $result = executeQuery($query,$args);
         return $result;
     }
+    public function detail_rab(){
+        $sql = "select id_submit_rab,id_formula,id_project,satuan_htg,id_submit_formula,formula_name,formula_desc,id_formula_attr,koefisien 
+        from tbl_project_rab
+        inner join mstr_formula on mstr_formula.id_submit_formula = tbl_project_rab.id_formula
+        inner join tbl_formula_combination on tbl_formula_combination.id_mstr_formula = mstr_formula.id_submit_formula
+        where status_formula_comb = 'ACTIVE' and formula_status = 'ACTIVE' and status_rab = 'ACTIVE'
+        and id_project = ?";
+        $args = array(
+            $this->id_project
+        );
+        $result = executeQuery($sql,$args);
+        return $result;
+    }
     public function insert(){
         $where = array(
             "id_project" => $this->id_project,

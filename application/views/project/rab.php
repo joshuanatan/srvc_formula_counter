@@ -39,6 +39,8 @@
         </tbody>
     </table>
     <a href = "<?php echo base_url();?>project" class = "btn btn-primary btn-sm">BACK</a>
+    <a href = "<?php echo base_url();?>project/count_unit/<?php echo $project[0]["id_submit_project"];?>" target = "_blank" class = "btn btn-warning btn-sm">COUNT ESTIMATED UNIT</a>
+    <a href = "<?php echo base_url();?>project/count_price/<?php echo $project[0]["id_submit_project"];?>" target = "_blank" class = "btn btn-danger btn-sm">COUNT ESTIMATED COST</a>
 </div>
 <div class = "modal fade" id = "addRab">
     <div class = "modal-dialog modal-lg">
@@ -116,7 +118,7 @@ function addRabRow(){
             }
             
             var length = $(".rab_row").length;
-            var html = "<tr class = 'rab_row'><td><div class = 'checkbox-custom checkbox-primary'><input checked type = 'checkbox' name = 'check[]' value = '"+length+"'><label></label></div></td><td><select class = 'form-control' name = 'formula"+length+"' id = 'formulaListRow"+length+"'>"+options+"</select><br/><div><ul id = 'detailFormulaList"+length+"'></ul></div></td><td><input type = 'number' class = 'form-control' name = 'satuan_htg"+length+"'></td></tr>";
+            var html = "<tr class = 'rab_row'><td><div class = 'checkbox-custom checkbox-primary'><input checked type = 'checkbox' name = 'check[]' value = '"+length+"'><label></label></div></td><td><select class = 'form-control' name = 'formula"+length+"' id = 'formulaListRow"+length+"'>"+options+"</select><br/><div><ul id = 'detailFormulaList"+length+"'></ul></div></td><td><input type = 'number' class = 'form-control' step = '0.0000001' name = 'satuan_htg"+length+"'></td></tr>";
             $("#add_row_container").before(html);
         }
     });

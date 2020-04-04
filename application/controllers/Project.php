@@ -267,4 +267,32 @@ class Project extends CI_Controller{
         }
         redirect("project/rab/".$id_prj);
     }
+    public function count_unit($id_project){
+        if($id_project != "" && is_numeric($id_project)){
+            $this->load->model("m_rab");
+            $this->m_rab->set_id_project($id_project);
+            $result = $this->m_rab->detail_rab();
+            if($result->num_rows() > 0){
+                
+            }
+            else{
+                echo "<script type='text/javascript'>";
+                echo "close();";
+                echo "</script>";
+            }
+        }
+        else{
+            echo "<script type='text/javascript'>";
+            echo "close();";
+            echo "</script>";
+        }
+    }
+    public function count_price($id_project){
+        if($project != "" && is_numeric($id_project)){
+
+        }
+        else{
+            redirect("project");
+        }
+    }
 }
