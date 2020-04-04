@@ -46,5 +46,27 @@ class Formula extends CI_Controller{
         }
         echo json_encode($respond);
     }
+    public function list(){
+        $respond["status"] = "SUCCESS";
+        $respond["main"] = array();
+        $respond["attr"] = array();
+
+        $this->load->model("m_formula");
+        $result = $this->m_formula->list();
+        if($result->num_rows() > 0){
+            $result = $result->result_array();
+            for($a = 0; $a<count($result); $a++){
+                $respond["main"][$a]["name"] = $result[$a]["formula_name"];
+                $respond["main"][$a]["desc"] = $result[$a]["formula_desc"];
+                $respond["main"][$a]["status"] = $result[$a]["formula_status"];
+                $respond["main"][$a]["last_modified"] = $result[$a]["formula_last_modified"];
+                $respond["main"][$a]["id_formula"] = $result[$a]["id_submit_formula"];
+            }
+        }
+        else{
+            $respond["status"] = "ERROR";
+        }
+        echo json_encode($respond);
+    }
 }
 ?>
