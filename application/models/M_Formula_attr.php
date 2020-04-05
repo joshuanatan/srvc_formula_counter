@@ -7,8 +7,10 @@ class M_Formula_attr extends CI_Model{
     private $formula_attr_name = "";
     private $harga_satuan_attr = 0;
     private $satuan_attr = "";
+    private $tipe_attr = "";
     private $formula_attr_last_modified = "";
     private $id_last_modified = 0;
+    
 
     public function __construct(){
         parent::__construct();
@@ -17,7 +19,8 @@ class M_Formula_attr extends CI_Model{
     }
     public function list(){
         $where = array(
-            "status_formula_attr" => "ACTIVE" 
+            "status_formula_attr" => "ACTIVE",
+            "tipe_attr" => $this->tipe_attr 
         );
         $field = array(
             "id_submit_formula_attr","formula_attr_name","harga_satuan_attr","satuan_attr","status_formula_attr","formula_attr_last_modified","id_last_modified"
@@ -48,6 +51,7 @@ class M_Formula_attr extends CI_Model{
                 "formula_attr_name" => $this->formula_attr_name,
                 "harga_satuan_attr" => $this->harga_satuan_attr,
                 "satuan_attr" => $this->satuan_attr,
+                "tipe_attr" => $this->tipe_attr,
                 "status_formula_attr" => "ACTIVE",
                 "formula_attr_last_modified" => $this->formula_attr_last_modified,
                 "id_last_modified" => $this->id_last_modified
@@ -122,6 +126,15 @@ class M_Formula_attr extends CI_Model{
             return false;
         }
     }
+    public function set_tipe_attr($tipe_attr = ""){
+        if($tipe_attr != ""){
+            $this->tipe_attr = $tipe_attr;
+            return true;
+        }
+        else{
+            return false;
+        }
+    }
     public function get_id_submit_formula_attr(){
         return $this->id_submit_formula_attr;
     }
@@ -133,5 +146,8 @@ class M_Formula_attr extends CI_Model{
     }
     public function get_satuan_attr(){
         return $this->satuan_attr;
+    }
+    public function get_tipe_attr(){
+        return $this->tipe_attr;
     }
 }

@@ -87,7 +87,7 @@ class M_Formula_comb extends CI_Model{
     }
     public function list(){
         $sql = "
-        select id_submit_formula_comb, id_formula_attr, koefisien, status_formula_comb, formula_attr_name, harga_satuan_attr,satuan_attr
+        select id_submit_formula_comb, id_formula_attr, koefisien, status_formula_comb, formula_attr_name, harga_satuan_attr,satuan_attr, tipe_attr
         from tbl_formula_combination 
         inner join mstr_formula_attr on mstr_formula_attr.id_submit_formula_attr = tbl_formula_combination.id_formula_attr 
         where id_mstr_formula = ? and status_formula_attr = 'ACTIVE' and status_formula_comb = 'ACTIVE'";

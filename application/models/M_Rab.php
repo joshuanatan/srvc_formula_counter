@@ -28,7 +28,7 @@ class M_Rab extends CI_Model{
         return $result;
     }
     public function detail_rab(){
-        $sql = "select id_submit_rab,id_formula,id_project,satuan_htg,id_submit_formula,formula_name,formula_desc,id_formula_attr,koefisien,formula_attr_name, harga_satuan_attr, satuan_attr, round((satuan_htg*koefisien),6) as jumlah_unit, round(satuan_htg*harga_satuan_attr,2) as harga_satuan
+        $sql = "select id_submit_rab,id_formula,id_project,satuan_htg,id_submit_formula,formula_name,formula_desc,id_formula_attr,koefisien,formula_attr_name, harga_satuan_attr, satuan_attr, round((satuan_htg*koefisien),6) as jumlah_unit, round(satuan_htg*harga_satuan_attr*koefisien,2) as harga_satuan
         from tbl_project_rab
         inner join mstr_formula on mstr_formula.id_submit_formula = tbl_project_rab.id_formula
         inner join tbl_formula_combination on tbl_formula_combination.id_mstr_formula = mstr_formula.id_submit_formula
