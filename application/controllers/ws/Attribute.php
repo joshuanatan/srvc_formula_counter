@@ -52,6 +52,29 @@ class Attribute extends CI_Controller{
         }
         echo json_encode($respond);
     }
+    public function daftar($bahan){
+        $respond["status"] = "SUCCESS";
+        $respond["attr"] = array();
+        
+        $this->load->model("m_formula_attr");
+        $this->m_formula_attr->set_tipe_attr($bahan);
+        $result = $this->m_formula_attr->list();
+        if($result->num_rows() > 0){
+            $result = $result->result_array();
+            for($a = 0; $a<count($result); $a++){
+                $respond["attr"][$a]["attr_id"] = $result[$a]["id_submit_formula_attr"];
+                $respond["attr"][$a]["attr_name"] = $result[$a]["formula_attr_name"];
+                $respond["attr"][$a]["attr_price"] = $result[$a]["harga_satuan_attr"];
+                $respond["attr"][$a]["attr_unit"] = $result[$a]["satuan_attr"];
+                $respond["attr"][$a]["attr_status"] = $result[$a]["status_formula_attr"];
+                $respond["attr"][$a]["attr_last"] = $result[$a]["formula_attr_last_modified"];
+            }
+        }
+        else{
+            $respond["status"] = "ERROR";
+        }
+        echo json_encode($respond);
+    }
     public function list_unassigned_attr($id_formula){
         if($id_submit_attr != "" && is_numeric($id_submit_attr)){
             $respond["status"] = "SUCCESS";

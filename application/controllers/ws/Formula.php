@@ -32,12 +32,14 @@ class Formula extends CI_Controller{
                             "id_formula_comb" => $result[$a]["id_submit_formula_comb"],
                             "id_formula_attr" => $result[$a]["id_formula_attr"],
                             "attr_name" => $result[$a]["formula_attr_name"],
+                            "tipe_attr" => $result[$a]["tipe_attr"],
                             "koefisien" => $result[$a]["koefisien"]
                         );
                     }
                 }
             }
             else{
+                echo "test";
                 $respond["status"] = "ERROR";
             }
         }
