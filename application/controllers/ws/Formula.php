@@ -39,7 +39,6 @@ class Formula extends CI_Controller{
                 }
             }
             else{
-                echo "test";
                 $respond["status"] = "ERROR";
             }
         }
