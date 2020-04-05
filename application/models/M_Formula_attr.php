@@ -40,7 +40,8 @@ class M_Formula_attr extends CI_Model{
     }
     public function insert(){
         $where = array(
-            "formula_attr_name" => $attr_name,
+            "formula_attr_name" => $this->formula_attr_name,
+            "status_formula_attr" => "ACTIVE"
         );
         $field = array(
             "id_submit_formula_attr"

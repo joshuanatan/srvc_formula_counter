@@ -115,4 +115,17 @@ class Alat extends CI_Controller{
         }
         redirect("alat");
     }
+    public function import(){
+        $data = array("Ember Aduk","Pacul Aduk","Blencong","Sekop","Pahat Besi","Timbrisan Tanah","Timbrisan Mesin/Stamper","Bar Cutter","Bar Binder","Bor Listrik","Pemotong Keramik","Compressor Cat ","Concrete Mixer","Pompa Beton","Vibrator");
+        $harga = array("7000","50000","50000","70000","25000","50000","100000","200","200","25000","3000","100000","250000","350000","100000");
+        $satuan = array("bh","bh","bh","bh","bh","bh","m3","kg","kg","hk","m2","hr","m3","m3","m3");
+        for($a = 0; $a<count($data); $a++){
+            $this->load->model("m_formula_attr");
+            $this->m_formula_attr->set_formula_attr_name(strtoupper($data[$a]));
+            $this->m_formula_attr->set_harga_satuan_attr($harga[$a]);
+            $this->m_formula_attr->set_satuan_attr(strtoupper($satuan[$a]));
+            $this->m_formula_attr->set_tipe_attr("ALAT");
+            $this->m_formula_attr->insert();
+        }
+    }
 }

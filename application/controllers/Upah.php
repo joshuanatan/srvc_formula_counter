@@ -115,4 +115,20 @@ class Upah extends CI_Controller{
         }
         redirect("upah");
     }
+    public function import(){
+        $data = array(
+            "Kenek/Laden","Tukang Gali","Tukang Batu Kasar","Tukang Batu Halus","Tukang Besi","Tukang Seng","Tukang Kayu Kasar","Tukang Kayu Halus","Tukang Cat","Tukang Pipa","Tukang Listrik","Kepala Tukang","Mandor"
+        );
+        $harga = array(
+            "90000","170000","125000","125000","125000","125000","125000","135000","125000","125000","125000","140000","160000",
+        );
+        for($a = 0; $a<count($data); $a++){
+            $this->load->model("m_formula_attr");
+            $this->m_formula_attr->set_formula_attr_name(strtoupper($data[$a]));
+            $this->m_formula_attr->set_harga_satuan_attr($harga[$a]);
+            $this->m_formula_attr->set_satuan_attr("HARI");
+            $this->m_formula_attr->set_tipe_attr("UPAH");
+            $this->m_formula_attr->insert();
+        }
+    }
 }
