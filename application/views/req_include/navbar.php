@@ -69,19 +69,31 @@
                     <li class="site-menu-item">
                         <a class="animsition-link" href="<?php echo base_url();?>project">
                             <i class="site-menu-icon md-collection-text" aria-hidden="true"></i>
-                            <span class="site-menu-title">Project</span>
+                            <span class="site-menu-title">Proyek</span>
                         </a>
                     </li>
                     <li class="site-menu-item">
                         <a class="animsition-link" href="<?php echo base_url();?>formula">
                             <i class="site-menu-icon md-collection-text" aria-hidden="true"></i>
-                            <span class="site-menu-title">Formula</span>
+                            <span class="site-menu-title">Nama Perkerjaan</span>
                         </a>
                     </li>
                     <li class="site-menu-item">
                         <a class="animsition-link" href="<?php echo base_url();?>attribute">
                             <i class="site-menu-icon md-receipt" aria-hidden="true"></i>
-                            <span class="site-menu-title">Formula Attributes</span>
+                            <span class="site-menu-title">Bahan</span>
+                        </a>
+                    </li>
+                    <li class="site-menu-item">
+                        <a class="animsition-link" href="<?php echo base_url();?>upah">
+                            <i class="site-menu-icon md-receipt" aria-hidden="true"></i>
+                            <span class="site-menu-title">Upah</span>
+                        </a>
+                    </li>
+                    <li class="site-menu-item">
+                        <a class="animsition-link" href="<?php echo base_url();?>alat">
+                            <i class="site-menu-icon md-receipt" aria-hidden="true"></i>
+                            <span class="site-menu-title">Alat</span>
                         </a>
                     </li>
                 </ul>
