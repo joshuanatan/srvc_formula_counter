@@ -1,10 +1,10 @@
 <div class="page">
     <div class="page-header">
-        <h1 class="page-title">Formula Attributes</h1>
+        <h1 class="page-title">Daftar Bahan</h1>
         <div class="page-header-actions">
             <ol class="breadcrumb">
                 <li class="breadcrumb-item"><a href="<?php echo base_url();?>welcome/dashboard">Home</a></li>
-                <li class="breadcrumb-item active">Formula Attributes</li>
+                <li class="breadcrumb-item active">Bahan</li>
             </ol>
         </div>
     </div>

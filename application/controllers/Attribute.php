@@ -13,6 +13,7 @@ class Attribute extends CI_Controller{
         $this->load->view("attribute/page_open");
         
         $this->load->model("m_formula_attr");
+        $this->m_formula_attr->set_tipe_attr("BAHAN");
         $result = $this->m_formula_attr->list();
         $data = array(
             "attribute" => $result->result()
@@ -51,6 +52,7 @@ class Attribute extends CI_Controller{
             $this->m_formula_attr->set_formula_attr_name($attr_name);
             $this->m_formula_attr->set_harga_satuan_attr($hrg_attr);
             $this->m_formula_attr->set_satuan_attr($attr_unit);
+            $this->m_formula_attr->set_tipe_attr("BAHAN");
             $id_formula_attr = $this->m_formula_attr->insert();
         }
         redirect("attribute");

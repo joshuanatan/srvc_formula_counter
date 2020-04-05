@@ -1,11 +1,11 @@
 <div class = "col-lg-12">
-    <button type = "button" class = "btn btn-primary btn-sm" data-toggle = "modal" data-target = "#addAttribute">Add Formula Attribute</button><br/><br/>
+    <button type = "button" class = "btn btn-primary btn-sm" data-toggle = "modal" data-target = "#addAttribute">Tambah Data Bahan</button><br/><br/>
     <table class = "table table-bordered table-hover table-striped" data-plugin = "dataTable">
         <thead>
-            <th>Attribute Name</th>
-            <th>Attribute Unit (Satuan)</th>
-            <th>Attribute Price(Satuan)</th>
-            <th>Attribute Status</th>
+            <th>Nama Bahan</th>
+            <th>Satuan Bahan</th>
+            <th>Harga Satuan</th>
+            <th>Status Bahan</th>
             <th>Last Modified</th>
             <th>Action</th>
         </thead>
@@ -34,20 +34,20 @@
     <div class = "modal-dialog">
         <div class = "modal-content">
             <div class = "modal-header">
-                <h4 class = "modal-title">Add Attribute</h4>
+                <h4 class = "modal-title">Tambah Data Bahan</h4>
             </div>
             <div class = "modal-body">
                 <form action = "<?php echo base_url();?>attribute/register" method = "POST">
                     <div class = "form-group">
-                        <h5>Attribute Name</h5>
+                        <h5>Nama Bahan</h5>
                         <input type = "text" class = "form-control" required name = "attr_name">
                     </div>
                     <div class = "form-group">
-                        <h5>Attribute Unit (Satuan)</h5>
+                        <h5>Satuan Bahan</h5>
                         <input type = "text" required name = "attr_unit" class = "form-control">
                     </div>
                     <div class = "form-group">
-                        <h5>Attribute Price</h5>
+                        <h5>Harga Satuan</h5>
                         <input type = "text" required name = "attr_price" class = "form-control">
                     </div>
                     <div class = "form-group">
@@ -64,21 +64,21 @@
     <div class = "modal-dialog">
         <div class = "modal-content">
             <div class = "modal-header">
-                <h4 class = "modal-title">Edit Attribute</h4>
+                <h4 class = "modal-title">Ubah Data Bahan</h4>
             </div>
             <div class = "modal-body">
                 <form action = "<?php echo base_url();?>attribute/update" method = "POST">
                     <input type = "hidden" name = "attr_id" id = "attr_id_edit">
                     <div class = "form-group">
-                        <h5>Attribute Name</h5>
+                        <h5>Nama Bahan</h5>
                         <input type = "text" class = "form-control" required name = "attr_name" id = "attr_name_edit">
                     </div>
                     <div class = "form-group">
-                        <h5>Attribute Unit (Satuan)</h5>
+                        <h5>Satuan Bahan</h5>
                         <input type = "text" required name = "attr_unit" class = "form-control" id = "attr_unit_edit">
                     </div>
                     <div class = "form-group">
-                        <h5>Attribute Price</h5>
+                        <h5>Harga Satuan</h5>
                         <input type = "text" required name = "attr_price" class = "form-control" id = "attr_price_edit">
                     </div>
                     <div class = "form-group">
@@ -95,24 +95,20 @@
     <div class = "modal-dialog">
         <div class = "modal-content">
             <div class = "modal-header">
-                <h4 class = "modal-title">Delete Attribute</h4>
+                <h4 class = "modal-title">Hapus Bahan</h4>
             </div>
             <div class = "modal-body">
                 <form action = "<?php echo base_url();?>attribute/delete" method = "POST">
                 <input type = "hidden" name = "attr_id" value = "" id = "attr_id_delete">
-                    <h4 align = "center">Are you sure want to delete this attribute?</h4>
+                    <h4 align = "center">Apakah anda yakin akan menghapus data bahan di bawah ini?</h4>
                     <table class = "table table-bordered table-striped table-hover">
-                        <thead>
-                            <th style = "width:50%">Attributes</th>
-                            <th style = "width:50%">Values</th>
-                        </thead>
                         <tbody>
                             <tr>
-                                <td>Attribute Name</td>
+                                <td>Nama Bahan</td>
                                 <td id = "attr_name_delete"></td>
                             </tr>
                             <tr>
-                                <td>Attribute Unit</td>
+                                <td>Satuan Bahan</td>
                                 <td id = "attr_unit_delete"></td>
                             </tr>
                         </tbody>
