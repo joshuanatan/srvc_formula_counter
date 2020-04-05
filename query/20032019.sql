@@ -8,12 +8,12 @@ create table mstr_formula(
     id_last_modified int
 );
 drop table mstr_formula_attr;
-select * from mstr_formula_attr;
 create table mstr_formula_attr(
 	id_submit_formula_attr int primary key auto_increment,
     formula_attr_name varchar(100),
     harga_satuan_attr int,
     satuan_attr varchar(100),
+    tipe_attr varchar(10) comment 'UPAH/ALAT/BAHAN',
     status_formula_attr varchar(10),
     formula_attr_last_modified datetime,
     id_last_modified int
@@ -28,6 +28,7 @@ create table tbl_formula_combination(
     formula_comb_last_modified datetime,
     id_last_modified int
 );
+drop table mstr_project;
 create table mstr_project(
 	id_submit_project int primary key auto_increment,
     prj_name varchar(100),
@@ -38,7 +39,6 @@ create table mstr_project(
     project_last_modified datetime,
     id_last_modified int
 );
-show columns from mstr_project;
 create table mstr_client(
 	id_submit_client int primary key auto_increment,
     clnt_name varchar(100),
@@ -48,7 +48,7 @@ create table mstr_client(
 	clnt_last_modified datetime,
 	id_last_modified int
 );
-show columns from mstr_client;
+drop table tbl_project_rab;
 create table tbl_project_rab(
 	id_submit_rab int primary key auto_increment,
     id_formula int,
@@ -58,9 +58,3 @@ create table tbl_project_rab(
     rab_last_modified datetime,
     id_last_modified int
 );
-show columns from mstr_acc;
-
-
-show columns from tbl_project_rab;
-select * from mstr_project;
-select * from mstr_client;
