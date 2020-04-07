@@ -226,10 +226,11 @@ class Project extends CI_Controller{
         $result = $this->m_project->detail();
         $data["project"] = $result->result_array();
 
+        /*
         $this->m_rab->set_id_project($id_project);
         $result = $this->m_rab->list();
         $data["rab"] = $result->result_array();
-        
+        */
         $this->load->view("project/rab",$data);
         $this->load->view("project/page_close");
         $this->load->view("req_include/page_close");

@@ -51,21 +51,6 @@ class Formula extends CI_Controller{
         $respond["main"] = array();
         $respond["attr"] = array();
 
-        $this->load->model("m_formula");
-        $result = $this->m_formula->list();
-        if($result->num_rows() > 0){
-            $result = $result->result_array();
-            for($a = 0; $a<count($result); $a++){
-                $respond["main"][$a]["name"] = $result[$a]["formula_name"];
-                $respond["main"][$a]["desc"] = $result[$a]["formula_desc"];
-                $respond["main"][$a]["status"] = $result[$a]["formula_status"];
-                $respond["main"][$a]["last_modified"] = $result[$a]["formula_last_modified"];
-                $respond["main"][$a]["id_formula"] = $result[$a]["id_submit_formula"];
-            }
-        }
-        else{
-            $respond["status"] = "ERROR";
-        }
         echo json_encode($respond);
     }
     public function subformula($id_formula){
@@ -84,6 +69,54 @@ class Formula extends CI_Controller{
                     $respond["main"][$a]["name"] = $result[$a]["subformula_name"];
                     $respond["main"][$a]["status"] = $result[$a]["subformula_status"];
                     $respond["main"][$a]["last_modified"] = $result[$a]["subformula_last_modified"];
+                }
+            }
+            else{
+                $respond["status"] = "ERROR";
+            }
+        }
+        else{
+            $respond["status"] = "ERROR";
+        }
+        echo json_encode($respond);
+    }
+    public function category(){
+        $respond["status"] = "SUCCESS";
+        $respond["main"] = array();
+        $respond["attr"] = array();
+
+        $this->load->model("m_formula_cat");
+        $result = $this->m_formula_cat->list();
+        if($result->num_rows() > 0){
+            $result = $result->result_array();
+            for($a = 0; $a<count($result); $a++){
+                $respond["main"][$a]["id_formula_cat"] = $result[$a]["id_submit_formula_cat"];
+                $respond["main"][$a]["cat_name"] = $result[$a]["formula_cat_name"];
+                $respond["main"][$a]["cat_status"] = $result[$a]["status_formula_cat"];
+                $respond["main"][$a]["cat_last_modified"] = $result[$a]["formula_cat_last_modified"];
+            }
+        }
+        else{
+            $respond["status"] = "ERROR";
+        }   
+        echo json_encode($respond);
+    }
+    public function daftar_pekerjaan($id_formula_cat){
+        $respond["status"] = "SUCCESS";
+        $respond["main"] = array();
+        $respond["attr"] = array();
+
+        if($id_formula_cat != "" && is_numeric($id_formula_cat)){
+            $this->load->model("m_formula");
+            $this->m_formula->set_id_formula_cat($id_formula_cat);
+            $result = $this->m_formula->list();
+            if($result->num_rows() > 0){
+                $result = $result->result_array();
+                for($a = 0; $a<count($result); $a++){
+                    $respond["main"][$a]["id_formula"] = $result[$a]["id_submit_formula"];
+                    $respond["main"][$a]["formula_desc"] = $result[$a]["formula_desc"];
+                    $respond["main"][$a]["status"] = $result[$a]["formula_status"];
+                    $respond["main"][$a]["last_modified"] = $result[$a]["formula_last_modified"];
                 }
             }
             else{

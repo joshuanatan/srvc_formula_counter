@@ -1,14 +1,14 @@
 <div class = "col-lg-12">
     <h3><b><i><?php echo strtoupper($project[0]["prj_name"]);?></i></b> RAB</h3>
-    <button type = "button" class = "btn btn-primary btn-sm" data-toggle = "modal" data-target = "#addRab">Add RAB</button><br/><br/>
+    <button type = "button" class = "btn btn-primary btn-sm" data-toggle = "modal" data-target = "#addRab">Tambah Komponen RAB</button><br/><br/>
     <table class = "table table-bordered table-hover table-striped" data-plugin = "dataTable">
         <thead>
-            <th>Formula Name</th>
+            <th>Nama Pekerjaan</th>
             <th>Satuan Hitung</th>
             <th style = "width:20%">Action</th>
         </thead>
         <tbody>
-            <?php for($a = 0; $a<count($rab); $a++):?>
+            <?php for($a = 0; false; $a++):?>
             <tr id = "row<?php echo $a;?>">
                 <input type = 'hidden' id = "id_rab<?php echo $a;?>" value = "<?php echo $rab[$a]["id_submit_rab"];?>">
                 <td>
@@ -40,7 +40,6 @@
     </table>
     <a href = "<?php echo base_url();?>project" class = "btn btn-primary btn-sm">BACK</a>
     <a href = "<?php echo base_url();?>project/count_unit/<?php echo $project[0]["id_submit_project"];?>" target = "_blank" class = "btn btn-warning btn-sm">COUNT ESTIMATED UNIT</a>
-    <a href = "<?php echo base_url();?>project/count_price/<?php echo $project[0]["id_submit_project"];?>" target = "_blank" class = "btn btn-danger btn-sm">COUNT ESTIMATED COST</a>
 </div>
 <div class = "modal fade" id = "addRab">
     <div class = "modal-dialog modal-lg">
@@ -56,12 +55,13 @@
                         <table class = "table table-striped table-hover table-bordered">
                             <thead>
                                 <th>#</th>
-                                <th>Formula</th>
+                                <th>Kategori Pekerjaan</th>
+                                <th>Pekerjaan</th>
                                 <th>Satuan Hitung</th>
                             </thead>
                             <tbody>
                                 <tr id = "add_row_container">
-                                    <td colspan = 3>
+                                    <td colspan = 4>
                                         <button type = "button" class = "btn btn-primary btn-sm col-lg-12" onclick = "addRabRow()">Add Attribute</button>
                                     </td>
                                 </tr>
@@ -107,21 +107,36 @@
 <script>
 function addRabRow(){
     $.ajax({
-        url:"<?php echo base_url();?>ws/formula/list",
+        url:"<?php echo base_url();?>ws/formula/category",
         type:"GET",
         dataType:"JSON",
         success:function(respond){
 
-            var options = "";
+            var options = "<option selected disabled>Silahkan Pilih Kategori Pekerjaan</option>";
             for(var a = 0; a<respond["main"].length; a++){
-                options += "<option value = '"+respond["main"][a]["id_formula"]+"'>"+respond["main"][a]["name"].toUpperCase()+"</option>";
+                options += "<option value = '"+respond["main"][a]["id_formula_cat"]+"'>"+respond["main"][a]["cat_name"].toUpperCase()+"</option>";
             }
             
             var length = $(".rab_row").length;
-            var html = "<tr class = 'rab_row'><td><div class = 'checkbox-custom checkbox-primary'><input checked type = 'checkbox' name = 'check[]' value = '"+length+"'><label></label></div></td><td><select class = 'form-control' name = 'formula"+length+"' id = 'formulaListRow"+length+"'>"+options+"</select><br/><div><ul id = 'detailFormulaList"+length+"'></ul></div></td><td><input type = 'number' class = 'form-control' step = '0.0000001' name = 'satuan_htg"+length+"'></td></tr>";
+            var html = "<tr class = 'rab_row'><td><div class = 'checkbox-custom checkbox-primary'><input checked type = 'checkbox' name = 'check[]' value = '"+length+"'><label></label></div></td><td><select onchange = 'loadDaftarPekerjaan("+length+")' class = 'form-control' id = 'formulaListRow"+length+"'>"+options+"</select></td><td><select class = 'form-control' name = 'formula"+length+"' id = 'pekerjaanRow"+length+"'></select></td><td><input type = 'number' class = 'form-control' step = '0.0000001' name = 'satuan_htg"+length+"'></td></tr>";
             $("#add_row_container").before(html);
         }
     });
+}
+function loadDaftarPekerjaan(row){
+    var id_cat = $("#formulaListRow"+row).val();
+    $.ajax({
+        url:"<?php echo base_url();?>ws/formula/daftar_pekerjaan/"+id_cat,
+        type:"GET",
+        dataType:"JSON",
+        success:function(respond){
+            var options = "";
+            for(var a = 0; a<respond["main"].length; a++){
+                options += "<option value = '"+respond["main"][a]["id_formula"]+"'>"+respond["main"][a]["formula_desc"].toUpperCase()+"</option>";
+            }
+            $("#pekerjaanRow"+row).html(options);
+        }
+    })
 }
 function active_edit(row){
     $("#saveButton"+row).css("display","inline-block");
