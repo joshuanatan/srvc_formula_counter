@@ -24,8 +24,11 @@
                     <a href = "#" onclick = "load_delete_content(<?php echo $project[$a]['id_submit_project'];?>)" data-toggle = "modal" data-target = "#deleteProject" class = "btn btn-danger btn-sm">
                         <i class = "md-delete"></i>
                     </a>
-                    <a href = "<?php echo base_url();?>project/rab/<?php echo $project[$a]["id_submit_project"];?>" class = "btn btn-success btn-sm">
+                    <a href = "<?php echo base_url();?>project/rab/<?php echo $project[$a]["id_submit_project"];?>" class = "btn btn-warning btn-sm">
                         <i class = "md-assignment"></i>
+                    </a>
+                    <a href = "<?php echo base_url();?>project/belanja/<?php echo $project[$a]["id_submit_project"];?>" class = "btn btn-success btn-sm">
+                        <i class = "md-money-box"></i>
                     </a>
                 </td>
             </tr>
