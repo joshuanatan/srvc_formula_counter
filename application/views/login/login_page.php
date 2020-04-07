@@ -59,7 +59,6 @@
                                 <input required type="password" class="form-control" name="password" />
                                 <label class="floating-label">Password</label>
                             </div>
-                            <a class="float-right" href="forgot-password.html">Forgot password?</a>
                             <button type="submit" class="btn btn-primary btn-block btn-lg mt-40">Sign in</button>
                         </form>
                     </div>
