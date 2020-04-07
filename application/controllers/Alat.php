@@ -2,10 +2,17 @@
 defined("BASEPATH") or exit("No Direct Script Allowed");
 
 class Alat extends CI_Controller{
+    private function check_session(){
+        if($this->session->id_submit_acc == ""){
+            redirect("welcome/login");
+            exit();
+        }
+    }  
     public function __construct(){
         parent::__construct();
     }
     public function index(){
+        $this->check_session();
         $this->load->view("req_include/head");
         $this->load->view("plugin/datatable/datatable-css");
         $this->load->view("req_include/page_open");
@@ -25,6 +32,7 @@ class Alat extends CI_Controller{
         $this->load->view("plugin/datatable/datatable-js");
     }
     public function register(){
+        $this->check_session();
         $config = array(
             array(
                 "field" => "attr_name",
@@ -58,6 +66,7 @@ class Alat extends CI_Controller{
         redirect("alat");
     }
     public function update(){
+        $this->check_session();
         $config = array(
             array(
                 "field" => "attr_name",
@@ -98,6 +107,7 @@ class Alat extends CI_Controller{
         redirect("alat");
     }
     public function delete(){
+        $this->check_session();
         $config = array(
             array(
                 "field" => "attr_id",
@@ -116,6 +126,7 @@ class Alat extends CI_Controller{
         redirect("alat");
     }
     public function import(){
+        $this->check_session();
         $data = array("Ember Aduk","Pacul Aduk","Blencong","Sekop","Pahat Besi","Timbrisan Tanah","Timbrisan Mesin/Stamper","Bar Cutter","Bar Binder","Bor Listrik","Pemotong Keramik","Compressor Cat ","Concrete Mixer","Pompa Beton","Vibrator");
         $harga = array("7000","50000","50000","70000","25000","50000","100000","200","200","25000","3000","100000","250000","350000","100000");
         $satuan = array("bh","bh","bh","bh","bh","bh","m3","kg","kg","hk","m2","hr","m3","m3","m3");

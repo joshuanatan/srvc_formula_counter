@@ -2,10 +2,17 @@
 defined("BASEPATH") or exit("No Direct Script");
 
 class Project extends CI_Controller{
+    private function check_session(){
+        if($this->session->id_submit_acc == ""){
+            redirect("welcome/login");
+            exit();
+        }
+    }  
     public function __construct(){
         parent::__construct();
     }
     public function index(){
+        $this->check_session();
         $this->load->view("req_include/head");
         $this->load->view("plugin/datatable/datatable-css");
         $this->load->view("req_include/page_open");
@@ -27,6 +34,7 @@ class Project extends CI_Controller{
         $this->load->view("plugin/datatable/datatable-js");
     }
     public function register(){
+        $this->check_session();
         $config = array(
             array(
                 "field" => "prj_name",
@@ -99,6 +107,7 @@ class Project extends CI_Controller{
         redirect("project");
     }
     public function update(){
+        $this->check_session();
         $config = array(
             array(
                 "field" => "id_submit_project",
@@ -178,6 +187,7 @@ class Project extends CI_Controller{
         redirect("project");
     }
     public function delete(){
+        $this->check_session();
         $config = array(
             array(
                 "field" => "id_project",
@@ -198,6 +208,7 @@ class Project extends CI_Controller{
         redirect("project");
     }
     public function rab($id_project){
+        $this->check_session();
         if($id_project == "" || !is_numeric($id_project)){
             redirect("project");
         }
@@ -226,6 +237,7 @@ class Project extends CI_Controller{
         $this->load->view("plugin/datatable/datatable-js");
     }
     public function register_rab(){
+        $this->check_session();
         $config = array(
             array(
                 "field" => "id_prj",
@@ -268,6 +280,7 @@ class Project extends CI_Controller{
         redirect("project/rab/".$id_prj);
     }
     public function count_unit($id_project){
+        $this->check_session();
         if($id_project != "" && is_numeric($id_project)){
             $this->load->model("m_rab");
             $this->m_rab->set_id_project($id_project);
@@ -300,8 +313,32 @@ class Project extends CI_Controller{
         }
     }
     public function count_price($id_project){
+        $this->check_session();
         if($project != "" && is_numeric($id_project)){
 
+        }
+        else{
+            redirect("project");
+        }
+    }
+    public function belanja($id_project){
+        $this->check_session();
+        if($id_project != "" && is_numeric($id_project)){
+            $this->load->view("req_include/head");
+            $this->load->view("plugin/datatable/datatable-css");
+            $this->load->view("req_include/page_open");
+            $this->load->view("req_include/navbar");
+            $this->load->view("project/page_open");
+
+            $this->load->model("m_rab");
+            $this->load->model("m_project");
+            $this->load->model("m_formula");
+            
+            $this->load->view("project/belanja",$data);
+            $this->load->view("project/page_close");
+            $this->load->view("req_include/page_close");
+            $this->load->view("req_include/script");
+            $this->load->view("plugin/datatable/datatable-js");
         }
         else{
             redirect("project");

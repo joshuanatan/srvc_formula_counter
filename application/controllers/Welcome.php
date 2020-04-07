@@ -96,19 +96,12 @@ class Welcome extends CI_Controller{
     }
     public function sign_up(){
         
-        if(!$this->check_root_user()){
-            $this->load->view("login/signup_page");
-            $this->load->view("req_include/script");
-        }
-        else{
-            $msg = "Root user exists, please contact root user for registration";
-            $this->session->set_flashdata("msg",$msg);
-            $this->session->set_flashdata("type","danger");
-            redirect("welcome");
-        }
+        $this->load->view("login/signup_page");
+        $this->load->view("req_include/script");
     }
     public function register(){
-        if(!$this->check_root_user()){
+        //if(!$this->check_root_user()){
+        if(true){
             $config = array(
                 array(
                     "field" => "email",

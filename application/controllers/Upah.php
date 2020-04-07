@@ -2,10 +2,17 @@
 defined("BASEPATH") or exit("No Direct Script Allowed");
 
 class Upah extends CI_Controller{
+    private function check_session(){
+        if($this->session->id_submit_acc == ""){
+            redirect("welcome/login");
+            exit();
+        }
+    }  
     public function __construct(){
         parent::__construct();
     }
     public function index(){
+        $this->check_session();
         $this->load->view("req_include/head");
         $this->load->view("plugin/datatable/datatable-css");
         $this->load->view("req_include/page_open");
@@ -25,6 +32,7 @@ class Upah extends CI_Controller{
         $this->load->view("plugin/datatable/datatable-js");
     }
     public function register(){
+        $this->check_session();
         $config = array(
             array(
                 "field" => "attr_name",
@@ -58,6 +66,7 @@ class Upah extends CI_Controller{
         redirect("upah");
     }
     public function update(){
+        $this->check_session();
         $config = array(
             array(
                 "field" => "attr_name",
@@ -98,6 +107,7 @@ class Upah extends CI_Controller{
         redirect("upah");
     }
     public function delete(){
+        $this->check_session();
         $config = array(
             array(
                 "field" => "attr_id",
@@ -116,6 +126,7 @@ class Upah extends CI_Controller{
         redirect("upah");
     }
     public function import(){
+        $this->check_session();
         $data = array(
             "Kenek/Laden","Tukang Gali","Tukang Batu Kasar","Tukang Batu Halus","Tukang Besi","Tukang Seng","Tukang Kayu Kasar","Tukang Kayu Halus","Tukang Cat","Tukang Pipa","Tukang Listrik","Kepala Tukang","Mandor"
         );
