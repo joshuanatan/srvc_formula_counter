@@ -74,13 +74,13 @@
                     </li>
                     <li class="site-menu-item">
                         <a class="animsition-link" href="<?php echo base_url();?>formula">
-                            <i class="site-menu-icon md-collection-text" aria-hidden="true"></i>
+                            <i class="site-menu-icon md-storage" aria-hidden="true"></i>
                             <span class="site-menu-title">Nama Perkerjaan</span>
                         </a>
                     </li>
                     <li class="site-menu-item">
                         <a class="animsition-link" href="<?php echo base_url();?>attribute">
-                            <i class="site-menu-icon md-receipt" aria-hidden="true"></i>
+                            <i class="site-menu-icon md-plaster" aria-hidden="true"></i>
                             <span class="site-menu-title">Bahan</span>
                         </a>
                     </li>
@@ -92,7 +92,7 @@
                     </li>
                     <li class="site-menu-item">
                         <a class="animsition-link" href="<?php echo base_url();?>alat">
-                            <i class="site-menu-icon md-receipt" aria-hidden="true"></i>
+                            <i class="site-menu-icon md-truck" aria-hidden="true"></i>
                             <span class="site-menu-title">Alat</span>
                         </a>
                     </li>
