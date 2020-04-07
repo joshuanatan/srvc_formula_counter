@@ -58,3 +58,11 @@ create table tbl_project_rab(
     rab_last_modified datetime,
     id_last_modified int
 );
+create table mstr_formula_cat(
+	id_submit_formula_cat int primary key auto_increment,
+    formula_cat_name varchar(100),
+    status_formula_cat varchar(10),
+    formula_cat_last_modified datetime,
+    id_last_modified int
+)
+)

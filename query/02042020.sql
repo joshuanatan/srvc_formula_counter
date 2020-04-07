@@ -7,3 +7,6 @@ select * from mstr_project;
 select * from mstr_client;
 
 select * from tbl_formula_combination;
+
+select * from mstr_formula_attr WHERE TIPE_ATTR = 'upah'
+delete from mstr_formula_attr where id_submit_formula_attr > 867
