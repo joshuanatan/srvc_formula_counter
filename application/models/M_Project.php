@@ -2,7 +2,7 @@
 defined("BASEPATH") or exit("No Direct Script");
 date_default_timezone_set("Asia/Jakarta");
 
-class M_Project extends CI_Model{
+class M_project extends CI_Model{
     private $id_submit_project = 0;
     private $prj_name = "";
     private $prj_addrs = "";

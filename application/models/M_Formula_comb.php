@@ -2,7 +2,7 @@
 defined("BASEPATH") or exit("No Direct Script");
 date_default_timezone_set("Asia/Jakarta");
 
-class M_Formula_comb extends CI_Model{
+class M_formula_comb extends CI_Model{
     private $id_submit_formula_comb = 0;
     private $id_mstr_formula = 0;
     private $id_formula_attr = 0;

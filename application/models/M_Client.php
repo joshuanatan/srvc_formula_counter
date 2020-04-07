@@ -2,7 +2,7 @@
 defined("BASEPATH") or exit("No Direct Script Allowed");
 date_default_timezone_set("Asia/Jakarta");
 
-class M_Client extends CI_Model{
+class M_client extends CI_Model{
     private $id_submit_client = 0;
     private $clnt_name = "";
     private $clnt_phone = "";

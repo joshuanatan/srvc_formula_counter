@@ -2,7 +2,7 @@
 defined("BASEPATH") or exit("No Direct Access Script");
 date_default_timezone_set("Asia/Jakarta");
 
-class M_Formula_attr extends CI_Model{
+class M_formula_attr extends CI_Model{
     private $id_submit_formula_attr = 0;
     private $formula_attr_name = "";
     private $harga_satuan_attr = 0;

@@ -2,10 +2,10 @@
 defined("BASEPATH") or exit("No Direct Script Access is Allowed");
 date_default_timezone_set("Asia/Jakarta");
 
-class M_Formula extends CI_Model{
+class M_formula extends CI_Model{
     private $id_submit_formula = 0;
-    private $formula_name = "";
-    private $formula_desc = "";
+    private $id_formula_cat = 0;
+    private $formula_desc = ""; 
     private $formula_last_modified = "";
     private $id_last_modified = 0;
     
@@ -16,10 +16,11 @@ class M_Formula extends CI_Model{
     }
     public function list(){
         $where = array(
+            "id_formula_cat" => $this->id_formula_cat,
             "formula_status" => "ACTIVE" 
         );
         $field = array(
-            "formula_name","formula_desc","formula_status","formula_last_modified","id_submit_formula"
+            "formula_desc","formula_status","formula_last_modified","id_submit_formula"
         );
         $result = selectRow("mstr_formula",$where,$field);
         return $result;
@@ -29,14 +30,15 @@ class M_Formula extends CI_Model{
             "id_submit_formula" => $this->id_submit_formula,
         );
         $field = array(
-            "id_submit_formula","formula_name","formula_desc"
+            "id_submit_formula","formula_desc"
         );
         $result = selectRow("mstr_formula",$where,$field);
         return $result;
     }
     public function insert(){
         $where = array(
-            "formula_name" => $this->formula_name
+            "id_formula_cat" => $this->id_formula_cat,
+            "formula_desc" => $this->formula_desc
         );
         $field = array(
             "id_submit_formula"
@@ -44,7 +46,7 @@ class M_Formula extends CI_Model{
         $result = selectRow("mstr_formula",$where,$field);
         if(!$result->num_rows() > 0){
             $data = array(
-                "formula_name" => $this->formula_name,
+                "id_formula_cat" => $this->id_formula_cat,
                 "formula_desc" => $this->formula_desc,
                 "formula_status" => "ACTIVE",
                 "formula_last_modified" => $this->formula_last_modified,
@@ -59,16 +61,25 @@ class M_Formula extends CI_Model{
     }
     public function update(){
         $where = array(
-            "id_submit_formula" => $this->id_submit_formula
+            "id_submit_formula !=" => $this->id_submit_formula,
+            "id_formula_cat" => $this->id_formula_cat,
+            "formula_desc" => $this->formula_desc
         );
-        $data = array(
-            "formula_name" => $this->formula_name,
-            "formula_desc" => $this->formula_desc,
-            "formula_last_modified" => $this->formula_last_modified,
-            "id_last_modified" => $this->id_last_modified
-        );
-        updateRow("mstr_formula",$data,$where);
-        return true;
+        if(!isExistsInTable("mstr_formula",$where)){
+            $where = array(
+                "id_submit_formula" => $this->id_submit_formula
+            );
+            $data = array(
+                "formula_desc" => $this->formula_desc,
+                "formula_last_modified" => $this->formula_last_modified,
+                "id_last_modified" => $this->id_last_modified
+            );
+            updateRow("mstr_formula",$data,$where);
+            return true;
+        }
+        else{
+            return false;
+        }
     }
     public function delete(){
         $where = array(
@@ -92,15 +103,6 @@ class M_Formula extends CI_Model{
             return false;
         }
     }
-    public function set_formula_name($formula_name = ""){
-        if($formula_name != ""){
-            $this->formula_name = $formula_name;
-            return true;
-        }   
-        else{
-            return false;
-        }
-    }
     public function set_formula_desc($formula_desc = ""){
         if($formula_desc != ""){
             $this->formula_desc = $formula_desc;
@@ -110,17 +112,25 @@ class M_Formula extends CI_Model{
             return false;
         }
     }
+    public function set_id_formula_cat($id_formula_cat = ""){
+        if($id_formula_cat != "" && is_numeric($id_formula_cat)){
+            $this->id_formula_cat = $id_formula_cat;
+            return true;
+        }
+        else{
+            return false;
+        }
+    }
     public function get_id_submit_formula(){
         return $this->id_submit_formula;
-
-    }
-    public function get_formula_name(){
-        return $this->formula_name;
 
     }
     public function get_formula_desc(){
         return $this->formula_desc;
 
+    }
+    public function get_id_formula_cat(){
+        return $this->id_formula_cat;
     }
 }
 ?>

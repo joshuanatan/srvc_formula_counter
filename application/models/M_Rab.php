@@ -2,7 +2,7 @@
 defined("BASEPATH") or exit("No Direct Script");
 date_default_timezone_set("Asia/Jakarta");
 
-class M_Rab extends CI_Model{
+class M_rab extends CI_Model{
     private $id_submit_rab = 0;
     private $id_formula = 0;
     private $id_project = 0;
