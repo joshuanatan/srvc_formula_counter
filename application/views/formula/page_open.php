@@ -1,10 +1,10 @@
 <div class="page">
     <div class="page-header">
-        <h1 class="page-title">Formula</h1>
+        <h1 class="page-title">Pekerjaan</h1>
         <div class="page-header-actions">
             <ol class="breadcrumb">
                 <li class="breadcrumb-item"><a href="<?php echo base_url();?>welcome/dashboard">Home</a></li>
-                <li class="breadcrumb-item active">Formula</li>
+                <li class="breadcrumb-item active">Nama Pekerjaan</li>
             </ol>
         </div>
     </div>
