@@ -17,9 +17,10 @@ class M_rab extends CI_Model{
     }
     public function list(){ 
         $query = "
-        select id_submit_rab,id_project,id_formula,satuan_htg,rab_last_modified,formula_name, formula_desc, formula_last_modified 
+        select id_submit_rab, id_formula, formula_desc, satuan_htg, formula_cat_name,id_formula_cat 
         from tbl_project_rab
         inner join mstr_formula on mstr_formula.id_submit_formula = tbl_project_rab.id_formula
+        inner join mstr_formula_cat on mstr_formula_cat.id_submit_formula_cat = mstr_formula.id_formula_cat
         where status_rab = 'ACTIVE' and id_project = ?";
         $args = array(
             $this->id_project   
@@ -28,13 +29,15 @@ class M_rab extends CI_Model{
         return $result;
     }
     public function detail_rab(){
-        $sql = "select id_submit_rab,id_formula,id_project,satuan_htg,id_submit_formula,formula_name,formula_desc,id_formula_attr,koefisien,formula_attr_name, harga_satuan_attr, satuan_attr, round((satuan_htg*koefisien),6) as jumlah_unit, round(satuan_htg*harga_satuan_attr*koefisien,2) as harga_satuan
+        $sql = "select id_submit_rab,id_formula,id_project,satuan_htg,id_submit_formula,formula_cat_name,formula_desc,id_formula_attr,koefisien,formula_attr_name, tipe_attr, harga_satuan_attr, satuan_attr, round((satuan_htg*koefisien),6) as jumlah_unit, round(satuan_htg*harga_satuan_attr*koefisien,2) as harga_satuan
         from tbl_project_rab
         inner join mstr_formula on mstr_formula.id_submit_formula = tbl_project_rab.id_formula
+        inner join mstr_formula_cat on mstr_formula_cat.id_submit_formula_cat = mstr_formula.id_formula_cat
         inner join tbl_formula_combination on tbl_formula_combination.id_mstr_formula = mstr_formula.id_submit_formula
         inner join mstr_formula_attr on mstr_formula_attr.id_submit_formula_attr = tbl_formula_combination.id_formula_attr
         where status_rab = 'ACTIVE' and formula_status = 'ACTIVE' and status_formula_comb = 'ACTIVE' and status_formula_attr = 'ACTIVE'
-        and id_project = ?";
+        and id_project = ?
+        order by formula_cat_name,formula_desc,tipe_attr";
         $args = array(
             $this->id_project
         );

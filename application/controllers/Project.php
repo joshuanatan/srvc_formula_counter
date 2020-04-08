@@ -220,17 +220,19 @@ class Project extends CI_Controller{
 
         $this->load->model("m_rab");
         $this->load->model("m_project");
-        $this->load->model("m_formula");
+        $this->load->model("m_formula_cat");
 
         $this->m_project->set_id_submit_project($id_project);
         $result = $this->m_project->detail();
         $data["project"] = $result->result_array();
 
-        /*
+        
         $this->m_rab->set_id_project($id_project);
         $result = $this->m_rab->list();
         $data["rab"] = $result->result_array();
-        */
+        
+        $result = $this->m_formula_cat->list();
+        $data["cat"] = $result->result_array();
         $this->load->view("project/rab",$data);
         $this->load->view("project/page_close");
         $this->load->view("req_include/page_close");

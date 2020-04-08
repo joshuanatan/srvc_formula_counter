@@ -1,5 +1,5 @@
 <div class = "col-lg-12">
-    <table class = "table table-bordered table-hover table-striped" data-plugin = "dataTable">
+    <table class = "table table-bordered table-hover table-striped">
         <thead>
             <th>Attribute Name</th>
             <th>Volume</th>
@@ -10,9 +10,40 @@
             <th>Estimated Price</th>
         </thead>
         <tbody>
+            <?php $formula_cat_name = "";?>
+            <?php $formula_name = "";?>
+            <?php $tipe_attr = "";?>
             <?php for($a = 0; $a<count($rab); $a++):?>
+                <?php if(strtoupper($rab[$a]["formula_cat_name"]) != strtoupper($formula_cat_name)):?>
+                    <?php $formula_cat_name = $rab[$a]["formula_cat_name"];?>
+                    <tr>
+                        <td colspan = 7><strong></td>
+                    </tr>
+                    <tr>
+                        <td colspan = 7><strong><?php echo strtoupper($formula_cat_name);?></strong><br/></td>
+                    </tr>
+                <?php endif;?>
+                <?php if(strtoupper($rab[$a]["formula_desc"]) != strtoupper($formula_name)):?>
+                    <?php $formula_name = $rab[$a]["formula_desc"];?>
+                    
+                    <tr>
+                        <td colspan = 7><strong></td>
+                    </tr>
+                    <tr>
+                        <td colspan = 7><strong><?php echo strtoupper($formula_name);?></strong><br/></td>
+                    </tr>
+                    <tr>
+                        <td colspan = 7><strong></td>
+                    </tr>
+                <?php endif;?>
+                <?php if(strtoupper($rab[$a]["tipe_attr"]) != strtoupper($tipe_attr)):?>
+                    <?php $tipe_attr = $rab[$a]["tipe_attr"];?>
+                    <tr>
+                        <td colspan = 7><strong><?php echo "BIAYA ".strtoupper($tipe_attr);?></strong><br/></td>
+                    </tr>
+                <?php endif;?>
             <tr>
-                <td><?php echo strtoupper($rab[$a]["formula_attr_name"]);?></td>
+                <td><?php echo ucwords(strtolower($rab[$a]["formula_attr_name"]));?></td>
                 <td><?php echo $rab[$a]["satuan_htg"];?></td>
                 <td><?php echo $rab[$a]["koefisien"];?></td>
                 <td><?php echo $rab[$a]["jumlah_unit"];?></td>
