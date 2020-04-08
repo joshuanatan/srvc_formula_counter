@@ -96,6 +96,12 @@
                             <span class="site-menu-title">Alat</span>
                         </a>
                     </li>
+                    <li class="site-menu-item">
+                        <a class="animsition-link" href="<?php echo base_url();?>supplier">
+                            <i class="site-menu-icon md-store" aria-hidden="true"></i>
+                            <span class="site-menu-title">Supplier</span>
+                        </a>
+                    </li>
                 </ul>
             </div>      
         </div>
