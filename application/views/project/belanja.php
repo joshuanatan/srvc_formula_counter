@@ -1,6 +1,7 @@
 <div class = "col-lg-12">
     <h3><b><i><?php echo strtoupper($project[0]["prj_name"]);?></i></b> Daftar Pengeluaran</h3>
     <button type = "button" class = "btn btn-primary btn-sm" onclick = "load_list_bahan();load_list_supplier()" data-toggle = "modal" data-target = "#tambah_pembayaran">Tambah Daftar Pengeluaran</button><br/><br/>
+    <input type = "hidden" id = "id_proj" value = "<?php echo $project[0]["id_submit_project"];?>">
     <div class="col-xl-3 col-md-6" style="">
         <div class="card card-shadow" id="widgetLineareaOne">
             <div class="card-block p-20 pt-10">
@@ -35,7 +36,6 @@
                 <h4>Tambah Belanja Proyek</h4>
             </div>
             <div class = "modal-body">
-                <input type = "hidden" id = "id_proj" value = "<?php echo $project[0]["id_submit_project"];?>">
                 <div class = "form-group">
                     <h5>Tipe Item</h5>
                     <select class = "form-control" id = "tipe_item" data-plugin = "select2" onchange = "load_list_bahan()">
@@ -158,30 +158,28 @@
 </div>
 <script>
     function load_data_belanja(){
-        var id_proj = $("#id_proj").val();
+        var id_proj = <?php echo $project[0]["id_submit_project"];?>;
         $.ajax({
             url:"<?php echo base_url();?>ws/project/list_belanja/"+id_proj,
             type:"GET",
             async:false,
             dataType:"JSON",
             success:function(respond){
-                if(respond["status"] == "SUCCESS"){
-                    $("#table_list_belanja").DataTable().clear().destroy();
-                    var html = "";
-                    for(var a = 0; a<respond["content"].length; a++){
-                        html += "<tr>";
-                        html += "<input type = 'hidden' id = 'id_belanja"+a+"' value = '"+respond["content"][a]["id_belanja"]+"'>";
-                        html += "<td class = 'align-middle text-center' id = 'text_item"+a+"'><input type = 'hidden' id = 'id_item"+a+"' value = '"+respond["content"][a]["id_item"]+"'>"+respond["content"][a]["item"]+"</td>";
-                        html += "<td class = 'align-middle text-center' id = 'text_supplier"+a+"'><input type = 'hidden' id = 'id_supplier"+a+"' value = '"+respond["content"][a]["id_supplier"]+"'>"+respond["content"][a]["supplier"]+"</td>";
-                        html += "<td class = 'align-middle text-center' id = 'text_pengeluaran"+a+"'><input type = 'hidden' id = 'id_pengeluaran"+a+"' value = '"+respond["content"][a]["pengeluaran"]+"'>"+respond["content"][a]["pengeluaran"]+"</td>";
-                        html += "<td class = 'align-middle text-center'>"+respond["content"][a]["last_modified"]+"</td>";
-                        html += "<td class = 'align-middle text-center'><i onclick = 'load_list_bahan_edit();load_list_supplier_edit();load_edit_content("+a+")' data-toggle = 'modal' data-target = '#ubah_pembayaran' style = 'cursor:pointer;font-size:large' class = 'text-primary md-edit'></i> | <i onclick = 'load_delete_content("+a+")'data-toggle = 'modal' data-target = '#hapus_pembayaran' style = 'cursor:pointer;font-size:large' class = 'text-danger md-delete'></i></td>";
-                    html += "</tr>";
-                    }
-                    $("#total_pengeluaran").html(respond["total"]);
-                    $("#list_belanja").html(html);
-                    $("#table_list_belanja").dataTable();
+                $("#table_list_belanja").DataTable().clear().destroy();
+                var html = "";
+                for(var a = 0; a<respond["content"].length; a++){
+                    html += "<tr>";
+                    html += "<input type = 'hidden' id = 'id_belanja"+a+"' value = '"+respond["content"][a]["id_belanja"]+"'>";
+                    html += "<td class = 'align-middle text-center' id = 'text_item"+a+"'><input type = 'hidden' id = 'id_item"+a+"' value = '"+respond["content"][a]["id_item"]+"'>"+respond["content"][a]["item"]+"</td>";
+                    html += "<td class = 'align-middle text-center' id = 'text_supplier"+a+"'><input type = 'hidden' id = 'id_supplier"+a+"' value = '"+respond["content"][a]["id_supplier"]+"'>"+respond["content"][a]["supplier"]+"</td>";
+                    html += "<td class = 'align-middle text-center' id = 'text_pengeluaran"+a+"'><input type = 'hidden' id = 'id_pengeluaran"+a+"' value = '"+respond["content"][a]["pengeluaran"]+"'>"+respond["content"][a]["pengeluaran"]+"</td>";
+                    html += "<td class = 'align-middle text-center'>"+respond["content"][a]["last_modified"]+"</td>";
+                    html += "<td class = 'align-middle text-center'><i onclick = 'load_list_bahan_edit();load_list_supplier_edit();load_edit_content("+a+")' data-toggle = 'modal' data-target = '#ubah_pembayaran' style = 'cursor:pointer;font-size:large' class = 'text-primary md-edit'></i> | <i onclick = 'load_delete_content("+a+")'data-toggle = 'modal' data-target = '#hapus_pembayaran' style = 'cursor:pointer;font-size:large' class = 'text-danger md-delete'></i></td>";
+                html += "</tr>";
                 }
+                $("#total_pengeluaran").html(respond["total"]);
+                $("#list_belanja").html(html);
+                $("#table_list_belanja").dataTable();
             }
         })
     }
@@ -327,7 +325,7 @@
     }
     function register_belanja(){
         var id_supplier = $("#supp_list").val();
-        var id_project = $("#id_proj").val();
+        var id_project = <?php echo $project[0]["id_submit_project"];?>;
         var id_item = $("#attr_list").val();
         var nama_supp = "";
         var nama_item = $("#attr_list option:selected").text();
