@@ -94,6 +94,7 @@ class Formula extends CI_Controller{
         
         $this->load->view("req_include/head");
         $this->load->view("plugin/datatable/datatable-css");
+        $this->load->view("plugin/form/form-css");
         $this->load->view("req_include/page_open");
         $this->load->view("req_include/navbar");
         $this->load->view("formula/page_open");
@@ -113,6 +114,7 @@ class Formula extends CI_Controller{
         $this->load->view("formula/page_close");
         $this->load->view("req_include/page_close");
         $this->load->view("req_include/script");
+        $this->load->view("plugin/form/form-js");
         $this->load->view("plugin/datatable/datatable-js");
     }
     public function register(){
