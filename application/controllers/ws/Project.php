@@ -129,6 +129,7 @@ class Project extends CI_Controller{
     public function list_belanja($id_project){
         $respond["status"] = "SUCCESS";
         $respond["content"] = array();
+        $respond["total"] = 0;
         if($id_project != "" && is_numeric($id_project)){
             $this->load->model("m_belanja");
             $this->m_belanja->set_id_project($id_project);
@@ -146,7 +147,10 @@ class Project extends CI_Controller{
                     $respond["content"][$a]["project"] = $result[$a]["prj_name"];
                     $respond["content"][$a]["item"] = $result[$a]["formula_attr_name"]; 
                     $respond["content"][$a]["supplier"] = $result[$a]["nama_supp"]; 
+                    
+                    $respond["total"] += $result[$a]["pengeluaran"];
                 }
+                $respond["total"] = number_format($respond["total"],0,',','.');
             }
             else{
                 $respond["status"] = "ERROR";

@@ -1,6 +1,18 @@
 <div class = "col-lg-12">
     <h3><b><i><?php echo strtoupper($project[0]["prj_name"]);?></i></b> Daftar Pengeluaran</h3>
     <button type = "button" class = "btn btn-primary btn-sm" onclick = "load_list_bahan();load_list_supplier()" data-toggle = "modal" data-target = "#tambah_pembayaran">Tambah Daftar Pengeluaran</button><br/><br/>
+    <div class="col-xl-3 col-md-6" style="">
+        <div class="card card-shadow" id="widgetLineareaOne">
+            <div class="card-block p-20 pt-10">
+                <div class="clearfix">
+                    <span class="float-left grey-700 font-size-30" id = "total_pengeluaran"></span>
+                </div>
+                <div class="mb-20 grey-500">
+                    Total Pengeluaran Belanja
+                </div>
+            </div>
+        </div>
+    </div>
     <table class = "table table-bordered table-hover table-striped" id = "table_list_belanja">
         <thead>
             <tr>
@@ -150,6 +162,7 @@
         $.ajax({
             url:"<?php echo base_url();?>ws/project/list_belanja/"+id_proj,
             type:"GET",
+            async:false,
             dataType:"JSON",
             success:function(respond){
                 if(respond["status"] == "SUCCESS"){
@@ -165,6 +178,7 @@
                         html += "<td class = 'align-middle text-center'><i onclick = 'load_list_bahan_edit();load_list_supplier_edit();load_edit_content("+a+")' data-toggle = 'modal' data-target = '#ubah_pembayaran' style = 'cursor:pointer;font-size:large' class = 'text-primary md-edit'></i> | <i onclick = 'load_delete_content("+a+")'data-toggle = 'modal' data-target = '#hapus_pembayaran' style = 'cursor:pointer;font-size:large' class = 'text-danger md-delete'></i></td>";
                     html += "</tr>";
                     }
+                    $("#total_pengeluaran").html(respond["total"]);
                     $("#list_belanja").html(html);
                     $("#table_list_belanja").dataTable();
                 }
