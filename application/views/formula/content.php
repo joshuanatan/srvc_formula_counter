@@ -14,7 +14,7 @@
                 <td><?php echo $a->formula_status;?></td>
                 <td><?php echo $a->formula_last_modified;?></td>
                 <td>
-                    <a href = "#" data-toggle = "modal" data-target = "#editFormula" onclick = "load_content(<?php echo $a->id_submit_formula;?>)" class = "btn btn-primary btn-sm">
+                    <a href = "#" data-toggle = "modal" data-target = "#editFormula" onclick = "load_list_bahan_edit();load_list_alat_edit();load_list_upah_edit();load_content(<?php echo $a->id_submit_formula;?>)" class = "btn btn-primary btn-sm">
                         <i class = "md-edit"></i>
                     </a>
                     <a href = "#" data-toggle = "modal" data-target = "#deleteFormula" onclick = "load_delete_content(<?php echo $a->id_submit_formula;?>)" class = "btn btn-danger btn-sm">
@@ -140,6 +140,7 @@
                     </div>
                     <div class = "form-group">
                         <h5>Bahan</h5>
+                        <datalist id = "list_bahan_edit"></datalist>
                         <table class = "table table-striped table-hover table-bordered">
                             <thead>
                                 <th style = "width:5%">Edit</th>
@@ -158,6 +159,7 @@
                     </div>
                     <div class = "form-group">
                         <h5>Upah</h5>
+                        <datalist id = "list_upah_edit"></datalist>
                         <table class = "table table-striped table-hover table-bordered">
                             <thead>
                                 <th style = "width:5%">Edit</th>
@@ -176,6 +178,7 @@
                     </div>
                     <div class = "form-group">
                         <h5>Alat Bantu</h5>
+                        <datalist id = "list_alat_edit"></datalist>
                         <table class = "table table-striped table-hover table-bordered">
                             <thead>
                                 <th style = "width:5%">Edit</th>
@@ -252,47 +255,56 @@
     }
 </script>
 <script>
-    function load_content(id_submit_formula){
-        var option_bahan = "";
-        var option_upah = "";
-        var option_alat = "";
-
-        $("#formula_id_edit").val(id_submit_formula)
-        $("#formula_desc_edit").val($("#formula_desc"+id_submit_formula).text());
-
+    function load_list_bahan_edit(){
         $.ajax({
             url:"<?php echo base_url();?>ws/attribute/daftar/bahan",
             type:"GET",
+            async:false,
             dataType:"JSON",
             success:function(respond){
+                var option_bahan = "";
                 for(var a = 0; a<respond["attr"].length; a++){
-                    option_bahan += "<option value = '"+respond["attr"][a]["attr_id"]+"'>"+respond["attr"][a]["attr_name"].toUpperCase()+"</option>";
+                    option_bahan += "<option value = '"+respond["attr"][a]["attr_name"].toUpperCase()+"'>";
                 }
-                $(".formulaListRowEditBahan").html(option_bahan);
+                $("#list_bahan_edit").html(option_bahan);
             }
         });
+    }
+    function load_list_alat_edit(){
+        $.ajax({
+            url:"<?php echo base_url();?>ws/attribute/daftar/alat",
+            type:"GET",
+            async:false,
+            dataType:"JSON",
+            success:function(respond){
+                var option_alat = "";
+                for(var a = 0; a<respond["attr"].length; a++){
+                    option_alat += "<option value = '"+respond["attr"][a]["attr_name"].toUpperCase()+"'>";
+                }
+                $("#list_alat_edit").html(option_alat);
+            }
+        });
+    }
+    function load_list_upah_edit(){
         $.ajax({
             url:"<?php echo base_url();?>ws/attribute/daftar/upah",
             type:"GET",
             dataType:"JSON",
             success:function(respond){
+                var option_upah = "";
                 for(var a = 0; a<respond["attr"].length; a++){
-                    option_upah += "<option value = '"+respond["attr"][a]["attr_id"]+"'>"+respond["attr"][a]["attr_name"].toUpperCase()+"</option>";
+                    option_upah += "<option value = '"+respond["attr"][a]["attr_name"].toUpperCase()+"'>";
                 }
-                $(".formulaListRowEditUpah").html(option_upah);
+                $("#list_upah_edit").html(option_upah);
             }
         });
-        $.ajax({
-            url:"<?php echo base_url();?>ws/attribute/daftar/alat",
-            type:"GET",
-            dataType:"JSON",
-            success:function(respond){
-                for(var a = 0; a<respond["attr"].length; a++){
-                    option_alat += "<option value = '"+respond["attr"][a]["attr_id"]+"'>"+respond["attr"][a]["attr_name"].toUpperCase()+"</option>";
-                }
-                $(".formulaListRowEditAlat").html(option_alat);
-            }
-        });
+    }
+</script>
+<script>
+    function load_content(id_submit_formula){
+        $("#formula_id_edit").val(id_submit_formula)
+        $("#formula_desc_edit").val($("#formula_desc"+id_submit_formula).text());
+        
         $.ajax({
             url:"<?php echo base_url();?>ws/formula/get_formula/"+id_submit_formula,
             dataType:"JSON",
@@ -304,13 +316,13 @@
                 for(var a = 0; a<respond["attr"].length; a++){
                     switch(respond["attr"][a]["tipe_attr"].toLowerCase()){
                         case "bahan":
-                            html_bahan += '<tr class = "attr_row"><input type = "hidden" name = "id_formula_comb'+a+'" value = "'+respond["attr"][a]["id_formula_comb"]+'"><td><div class = "checkbox-custom checkbox-primary"><input checked type = "checkbox" name = "edit[]" value = '+a+'><label></label></div></td><td><div class = "checkbox-custom checkbox-danger"><input type = "checkbox" name = "delete[]" value = '+a+'><label></label></td><td vertical-align = "middle"><select class = "form-control formulaListRowEditBahan" name = "id_attr'+a+'" id = "formulaListRowEdit'+a+'">'+option_bahan+'</select></td><td vertical-align = "middle"><input required value = "'+respond["attr"][a]["koefisien"]+'" type = "number" class = "form-control" name = "koefisien'+a+'" step="0.0000000001"></td></tr>';
+                            html_bahan += '<tr class = "attr_row"><input type = "hidden" name = "id_formula_comb'+a+'" value = "'+respond["attr"][a]["id_formula_comb"]+'"><td><div class = "checkbox-custom checkbox-primary"><input checked type = "checkbox" name = "edit[]" value = '+a+'><label></label></div></td><td><div class = "checkbox-custom checkbox-danger"><input type = "checkbox" name = "delete[]" value = '+a+'><label></label></td><td class = "align-middle;text-center"><input name = "attr_name'+a+'" type = "text" class = "form-control" list = "list_bahan_edit" value = "'+respond["attr"][a]["attr_name"]+'"></td><td class = "align-middle;text-center"><input required value = "'+respond["attr"][a]["koefisien"]+'" type = "number" class = "form-control" name = "koefisien'+a+'" step="0.0000000001"></td></tr>';
                         break;
                         case "upah":
-                            html_upah += '<tr class = "attr_row"><input type = "hidden" name = "id_formula_comb'+a+'" value = "'+respond["attr"][a]["id_formula_comb"]+'"><td><div class = "checkbox-custom checkbox-primary"><input checked type = "checkbox" name = "edit[]" value = '+a+'><label></label></div></td><td><div class = "checkbox-custom checkbox-danger"><input type = "checkbox" name = "delete[]" value = '+a+'><label></label></td><td vertical-align = "middle"><select class = "form-control formulaListRowEditUpah" name = "id_attr'+a+'" id = "formulaListRowEdit'+a+'">'+option_upah+'</select></td><td vertical-align = "middle"><input required value = "'+respond["attr"][a]["koefisien"]+'" type = "number" class = "form-control" name = "koefisien'+a+'" step="0.0000000001"></td></tr>';
+                            html_upah += '<tr class = "attr_row"><input type = "hidden" name = "id_formula_comb'+a+'" value = "'+respond["attr"][a]["id_formula_comb"]+'"><td><div class = "checkbox-custom checkbox-primary"><input checked type = "checkbox" name = "edit[]" value = '+a+'><label></label></div></td><td><div class = "checkbox-custom checkbox-danger"><input type = "checkbox" name = "delete[]" value = '+a+'><label></label></td><td class ="align-middle;text-center"><input name = "attr_name'+a+'" type = "text" class = "form-control" list = "list_upah_edit" value = "'+respond["attr"][a]["attr_name"]+'"></td><td class ="align-middle;text-center"><input required value = "'+respond["attr"][a]["koefisien"]+'" type = "number" class = "form-control" name = "koefisien'+a+'" step="0.0000000001"></td></tr>';
                         break;
                         case "alat":
-                            html_alat += '<tr class = "attr_row"><input type = "hidden" name = "id_formula_comb'+a+'" value = "'+respond["attr"][a]["id_formula_comb"]+'"><td><div class = "checkbox-custom checkbox-primary"><input checked type = "checkbox" name = "edit[]" value = '+a+'><label></label></div></td><td><div class = "checkbox-custom checkbox-danger"><input type = "checkbox" name = "delete[]" value = '+a+'><label></label></td><td vertical-align = "middle"><select class = "form-control formulaListRowEditAlat" name = "id_attr'+a+'" id = "formulaListRowEdit'+a+'">'+option_alat+'</select></td><td vertical-align = "middle"><input required value = "'+respond["attr"][a]["koefisien"]+'" type = "number" class = "form-control" name = "koefisien'+a+'" step="0.0000000001"></td></tr>';
+                            html_alat += '<tr class = "attr_row"><input type = "hidden" name = "id_formula_comb'+a+'" value = "'+respond["attr"][a]["id_formula_comb"]+'"><td><div class = "checkbox-custom checkbox-primary"><input checked type = "checkbox" name = "edit[]" value = '+a+'><label></label></div></td><td><div class = "checkbox-custom checkbox-danger"><input type = "checkbox" name = "delete[]" value = '+a+'><label></label></td><td class = "align-middle;text-center"><input name = "attr_name'+a+'" type = "text" class = "form-control" list = "list_alat_edit" value = "'+respond["attr"][a]["attr_name"]+'"></td><td class = "align-middle;text-center"><input required value = "'+respond["attr"][a]["koefisien"]+'" type = "number" class = "form-control" name = "koefisien'+a+'" step="0.0000000001"></td></tr>';
                         break;
                     }
                 }
@@ -318,10 +330,6 @@
                 $("#add_row_container_bahan_edit").before(html_bahan);
                 $("#add_row_container_upah_edit").before(html_upah);
                 $("#add_row_container_alat_edit").before(html_alat);
-
-                for(var a = 0; a<respond["attr"].length; a++){
-                    $("#formulaListRowEdit"+a).val(respond["attr"][a]["id_formula_attr"]);
-                }
             }
         });
     }
@@ -339,6 +347,7 @@
                             options += "<option value = '"+respond["attr"][a]["attr_id"]+"'>"+respond["attr"][a]["attr_name"].toUpperCase()+"</option>";
                         }
                         $("#formulaListRow"+counter).html(options);
+                        $("#formulaListRow"+counter).select2();
                     }
                 });
             break;
@@ -353,6 +362,7 @@
                             options += "<option value = '"+respond["attr"][a]["attr_id"]+"'>"+respond["attr"][a]["attr_name"].toUpperCase()+"</option>";
                         }
                         $("#formulaListRow"+counter).html(options);
+                        $("#formulaListRow"+counter).select2();
                     }
                 });
             break;
@@ -367,6 +377,7 @@
                             options += "<option value = '"+respond["attr"][a]["attr_id"]+"'>"+respond["attr"][a]["attr_name"].toUpperCase()+"</option>";
                         }
                         $("#formulaListRow"+counter).html(options);
+                        $("#formulaListRow"+counter).select2();
                     }
                 });
             break;

@@ -217,9 +217,9 @@ class Formula extends CI_Controller{
                             "rules" => "required|integer" 
                         ),
                         array(
-                            "field" => "id_attr".$a,
-                            "label" => "ID Formula Attribute",
-                            "rules" => "required|integer"
+                            "field" => "attr_name".$a,
+                            "label" => "Formula Attribute",
+                            "rules" => "required"
                         ),
                         array(
                             "field" => "koefisien".$a,
@@ -232,7 +232,11 @@ class Formula extends CI_Controller{
                         $this->load->model("m_formula_comb");
 
                         $id_formula_comb = $this->input->post("id_formula_comb".$a);
-                        $id_formula_attr = $this->input->post("id_attr".$a);
+                        $attr_name = $this->input->post("attr_name".$a);
+                        $where = array(
+                            "formula_attr_name" => $attr_name
+                        );
+                        $id_formula_attr = get1Value("mstr_formula_attr","id_submit_formula_attr",$where);
                         $koefisien = $this->input->post("koefisien".$a);
                         
                         $this->m_formula_comb->set_id_mstr_formula($id_submit_formula);
