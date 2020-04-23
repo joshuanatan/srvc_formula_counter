@@ -35,7 +35,10 @@ class M_supplier extends CI_Model{
                 "supp_last_modified" => $this->supp_last_modified,
                 "id_last_modified" => $this->id_last_modified,
             );
-            insertRow($this->tbl_name,$data);
+            return insertRow($this->tbl_name,$data);
+        }
+        else{
+            return false;
         }
     }
     public function update(){

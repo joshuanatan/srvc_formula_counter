@@ -126,4 +126,147 @@ class Project extends CI_Controller{
         }
         echo json_encode($respond);
     }
+    public function list_belanja($id_project){
+        $respond["status"] = "SUCCESS";
+        $respond["content"] = array();
+        if($id_project != "" && is_numeric($id_project)){
+            $this->load->model("m_belanja");
+            $this->m_belanja->set_id_project($id_project);
+            $result = $this->m_belanja->list_belanja_project();
+            if($result->num_rows() > 0){
+                $result = $result->result_array();
+                for($a = 0; $a<count($result); $a++){
+                    $respond["content"][$a]["id_belanja"] = $result[$a]["id_submit_belanja"];
+                    $respond["content"][$a]["id_project"] = $result[$a]["id_project"];
+                    $respond["content"][$a]["id_item"] = $result[$a]["id_item"];
+                    $respond["content"][$a]["id_supplier"] = $result[$a]["id_supplier"];
+                    $respond["content"][$a]["pengeluaran"] = $result[$a]["pengeluaran"];
+                    $respond["content"][$a]["status"] = $result[$a]["blnj_status"];
+                    $respond["content"][$a]["last_modified"] = $result[$a]["blnj_last_modified"];
+                    $respond["content"][$a]["project"] = $result[$a]["prj_name"];
+                    $respond["content"][$a]["item"] = $result[$a]["formula_attr_name"]; 
+                    $respond["content"][$a]["supplier"] = $result[$a]["nama_supp"]; 
+                }
+            }
+            else{
+                $respond["status"] = "ERROR";
+            }
+        }
+        else{
+            $respond["status"] = "ERROR";
+        }
+        echo json_encode($respond);
+    }
+    public function register_belanja(){
+        $respond["status"] = "SUCCESS";
+        $config = array(
+            array(
+                "field" => "id_project",
+                "label" => "",
+                "rules" => "required"
+            ),
+            array(
+                "field" => "id_item",
+                "label" => "",
+                "rules" => "required"
+            ),
+            array(
+                "field" => "id_supplier",
+                "label" => "",
+                "rules" => "required"
+            ),
+            array(
+                "field" => "pengeluaran",
+                "label" => "",
+                "rules" => "required"
+            ),
+        );
+        $this->form_validation->set_rules($config);
+        if($this->form_validation->run()){
+            $id_project = $this->input->post("id_project");
+            $id_item = $this->input->post("id_item");
+            $id_supplier = $this->input->post("id_supplier");
+            $pengeluaran = $this->input->post("pengeluaran");
+            
+            $this->load->model("m_belanja");
+            $this->m_belanja->set_id_project($id_project);
+            $this->m_belanja->set_id_item($id_item);
+            $this->m_belanja->set_id_supplier($id_supplier);
+            $this->m_belanja->set_pengeluaran($pengeluaran);
+            if($this->m_belanja->insert()){
+                $respond["register_time"] = date("Y-m-d H:i:s");
+            }
+            else{
+                $respond["status"] = "ERROR";
+            }
+        }
+        else{
+            $respond["status"] = "ERROR";
+        }
+        echo json_encode($respond);
+    }
+    public function update_belanja(){
+        $respond["status"] = "SUCCESS";
+        $config = array(
+            array(
+                "field" => "id_belanja",
+                "label" => "",
+                "rules" => "required"
+            ),
+            array(
+                "field" => "nama_item",
+                "label" => "",
+                "rules" => "required"
+            ),
+            array(
+                "field" => "nama_supp",
+                "label" => "",
+                "rules" => "required"
+            ),
+            array(
+                "field" => "pengeluaran",
+                "label" => "",
+                "rules" => "required"
+            ),
+        );
+        $this->form_validation->set_rules($config);
+        if($this->form_validation->run()){
+            $id_belanja = $this->input->post("id_belanja");
+
+            $nama_item = $this->input->post("nama_item");
+            $where = array(
+                "formula_attr_name" => $nama_item
+            );
+            $id_item = get1Value("mstr_formula_attr","id_submit_formula_attr",$where);
+
+            $nama_supp = $this->input->post("nama_supp");
+            $where = array(
+                "nama_supp" => $nama_supp
+            );
+            $id_supplier = get1Value("mstr_supplier","id_submit_supplier",$where);
+            $pengeluaran = $this->input->post("pengeluaran");
+            $this->load->model("m_belanja");
+            $this->m_belanja->set_id_submit_belanja($id_belanja);
+            $this->m_belanja->set_id_item($id_item);
+            $this->m_belanja->set_id_supplier($id_supplier);
+            $this->m_belanja->set_pengeluaran($pengeluaran);
+            $this->m_belanja->update();
+        }
+        else{
+            $respond["status"] = "ERROR";
+        }
+        echo json_encode($respond);
+    }
+    public function delete_belanja($id_belanja){
+        $respond["status"] = "SUCCESS";
+        if($id_belanja != "" && is_numeric($id_belanja)){
+            $this->load->model("m_belanja");
+            $this->m_belanja->set_id_submit_belanja($id_belanja);
+            $this->m_belanja->delete();
+        }
+        else{
+            $respond["status"] = "ERROR";
+        }
+        echo json_encode($respond);
+    }
 }
