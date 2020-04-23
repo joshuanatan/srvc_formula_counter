@@ -230,9 +230,16 @@ class Project extends CI_Controller{
         $this->m_rab->set_id_project($id_project);
         $result = $this->m_rab->list();
         $data["rab"] = $result->result_array();
+        for($a = 0; $a<count($data["rab"]); $a++){
+            $this->load->model("m_formula_comb");
+            $this->m_formula_comb->set_id_mstr_formula($data["rab"][$a]["id_formula"]);
+            $result = $this->m_formula_comb->count_formula_value()->result_array();
+            $data["rab"][$a]["value"] = $result[0]["harga"];
+        }
         
         $result = $this->m_formula_cat->list();
         $data["cat"] = $result->result_array();
+        
         $this->load->view("project/rab",$data);
         $this->load->view("project/page_close");
         $this->load->view("req_include/page_close");
@@ -329,19 +336,22 @@ class Project extends CI_Controller{
         if($id_project != "" && is_numeric($id_project)){
             $this->load->view("req_include/head");
             $this->load->view("plugin/datatable/datatable-css");
+            $this->load->view("plugin/form/form-css");
             $this->load->view("req_include/page_open");
             $this->load->view("req_include/navbar");
             $this->load->view("project/page_open");
 
-            $this->load->model("m_rab");
             $this->load->model("m_project");
-            $this->load->model("m_formula");
+            $this->m_project->set_id_submit_project($id_project);
+            $result = $this->m_project->detail();
+            $data["project"] = $result->result_array();
             
             $this->load->view("project/belanja",$data);
             $this->load->view("project/page_close");
             $this->load->view("req_include/page_close");
             $this->load->view("req_include/script");
             $this->load->view("plugin/datatable/datatable-js");
+            $this->load->view("plugin/form/form-js");
         }
         else{
             redirect("project");
