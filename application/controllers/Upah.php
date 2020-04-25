@@ -20,11 +20,8 @@ class Upah extends CI_Controller{
         $this->load->view("upah/page_open");
         
         $this->load->model("m_formula_attr");
-        $this->m_formula_attr->set_tipe_attr("UPAH");
-        $result = $this->m_formula_attr->list();
-        $data = array(
-            "attribute" => $result->result()
-        );
+        $data["col"] = $this->m_formula_attr->column();
+
         $this->load->view("upah/content",$data);
         $this->load->view("upah/page_close");
         $this->load->view("req_include/page_close");

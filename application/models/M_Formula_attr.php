@@ -3,6 +3,8 @@ defined("BASEPATH") or exit("No Direct Access Script");
 date_default_timezone_set("Asia/Jakarta");
 
 class M_formula_attr extends CI_Model{
+    private $tbl_name = "mstr_formula_attr";
+    private $column_list = array();
     private $id_submit_formula_attr = 0;
     private $formula_attr_name = "";
     private $harga_satuan_attr = 0;
@@ -16,6 +18,69 @@ class M_formula_attr extends CI_Model{
         parent::__construct();
         $this->formula_attr_last_modified = date("Y-m-d H:i:s");
         $this->id_last_modified = $this->session->id_submit_acc;
+        $this->column_list = array(
+            array(
+                "col_name" => "formula_attr_name",
+                "col_disp" => "Nama Bahan",
+                "order_by" => true
+            ),
+            array(
+                "col_name" => "satuan_attr",
+                "col_disp" => "Satuan Bahan",
+                "order_by" => false
+            ),
+            array(
+                "col_name" => "harga_satuan_attr",
+                "col_disp" => "Harga Bahan",
+                "order_by" => false
+            ),
+            array(
+                "col_name" => "status_formula_attr",
+                "col_disp" => "Status Bahan",
+                "order_by" => false
+            ),
+            array(
+                "col_name" => "formula_attr_last_modified",
+                "col_disp" => "Last Modified",
+                "order_by" => false
+            ),
+        );
+    }
+    public function column(){
+        return $this->column_list;
+    }
+    public function content($page = 1,$order_by = 0, $order_direction = "ASC", $search_key = "",$data_per_page = ""){
+        $order_by = $this->column_list[$order_by]["col_name"];
+        $search_query = "";
+        if($search_key != ""){
+            $search_query .= "AND
+            ( 
+                id_submit_formula_attr LIKE '%".$search_key."%' OR
+                formula_attr_name LIKE '%".$search_key."%' OR
+                satuan_attr LIKE '%".$search_key."%' OR
+                harga_satuan_attr LIKE '%".$search_key."%' OR
+                status_formula_attr LIKE '%".$search_key."%' OR
+                formula_attr_last_modified LIKE '%".$search_key."%'
+            )";
+        }
+        $query = "
+        SELECT formula_attr_name,satuan_attr,harga_satuan_attr,status_formula_attr,formula_attr_last_modified,id_submit_formula_attr
+        FROM ".$this->tbl_name." 
+        WHERE status_formula_attr = ? and tipe_attr = ? ".$search_query."  
+        ORDER BY ".$order_by." ".$order_direction." 
+        LIMIT 20 OFFSET ".($page-1)*$data_per_page;
+        $args = array(
+            "ACTIVE",$this->tipe_attr
+        );
+        $result["data"] = executeQuery($query,$args);
+        
+        $query = "
+        SELECT formula_attr_name,satuan_attr,harga_satuan_attr,status_formula_attr,formula_attr_last_modified,id_submit_formula_attr
+        FROM ".$this->tbl_name." 
+        WHERE status_formula_attr = ? and tipe_attr = ? ".$search_query."  
+        ORDER BY ".$order_by." ".$order_direction;
+        $result["total_data"] = executeQuery($query,$args)->num_rows();
+        return $result;
     }
     public function list(){
         $where = array(

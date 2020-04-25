@@ -20,11 +20,8 @@ class Alat extends CI_Controller{
         $this->load->view("alat/page_open");
         
         $this->load->model("m_formula_attr");
-        $this->m_formula_attr->set_tipe_attr("ALAT");
-        $result = $this->m_formula_attr->list();
-        $data = array(
-            "attribute" => $result->result()
-        );
+        $data["col"] = $this->m_formula_attr->column();
+
         $this->load->view("alat/content",$data);
         $this->load->view("alat/page_close");
         $this->load->view("req_include/page_close");

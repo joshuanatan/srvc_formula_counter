@@ -32,24 +32,35 @@ class Attribute extends CI_Controller{
     }
     public function list(){
         $respond["status"] = "SUCCESS";
-        $respond["attr"] = array();
+        $respond["content"] = array();
+
+        $order_by = $this->input->get("orderBy");
+        $order_direction = $this->input->get("orderDirection");
+        $page = $this->input->get("page");
+        $search_key = $this->input->get("searchKey");
+        $jenis = $this->input->get("jenis");
+        $data_per_page = 20;
         
         $this->load->model("m_formula_attr");
-        $result = $this->m_formula_attr->list();
-        if($result->num_rows() > 0){
-            $result = $result->result_array();
-            for($a = 0; $a<count($result); $a++){
-                $respond["attr"][$a]["attr_id"] = $result[$a]["id_submit_formula_attr"];
-                $respond["attr"][$a]["attr_name"] = $result[$a]["formula_attr_name"];
-                $respond["attr"][$a]["attr_price"] = $result[$a]["harga_satuan_attr"];
-                $respond["attr"][$a]["attr_unit"] = $result[$a]["satuan_attr"];
-                $respond["attr"][$a]["attr_status"] = $result[$a]["status_formula_attr"];
-                $respond["attr"][$a]["attr_last"] = $result[$a]["formula_attr_last_modified"];
+        $this->m_formula_attr->set_tipe_attr($jenis);
+        $result = $this->m_formula_attr->content($page,$order_by,$order_direction,$search_key,$data_per_page);
+
+        if($result["data"]->num_rows() > 0){
+            $result["data"] = $result["data"]->result_array();
+            for($a = 0; $a<count($result["data"]); $a++){
+                $respond["content"][$a]["name"] = $result["data"][$a]["formula_attr_name"];
+                $respond["content"][$a]["satuan"] = $result["data"][$a]["satuan_attr"];
+                $respond["content"][$a]["harga_satuan"] = $result["data"][$a]["harga_satuan_attr"];
+                $respond["content"][$a]["status"] = $result["data"][$a]["status_formula_attr"];
+                $respond["content"][$a]["last_modified"] = $result["data"][$a]["formula_attr_last_modified"];
+                $respond["content"][$a]["id_submit"] = $result["data"][$a]["id_submit_formula_attr"];
             }
         }
         else{
             $respond["status"] = "ERROR";
         }
+        $respond["page"] = $this->pagination->generate_pagination_rules($page,$result["total_data"],$data_per_page);
+
         echo json_encode($respond);
     }
     public function daftar($bahan){
