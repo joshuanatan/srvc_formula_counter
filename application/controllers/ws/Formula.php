@@ -48,8 +48,32 @@ class Formula extends CI_Controller{
     }
     public function list(){
         $respond["status"] = "SUCCESS";
-        $respond["main"] = array();
-        $respond["attr"] = array();
+        $respond["content"] = array();
+
+        $order_by = $this->input->get("orderBy");
+        $order_direction = $this->input->get("orderDirection");
+        $page = $this->input->get("page");
+        $search_key = $this->input->get("searchKey");
+        $id_cat = $this->input->get("idCat");
+        $data_per_page = 10;
+        
+        $this->load->model("m_formula");
+        $this->m_formula->set_id_formula_cat($id_cat);
+        $result = $this->m_formula->content($page,$order_by,$order_direction,$search_key,$data_per_page);
+
+        if($result["data"]->num_rows() > 0){
+            $result["data"] = $result["data"]->result_array();
+            for($a = 0; $a<count($result["data"]); $a++){
+                $respond["content"][$a]["desc"] = $result["data"][$a]["formula_desc"];
+                $respond["content"][$a]["status"] = $result["data"][$a]["formula_status"];
+                $respond["content"][$a]["last_modified"] = $result["data"][$a]["formula_last_modified"];
+                $respond["content"][$a]["id"] = $result["data"][$a]["id_submit_formula"];
+            }
+        }
+        else{
+            $respond["status"] = "ERROR";
+        }
+        $respond["page"] = $this->pagination->generate_pagination_rules($page,$result["total_data"],$data_per_page);
 
         echo json_encode($respond);
     }

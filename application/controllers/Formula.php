@@ -102,12 +102,10 @@ class Formula extends CI_Controller{
         $data["id_formula_cat"] = $id_formula_cat;
 
         $this->load->model("m_formula");
-        $this->m_formula->set_id_formula_cat($id_formula_cat);
-        $result = $this->m_formula->list();
-        $data["formula"] = $result->result();
+        $data["col"] = $this->m_formula->column();
 
         $this->load->model("m_formula_attr");
-        $result = $this->m_formula->list();
+        $result = $this->m_formula_attr->list();
         $data["attr"] = $result->result();
 
         $this->load->view("formula/content",$data);

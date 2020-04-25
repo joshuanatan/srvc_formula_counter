@@ -1,31 +1,36 @@
 <div class = "col-lg-12">
-    <button type = "button" class = "btn btn-primary btn-sm" data-toggle = "modal" data-target = "#addformula">Tambah Pekerjaan</button><br/><br/>
-    <table class = "table table-bordered table-hover table-striped" data-plugin = "dataTable">
-        <thead>
-            <th>Nama Pekerjaan</th>
-            <th>Status</th>
-            <th>Last Modified</th>
-            <th>Action</th>
-        </thead>
-        <tbody>
-            <?php foreach($formula as $a):?>
-            <tr>
-                <td id = "formula_desc<?php echo $a->id_submit_formula;?>"><?php echo $a->formula_desc;?></td>
-                <td><?php echo $a->formula_status;?></td>
-                <td><?php echo $a->formula_last_modified;?></td>
-                <td>
-                    <a href = "#" data-toggle = "modal" data-target = "#editFormula" onclick = "load_list_bahan_edit();load_list_alat_edit();load_list_upah_edit();load_content(<?php echo $a->id_submit_formula;?>)" class = "btn btn-primary btn-sm">
-                        <i class = "md-edit"></i>
-                    </a>
-                    <a href = "#" data-toggle = "modal" data-target = "#deleteFormula" onclick = "load_delete_content(<?php echo $a->id_submit_formula;?>)" class = "btn btn-danger btn-sm">
-                        <i class = "md-delete"></i>
-                    </a>
-                </td>
-            </tr>
-            <?php endforeach;?>
-        </tbody>
-    </table>
-    <a href = "<?php echo base_url();?>formula" class = "btn btn-primary btn-sm">BACK</a>
+    <button type = "button" class = "btn btn-primary btn-sm" data-toggle = "modal" data-target = "#register_dialog" style = "margin-right:10px">Add Account</button>
+    <div class = "align-middle text-center">
+        <i style = "cursor:pointer;font-size:large;margin-left:10px" class = "text-primary md-edit"></i><b> - Edit </b>   
+        <i style = "cursor:pointer;font-size:large;margin-left:10px" class = "text-danger md-delete"></i><b> - Delete </b>
+    </div>
+    <br/>
+    <div class = "table-responsive ">
+        <div class = "form-group">
+            <h5>Search Data Here</h5>
+            <input id = "search_box" placeholder = "Search data here..." type = "text" class = "form-control form-control-sm col-lg-3 col-sm-12" onkeyup = "search()">
+        </div>
+        <table class = "table table-bordered table-hover table-striped">
+            <thead>
+                <tr>
+                    <?php for($a = 0; $a<count($col); $a++):?>
+                    <th id = "col<?php echo $a;?>" style = "cursor:pointer" onclick = "sort(<?php echo $a;?>)" class = "text-center align-middle"><?php echo $col[$a]["col_disp"];?> 
+                    <?php if($a == 0):?>
+                    <span class="badge badge-light align-top" id = "orderDirection">ASC</span>
+                    <?php endif;?>
+                    </th>
+                    <?php endfor;?>
+                    <th class = "text-center align-middle">Action</th>
+                </tr>
+            </thead>
+            <tbody id = "content_container">
+            </tbody>
+        </table>
+    </div>
+    <nav aria-label="Page navigation example">
+        <ul class="pagination justify-content-center" id = "pagination_container">
+        </ul>
+    </nav>
 </div>
 <div class = "modal fade" id = "addFormula">
     <div class = "modal-dialog modal-lg">
@@ -202,6 +207,104 @@
         </div>
     </div>
 </div>
+
+<script>
+    var id_cat = <?php echo $id_formula_cat;?>;
+    var orderBy = 0;
+    var orderDirection = "ASC";
+    var searchKey = "";
+    var page = 1;
+    function refresh(req_page = 1) {
+        page = req_page;
+        $.ajax({
+            url: "<?php echo base_url();?>ws/formula/list?orderBy="+orderBy+"&orderDirection="+orderDirection+"&page="+page+"&searchKey="+searchKey+"&idCat="+id_cat,
+            type: "GET",
+            dataType: "JSON",
+            success: function(respond) {
+                var html = "";
+                if(respond["status"] == "SUCCESS"){
+                    for(var a = 0; a<respond["content"].length; a++){
+                        html += "<tr>";
+                        html += "<td class = 'align-middle text-center' id = 'id"+a+"'>"+respond["content"][a]["desc"]+"</td>";
+                        html += "<td class = 'align-middle text-center' id = 'name"+a+"'>"+respond["content"][a]["status"]+"</td>";
+                        html += "<td class = 'align-middle text-center' id = 'email"+a+"'>"+respond["content"][a]["last_modified"]+"</td>";
+                        html += "<td class = 'align-middle text-center'><i style = 'cursor:pointer;font-size:large' data-toggle = 'modal' class = 'text-primary md-edit' data-target = '#editFormula' onclick = 'load_list_bahan_edit();load_list_alat_edit();load_list_upah_edit();load_content("+respond["content"][a]["id"]+")'></i> | <i style = 'cursor:pointer;font-size:large' data-toggle = 'modal' class = 'text-danger md-delete' data-target = '#deleteFormula' onclick = 'load_delete_content("+respond["content"][a]["id"]+")'></i></td>";
+                        html += "</tr>";
+                    }
+                }
+                else{
+                    html += "<tr>";
+                    html += "<td colspan = 4 class = 'align-middle text-center'>No Records Found</td>";
+                    html += "</tr>";
+                }
+                $("#content_container").html(html);
+
+                html = "";
+                if(respond["page"]["previous"]){
+                    html += '<li class="page-item"><a class="page-link" onclick = "refresh('+(respond["page"]["before"])+')"><</a></li>';
+                }
+                else{
+                    html += '<li class="page-item"><a class="page-link" style = "cursor:not-allowed"><</a></li>';
+                }
+                if(respond["page"]["before"]){
+                    html += '<li class="page-item"><a class="page-link" onclick = "refresh('+(respond["page"]["before"])+')">'+respond["page"]["before"]+'</a></li>';
+                }
+                html += '<li class="page-item active"><a class="page-link" onclick = "refresh('+(respond["page"]["current"])+')">'+respond["page"]["current"]+'</a></li>';
+                if(respond["page"]["after"]){
+                    html += '<li class="page-item"><a class="page-link" onclick = "refresh('+(respond["page"]["after"])+')">'+respond["page"]["after"]+'</a></li>';
+                }
+                if(respond["page"]["next"]){
+                    html += '<li class="page-item"><a class="page-link" onclick = "refresh('+(respond["page"]["after"])+')">></a></li>';
+                }
+                else{
+                    html += '<li class="page-item"><a class="page-link" style = "cursor:not-allowed">></a></li>';
+                }
+                $("#pagination_container").html(html);
+            },
+            error: function(){
+                var html = "";
+                html += "<tr>";
+                html += "<td colspan = 4 class = 'align-middle text-center'>No Records Found</td>";
+                html += "</tr>";
+                $("#content_container").html(html);
+                
+                html = "";
+                html += '<li class="page-item"><a class="page-link" style = "cursor:not-allowed"><</a></li>';
+                html += '<li class="page-item"><a class="page-link" style = "cursor:not-allowed">></a></li>';
+                $("#pagination_container").html(html);
+            }
+        });
+    }
+    function sort(colNum){
+        if(parseInt(colNum) != orderBy){
+            orderBy = colNum; 
+            orderDirection = "ASC";
+            var orderDirectionHtml = '<span class="badge badge-light align-top" id = "orderDirection">ASC</span>';
+            $("#orderDirection").remove();
+            $("#col"+colNum).append(orderDirectionHtml);
+        }
+        else{
+            var direction = $("#orderDirection").text();
+            if(direction == "ASC"){
+                orderDirection = "DESC";
+            }
+            else{
+                orderDirection = "ASC";
+            }
+            $("#orderDirection").text(orderDirection);
+        }
+        refresh();
+    }
+    function search(){
+        searchKey = $("#search_box").val();
+        refresh();
+    }
+</script>
+<script>
+    window.onload = function(){
+        refresh();
+    }
+</script>
 <script>
     function add_attr_row(jenis){
         var counter = $(".attr_row").length;
