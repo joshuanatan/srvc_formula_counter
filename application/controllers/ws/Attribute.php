@@ -53,7 +53,7 @@ class Attribute extends CI_Controller{
                 $respond["content"][$a]["harga_satuan"] = $result["data"][$a]["harga_satuan_attr"];
                 $respond["content"][$a]["status"] = $result["data"][$a]["status_formula_attr"];
                 $respond["content"][$a]["last_modified"] = $result["data"][$a]["formula_attr_last_modified"];
-                $respond["content"][$a]["id_submit"] = $result["data"][$a]["id_submit_formula_attr"];
+                $respond["content"][$a]["id"] = $result["data"][$a]["id_submit_formula_attr"];
             }
         }
         else{
