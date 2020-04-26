@@ -230,11 +230,13 @@ class Project extends CI_Controller{
         $this->m_rab->set_id_project($id_project);
         $result = $this->m_rab->list();
         $data["rab"] = $result->result_array();
+        $data["rab_value"] = 0;
         for($a = 0; $a<count($data["rab"]); $a++){
             $this->load->model("m_formula_comb");
             $this->m_formula_comb->set_id_mstr_formula($data["rab"][$a]["id_formula"]);
             $result = $this->m_formula_comb->count_formula_value()->result_array();
             $data["rab"][$a]["value"] = $result[0]["harga"];
+            $data["rab_value"] += $data["rab"][$a]["value"] * $data["rab"][$a]["satuan_htg"]; 
         }
         
         $result = $this->m_formula_cat->list();
@@ -320,15 +322,6 @@ class Project extends CI_Controller{
             echo "<script type='text/javascript'>";
             echo "close();";
             echo "</script>";
-        }
-    }
-    public function count_price($id_project){
-        $this->check_session();
-        if($project != "" && is_numeric($id_project)){
-
-        }
-        else{
-            redirect("project");
         }
     }
     public function belanja($id_project){

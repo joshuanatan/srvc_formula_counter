@@ -5,6 +5,8 @@
         <thead>
             <th>Nama Pekerjaan</th>
             <th>Satuan Hitung</th>
+            <th>Harga Satuan</th>
+            <th>Harga Pekerjaan</th>
             <th style = "width:20%">Action</th>
         </thead>
         <tbody>
@@ -24,6 +26,8 @@
                         <?php echo $rab[$a]["satuan_htg"];?>
                     </div>        
                 </td>
+                <td><?php echo number_format($rab[$a]["value"]);?></td>
+                <td><?php echo number_format($rab[$a]["value"]*$rab[$a]["satuan_htg"]);?></td>
                 <td>
                     <!--<a href = "#" onclick = "active_edit(<?php echo $a;?>);" id = "editButton<?php echo $a;?>" class = "btn btn-primary btn-sm">
                         <i class = "md-edit"></i>
@@ -41,6 +45,13 @@
             </tr>
             <?php endfor;?>
         </tbody>
+    </table>
+    <hr/>
+    <table class = "table table-striped table-bordered">
+        <tr>
+            <td style = "width:60%">Total RAB</td>
+            <td style = "width:40%"><?php echo number_format($rab_value);?></td>
+        </tr>
     </table>
     <a href = "<?php echo base_url();?>project" class = "btn btn-primary btn-sm">BACK</a>
     <a href = "<?php echo base_url();?>project/count_unit/<?php echo $project[0]["id_submit_project"];?>" target = "_blank" class = "btn btn-warning btn-sm">COUNT ESTIMATED UNIT</a>

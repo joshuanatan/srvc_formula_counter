@@ -15,6 +15,17 @@ class M_formula_comb extends CI_Model{
         $this->formula_comb_last_modified = date("Y-m-d H:i:s");
         $this->id_last_modified = $this->session->id_submit_acc;
     }
+    public function count_formula_value(){
+        $sql = "select sum((koefisien*harga_satuan_attr)) as harga from tbl_formula_combination
+        inner join mstr_formula_attr on mstr_formula_attr.id_submit_formula_attr = tbl_formula_combination.id_formula_attr
+        where status_formula_comb = ?
+        and id_mstr_formula = ?;";
+        $args = array(
+            "ACTIVE",$this->id_mstr_formula
+        );
+        $result = executeQuery($sql,$args);
+        return $result;
+    }
     public function unassigned_attr(){
         $sql = "
         select id_submit_formula_attr, formula_attr_name, harga_satuan_attr, satuan_attr, status_formula_attr,formula_attr_last_modified 

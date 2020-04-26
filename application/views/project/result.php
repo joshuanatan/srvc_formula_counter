@@ -13,6 +13,7 @@
             <?php $formula_cat_name = "";?>
             <?php $formula_name = "";?>
             <?php $tipe_attr = "";?>
+            <?php $total_rab = 0;?>
             <?php for($a = 0; $a<count($rab); $a++):?>
                 <?php if(strtoupper($rab[$a]["formula_cat_name"]) != strtoupper($formula_cat_name)):?>
                     <?php $formula_cat_name = $rab[$a]["formula_cat_name"];?>
@@ -49,9 +50,16 @@
                 <td><?php echo $rab[$a]["jumlah_unit"];?></td>
                 <td><?php echo $rab[$a]["satuan_attr"];?></td>
                 <td><?php echo $rab[$a]["harga_satuan_attr"];?></td>
-                <td><?php echo $rab[$a]["harga_satuan"];?></td>
+                <td><?php $total_rab += $rab[$a]["harga_satuan"];echo number_format($rab[$a]["harga_satuan"]);?></td>
             </tr>
             <?php endfor;?>
         </tbody>
+    </table>
+    <hr/>
+    <table class = "table table-striped table-bordered">
+        <tr>
+            <td style = "width:60%">Total RAB</td>
+            <td style = "width:40%"><?php echo number_format($total_rab);?></td>
+        </tr>
     </table>
 </div>
