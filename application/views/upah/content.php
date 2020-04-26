@@ -1,5 +1,5 @@
 <div class = "col-lg-12">
-    <button type = "button" class = "btn btn-primary btn-sm" data-toggle = "modal" data-target = "#register_dialog" style = "margin-right:10px">Add Account</button>
+    <button type = "button" class = "btn btn-primary btn-sm" data-toggle = "modal" data-target = "#addAttribute" style = "margin-right:10px">Tambah Upah</button>
     <div class = "align-middle text-center">
         <i style = "cursor:pointer;font-size:large;margin-left:10px" class = "text-primary md-edit"></i><b> - Edit </b>   
         <i style = "cursor:pointer;font-size:large;margin-left:10px" class = "text-danger md-delete"></i><b> - Delete </b>
@@ -39,7 +39,8 @@
                 <h4 class = "modal-title">Tambah Data Upah</h4>
             </div>
             <div class = "modal-body">
-                <form action = "<?php echo base_url();?>attribute/register" method = "POST">
+                <form id = "register_form" method = "POST">
+                    <input type = "hidden" name = "attr_type" value = "UPAH">
                     <div class = "form-group">
                         <h5>Nama Upah</h5>
                         <input type = "text" class = "form-control" required name = "attr_name">
@@ -54,7 +55,7 @@
                     </div>
                     <div class = "form-group">
                         <button type = "button" class = "btn btn-sm btn-danger" data-dismiss = "modal">Cancel</button>
-                        <button type = "submit" class = "btn btn-sm btn-primary">Submit</button>
+                        <button type = "button" onclick = "register_attr()" class = "btn btn-sm btn-primary">Submit</button>
                     </div>
                 </form>
             </div>
@@ -68,7 +69,7 @@
                 <h4 class = "modal-title">Ubah Data Upah</h4>
             </div>
             <div class = "modal-body">
-                <form action = "<?php echo base_url();?>attribute/update" method = "POST">
+                <form id = "edit_form" method = "POST">
                     <input type = "hidden" name = "attr_id" id = "attr_id_edit">
                     <div class = "form-group">
                         <h5>Nama Upah</h5>
@@ -84,7 +85,7 @@
                     </div>
                     <div class = "form-group">
                         <button type = "button" class = "btn btn-sm btn-danger" data-dismiss = "modal">Cancel</button>
-                        <button type = "submit" class = "btn btn-sm btn-primary">Submit</button>
+                        <button type = "button" onclick = "update_attr()" class = "btn btn-sm btn-primary">Submit</button>
                     </div>
                 </form>
             </div>
@@ -98,26 +99,24 @@
                 <h4 class = "modal-title">Hapus Upah</h4>
             </div>
             <div class = "modal-body">
-                <form action = "<?php echo base_url();?>attribute/delete" method = "POST">
-                <input type = "hidden" name = "attr_id" value = "" id = "attr_id_delete">
-                    <h4 align = "center">Apakah anda yakin akan menghapus data upah di bawah ini?</h4>
-                    <table class = "table table-bordered table-striped table-hover">
-                        <tbody>
-                            <tr>
-                                <td>Nama Upah</td>
-                                <td id = "attr_name_delete"></td>
-                            </tr>
-                            <tr>
-                                <td>Satuan Upah</td>
-                                <td id = "attr_unit_delete"></td>
-                            </tr>
-                        </tbody>
-                    </table>
-                    <div class = "row">
-                        <button type = "button" class = "btn btn-sm btn-primary col-lg-3 col-sm-12 offset-lg-3" data-dismiss = "modal">Cancel</button>
-                        <button type = "submit" class = "btn btn-sm btn-danger col-lg-3">Delete</button>
-                    </div>
-                </form>
+            <input type = "hidden" name = "attr_id" value = "" id = "attr_id_delete">
+                <h4 align = "center">Apakah anda yakin akan menghapus data upah di bawah ini?</h4>
+                <table class = "table table-bordered table-striped table-hover">
+                    <tbody>
+                        <tr>
+                            <td>Nama Upah</td>
+                            <td id = "attr_name_delete"></td>
+                        </tr>
+                        <tr>
+                            <td>Satuan Upah</td>
+                            <td id = "attr_unit_delete"></td>
+                        </tr>
+                    </tbody>
+                </table>
+                <div class = "row">
+                    <button type = "button" class = "btn btn-sm btn-primary col-lg-3 col-sm-12 offset-lg-3" data-dismiss = "modal">Cancel</button>
+                    <button type = "button" onclick = "delete_attr()" class = "btn btn-sm btn-danger col-lg-3">Delete</button>
+                </div>
             </div>
         </div>
     </div>
@@ -233,6 +232,52 @@
     }
 </script>
 <script>
+    function register_attr(){
+        var form = $("#register_form")[0];
+        var data = new FormData(form);
+        $.ajax({
+            url:"<?php echo base_url();?>ws/attribute/register",
+            type:"POST",
+            dataType:"JSON",
+            data:data,
+            processData:false,
+            contentType:false,
+            success:function(respond){
+                $("#addAttribute").modal("hide");
+                refresh(page);
+            }
+        });
+    }
+    function update_attr(){
+        var form = $("#edit_form")[0];
+        var data = new FormData(form);
+        $.ajax({
+            url:"<?php echo base_url();?>ws/attribute/update",
+            type:"POST",
+            dataType:"JSON",
+            data:data,
+            processData: false,
+            contentType: false,
+            success:function(respond){
+                $("#editAttribute").modal("hide");
+                refresh(page);
+            }
+        });
+    }
+    function delete_attr(){
+        var attr_id = $("#attr_id_delete").val();
+        $.ajax({
+            url:"<?php echo base_url();?>ws/attribute/delete/"+attr_id,
+            type:"DELETE",
+            dataType:"JSON",
+            success:function(respond){
+                $("#deleteAttribute").modal("hide");
+                refresh(page);
+            }
+        });
+    }
+</script>
+<script>
 function load_content(id_submit_attr){
     $.ajax({
         url:"<?php echo base_url();?>ws/attribute/get_attribute/"+id_submit_attr,
@@ -246,7 +291,6 @@ function load_content(id_submit_attr){
         }
     });
 }
-
 function load_delete_content(id_submit_attr){
     $.ajax({
         url:"<?php echo base_url();?>ws/attribute/get_attribute/"+id_submit_attr,
