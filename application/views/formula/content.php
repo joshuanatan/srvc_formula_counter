@@ -31,6 +31,7 @@
         <ul class="pagination justify-content-center" id = "pagination_container">
         </ul>
     </nav>
+    <a href = "<?php echo base_url();?>formula" class = "btn btn-primary btn-sm">BACK</a>
 </div>
 <div class = "modal fade" id = "addFormula">
     <div class = "modal-dialog modal-lg">
