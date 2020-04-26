@@ -1,5 +1,5 @@
 <div class = "col-lg-12">
-    <button type = "button" class = "btn btn-primary btn-sm" data-toggle = "modal" data-target = "#register_dialog" style = "margin-right:10px">Add Account</button>
+    <button type = "button" class = "btn btn-primary btn-sm" data-toggle = "modal" data-target = "#addFormula" style = "margin-right:10px">Tambah Item Pekerjaan</button>
     <div class = "align-middle text-center">
         <i style = "cursor:pointer;font-size:large;margin-left:10px" class = "text-primary md-edit"></i><b> - Edit </b>   
         <i style = "cursor:pointer;font-size:large;margin-left:10px" class = "text-danger md-delete"></i><b> - Delete </b>
@@ -39,7 +39,7 @@
                 <h4 class = "modal-title">Tambah Pekerjaan</h4>
             </div>
             <div class = "modal-body">
-                <form action = "<?php echo base_url();?>formula/register" method = "POST">
+                <form id = "add_form" method = "POST">
                     <input type = "hidden" name = "id_formula_cat" value = "<?php echo $id_formula_cat;?>">
                     <div class = "form-group">
                         <h5>Nama Pekerjaan</h5>
@@ -102,7 +102,7 @@
                             </tbody>
                         </table>
                         <button type = "button" class = "btn btn-sm btn-danger" data-dismiss = "modal">Cancel</button>
-                        <button type = "submit" class = "btn btn-sm btn-primary">Submit</button>
+                        <button type = "button" onclick = "register_item()" class = "btn btn-sm btn-primary">Submit</button>
                     </div>
                 </form>
             </div>
@@ -116,15 +116,13 @@
                 <h4 class = "modal-title">Hapus Pekerjaan</h4>
             </div>
             <div class = "modal-body">
-                <form action = "<?php echo base_url();?>formula/delete" method = "POST">
-                    <input type = "hidden" name = "id_formula_cat" value = "<?php echo $id_formula_cat;?>">
-                    <input type = "hidden" name = "id_formula" value = "" id = "id_formula_delete">
-                    <h4 align = "center">Apakah anda yakin ingin menghapus pekerjaan <i><span id = "formula_desc_delete"></span></i></h4>
-                    <div class = "row">
-                        <button type = "button" class = "btn btn-sm btn-primary col-lg-3 col-sm-12 offset-lg-3" data-dismiss = "modal">Cancel</button>
-                        <button type = "submit" class = "btn btn-sm btn-danger col-lg-3">Delete</button>
-                    </div>
-                </form>
+                <input type = "hidden" name = "id_formula_cat" value = "<?php echo $id_formula_cat;?>">
+                <input type = "hidden" name = "id_formula" value = "" id = "id_formula_delete">
+                <h4 align = "center">Apakah anda yakin ingin menghapus pekerjaan <i><span id = "formula_desc_delete"></span></i></h4>
+                <div class = "row">
+                    <button type = "button" class = "btn btn-sm btn-primary col-lg-3 col-sm-12 offset-lg-3" data-dismiss = "modal">Cancel</button>
+                    <button type = "button" onclick = "delete_item()" class = "btn btn-sm btn-danger col-lg-3">Delete</button>
+                </div>
             </div>
         </div>
     </div>
@@ -136,7 +134,7 @@
                 <h4 class = "modal-title">Edit Formula</h4>
             </div>
             <div class = "modal-body">
-                <form action = "<?php echo base_url();?>formula/update" method = "POST">
+                <form id = "edit_form" method = "POST">
                     <input type = "hidden" name = "id_formula_cat" value = "<?php echo $id_formula_cat;?>">
                     <input type = "hidden" name = "id_formula" id = "formula_id_edit">
                     <div class = "form-group">
@@ -200,7 +198,7 @@
                             </tbody>
                         </table>
                         <button type = "button" class = "btn btn-sm btn-danger" data-dismiss = "modal">Cancel</button>
-                        <button type = "submit" class = "btn btn-sm btn-primary">Submit</button>
+                        <button type = "button" onclick = "update_item()" class = "btn btn-sm btn-primary">Submit</button>
                     </div>
                 </form>
             </div>
@@ -225,9 +223,9 @@
                 if(respond["status"] == "SUCCESS"){
                     for(var a = 0; a<respond["content"].length; a++){
                         html += "<tr>";
-                        html += "<td class = 'align-middle text-center' id = 'id"+a+"'>"+respond["content"][a]["desc"]+"</td>";
-                        html += "<td class = 'align-middle text-center' id = 'name"+a+"'>"+respond["content"][a]["status"]+"</td>";
-                        html += "<td class = 'align-middle text-center' id = 'email"+a+"'>"+respond["content"][a]["last_modified"]+"</td>";
+                        html += "<td class = 'align-middle text-center' id = 'desc"+respond["content"][a]["id"]+"'>"+respond["content"][a]["desc"]+"</td>";
+                        html += "<td class = 'align-middle text-center' id = 'status"+respond["content"][a]["id"]+"'>"+respond["content"][a]["status"]+"</td>";
+                        html += "<td class = 'align-middle text-center' id = 'last_modified"+respond["content"][a]["id"]+"'>"+respond["content"][a]["last_modified"]+"</td>";
                         html += "<td class = 'align-middle text-center'><i style = 'cursor:pointer;font-size:large' data-toggle = 'modal' class = 'text-primary md-edit' data-target = '#editFormula' onclick = 'load_list_bahan_edit();load_list_alat_edit();load_list_upah_edit();load_content("+respond["content"][a]["id"]+")'></i> | <i style = 'cursor:pointer;font-size:large' data-toggle = 'modal' class = 'text-danger md-delete' data-target = '#deleteFormula' onclick = 'load_delete_content("+respond["content"][a]["id"]+")'></i></td>";
                         html += "</tr>";
                     }
@@ -303,6 +301,54 @@
 <script>
     window.onload = function(){
         refresh();
+    }
+</script>
+<script>
+    function register_item(){
+        var form = $("#add_form")[0];
+        var data = new FormData(form);
+        $.ajax({
+            url: "<?php echo base_url();?>ws/formula/register",
+            type:"POST",
+            dataType:"JSON",
+            contentType:false,
+            processData:false,
+            data:data,
+            success:function(respond){
+                $("#addFormula").modal("hide");
+                refresh(page);
+            }
+        })
+    }
+    function update_item(){
+        var form = $("#edit_form")[0];
+        var data = new FormData(form);
+        $.ajax({
+            url:"<?php echo base_url();?>ws/formula/update",
+            type:"POST",
+            dataType:"JSON",
+            contentType:false,
+            processData:false,
+            data:data,
+            success:function(respond){
+                $("#editFormula").modal("hide");
+                refresh(page);
+            }
+        })
+    }
+    function delete_item(){
+        var id = $("#id_formula_delete").val();
+        $.ajax({
+            url:"<?php echo base_url();?>ws/formula/delete/"+id,
+            type:"DELETE",
+            dataType:"JSON",
+            contentType:false,
+            processData:false,
+            success:function(respond){
+                $("#deleteFormula").modal("hide");
+                refresh(page);
+            }
+        })
     }
 </script>
 <script>
@@ -406,7 +452,7 @@
 <script>
     function load_content(id_submit_formula){
         $("#formula_id_edit").val(id_submit_formula)
-        $("#formula_desc_edit").val($("#formula_desc"+id_submit_formula).text());
+        $("#formula_desc_edit").val($("#desc"+id_submit_formula).text());
         
         $.ajax({
             url:"<?php echo base_url();?>ws/formula/get_formula/"+id_submit_formula,
@@ -493,6 +539,6 @@
 <script>
     function load_delete_content(id_submit_formula){
         $("#id_formula_delete").val(id_submit_formula);
-        $("#formula_desc_delete").html($("#formula_desc"+id_submit_formula).text());
+        $("#formula_desc_delete").html($("#desc"+id_submit_formula).text());
     }
 </script>
