@@ -6,6 +6,38 @@ class Supplier extends CI_Controller{
     public function __construct(){
         parent::__construct();
     }
+    public function list(){
+        $respond["status"] = "SUCCESS";
+        $respond["content"] = array();
+
+        $order_by = $this->input->get("orderBy");
+        $order_direction = $this->input->get("orderDirection");
+        $page = $this->input->get("page");
+        $search_key = $this->input->get("searchKey");
+        $data_per_page = 20;
+        
+        $this->load->model("m_supplier");
+        $result = $this->m_supplier->content($page,$order_by,$order_direction,$search_key,$data_per_page);
+        if($result["data"]->num_rows() > 0){
+            $result["data"] = $result["data"]->result_array();
+            for($a = 0; $a<count($result["data"]); $a++){
+                $respond["content"][$a]["id"] = $result["data"][$a]["id_submit_supplier"];
+                $respond["content"][$a]["nama"] = $result["data"][$a]["nama_supp"];
+                $respond["content"][$a]["desc"] = $result["data"][$a]["desc_supp"];
+                $respond["content"][$a]["alamat"] = $result["data"][$a]["alamat_supp"];
+                $respond["content"][$a]["pic"] = $result["data"][$a]["pic_supp"];
+                $respond["content"][$a]["notelp"] = $result["data"][$a]["notelp_supp"];
+                $respond["content"][$a]["last_modified"] = $result["data"][$a]["supp_last_modified"];
+                $respond["content"][$a]["status"] = $result["data"][$a]["supp_status"];
+            }
+        }
+        else{
+            $respond["status"] = "ERROR";
+        }
+        $respond["page"] = $this->pagination->generate_pagination_rules($page,$result["total_data"],$data_per_page);
+
+        echo json_encode($respond);
+    }
     public function daftar(){
         $respond["status"] = "SUCCESS";
         $respond["supplier"] = array();

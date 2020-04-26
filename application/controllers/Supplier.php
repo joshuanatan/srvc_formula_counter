@@ -20,8 +20,7 @@ class Supplier extends CI_Controller{
         $this->load->view("supplier/page_open");
 
         $this->load->model("m_supplier");
-        $result = $this->m_supplier->list();
-        $data["supplier"] = $result->result_array();
+        $data["col"] = $this->m_supplier->column();
 
         $this->load->view("supplier/content",$data);
         $this->load->view("supplier/page_close");

@@ -4,7 +4,7 @@ date_default_timezone_set("Asia/Jakarta");
 
 class M_supplier extends CI_Model{
     private $tbl_name = "mstr_supplier";
-
+    private $column_list = array();
     private $id_submit_supplier = 0;
     private $nama_supp = "";
     private $desc_supp = "";
@@ -18,6 +18,80 @@ class M_supplier extends CI_Model{
         parent::__construct();
         $this->supp_last_modified = date("Y-m-d H:i:s");
         $this->id_last_modified = $this->session->id_submit_acc;
+        $this->column_list = array(
+            array(
+                "col_name" => "nama_supp",
+                "col_disp" => "Nama Supplier",
+                "order_by" => true
+            ),
+            array(
+                "col_name" => "desc_supp",
+                "col_disp" => "Deskripsi Supplier",
+                "order_by" => false
+            ),
+            array(
+                "col_name" => "alamat_supp",
+                "col_disp" => "Alamat Supplier",
+                "order_by" => false
+            ),
+            array(
+                "col_name" => "pic_supp",
+                "col_disp" => "PIC Supplier",
+                "order_by" => false
+            ),
+            array(
+                "col_name" => "notelp_supp",
+                "col_disp" => "No Telp Supplier",
+                "order_by" => false
+            ),
+            array(
+                "col_name" => "supp_last_modified",
+                "col_disp" => "Last Modified",
+                "order_by" => false
+            ),
+            array(
+                "col_name" => "supp_status",
+                "col_disp" => "Status Supplier",
+                "order_by" => false
+            ),
+        );
+    }
+    public function column(){
+        return $this->column_list;
+    }
+    public function content($page = 1,$order_by = 0, $order_direction = "ASC", $search_key = "",$data_per_page = ""){
+        $order_by = $this->column_list[$order_by]["col_name"];
+        $search_query = "";
+        if($search_key != ""){
+            $search_query .= "AND
+            ( 
+                id_submit_supplier LIKE '%".$search_key."%' OR
+                nama_supp LIKE '%".$search_key."%' OR
+                desc_supp LIKE '%".$search_key."%' OR
+                alamat_supp LIKE '%".$search_key."%' OR
+                pic_supp LIKE '%".$search_key."%' OR
+                notelp_supp LIKE '%".$search_key."%' OR
+                supp_last_modified LIKE '%".$search_key."%' OR
+                supp_status LIKE '%".$search_key."%'
+            )";
+        }
+        $query = "
+        SELECT id_submit_supplier,nama_supp,desc_supp,alamat_supp,pic_supp,notelp_supp,supp_last_modified,supp_status
+        FROM ".$this->tbl_name." 
+        WHERE supp_status = ? ".$search_query."  
+        ORDER BY ".$order_by." ".$order_direction." 
+        LIMIT 20 OFFSET ".($page-1)*$data_per_page;
+        $args = array(
+            "ACTIVE"
+        );
+        $result["data"] = executeQuery($query,$args);
+        $query = "
+        SELECT id_submit_supplier
+        FROM ".$this->tbl_name." 
+        WHERE supp_status = ? ".$search_query."  
+        ORDER BY ".$order_by." ".$order_direction;
+        $result["total_data"] = executeQuery($query,$args)->num_rows();
+        return $result;
     }
     public function insert(){
         $where = array(
