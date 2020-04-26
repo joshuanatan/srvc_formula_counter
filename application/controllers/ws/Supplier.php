@@ -63,58 +63,123 @@ class Supplier extends CI_Controller{
     }
     public function register(){
         $respond["status"] = "SUCCESS";
-        $respond["id"] = false;
         $config = array(
             array(
-                "field" => "nama_supp_add",
-                "label" =>"",
+                "field" => "nama",
+                "label" => "Nama Supplier",
                 "rules" => "required"
             ),
             array(
-                "field" => "desc_supp_add",
-                "label" =>"",
+                "field" => "desc",
+                "label" => "Desc Supplier",
                 "rules" => "required"
             ),
             array(
-                "field" => "almt_supp_add",
-                "label" =>"",
+                "field" => "alamat",
+                "label" => "Alamat Supplier",
                 "rules" => "required"
             ),
             array(
-                "field" => "pic_supp_add",
-                "label" =>"",
+                "field" => "pic",
+                "label" => "Pic Supplier",
                 "rules" => "required"
             ),
             array(
-                "field" => "notelp_supp_add",
-                "label" =>"",
+                "field" => "notelp",
+                "label" => "No Telp Supplier",
                 "rules" => "required"
             ),
         );
         $this->form_validation->set_rules($config);
         if($this->form_validation->run()){
-            $nama_supp_add = $this->input->post("nama_supp_add");
-            $desc_supp_add = $this->input->post("desc_supp_add");
-            $almt_supp_add = $this->input->post("almt_supp_add");
-            $pic_supp_add = $this->input->post("pic_supp_add");
-            $notelp_supp_add = $this->input->post("notelp_supp_add");
+            $nama = $this->input->post("nama");
+            $desc = $this->input->post("desc");
+            $alamat = $this->input->post("alamat");
+            $pic = $this->input->post("pic");
+            $notelp = $this->input->post("notelp");
 
             $this->load->model("m_supplier");
-            $this->m_supplier->set_nama_supp($nama_supp_add);
-            $this->m_supplier->set_desc_supp($desc_supp_add);
-            $this->m_supplier->set_alamat_supp($almt_supp_add);
-            $this->m_supplier->set_pic_supp($pic_supp_add);
-            $this->m_supplier->set_notelp_supp($notelp_supp_add);
-            $result = $this->m_supplier->insert();
-            if($result){
-                $respond["id"] = $result; 
-            }
-            else{
-                $respond["status"] = "ERROR";
-            }
+            $this->m_supplier->set_nama_supp($nama);
+            $this->m_supplier->set_alamat_supp($alamat);
+            $this->m_supplier->set_pic_supp($pic);
+            $this->m_supplier->set_notelp_supp($notelp);
+            $this->m_supplier->set_desc_supp($desc);
+            $this->m_supplier->insert();
         }
         else{
             $respond["status"] = "ERROR";
+            $respond["msg"] = validation_errors();
+        }
+        echo json_encode($respond);
+    }
+    public function update(){
+        $respond["status"] = "SUCCESS";
+        $config = array(
+            array(
+                "field" => "id",
+                "label" => "ID Supplier",
+                "rules" => "required"
+            ),
+            array(
+                "field" => "nama",
+                "label" => "Nama Supplier",
+                "rules" => "required"
+            ),
+            array(
+                "field" => "desc",
+                "label" => "Desc Supplier",
+                "rules" => "required"
+            ),
+            array(
+                "field" => "alamat",
+                "label" => "Alamat Supplier",
+                "rules" => "required"
+            ),
+            array(
+                "field" => "pic",
+                "label" => "Pic Supplier",
+                "rules" => "required"
+            ),
+            array(
+                "field" => "notelp",
+                "label" => "No Telp Supplier",
+                "rules" => "required"
+            ),
+        );
+        $this->form_validation->set_rules($config);
+        if($this->form_validation->run()){
+            $id = $this->input->post("id");
+            $nama = $this->input->post("nama");
+            $desc = $this->input->post("desc");
+            $alamat = $this->input->post("alamat");
+            $pic = $this->input->post("pic");
+            $notelp = $this->input->post("notelp");
+
+            $this->load->model("m_supplier");
+            $this->m_supplier->set_id_submit_supplier($id);
+            $this->m_supplier->set_nama_supp($nama);
+            $this->m_supplier->set_alamat_supp($alamat);
+            $this->m_supplier->set_pic_supp($pic);
+            $this->m_supplier->set_notelp_supp($notelp);
+            $this->m_supplier->set_desc_supp($desc);
+            $this->m_supplier->update();
+        }
+        else{
+            $respond["status"] = "ERROR";
+            $respond["msg"] = validation_errors();
+        }
+        echo json_encode($respond);
+    }
+    public function delete($id_supplier){
+        $respond["status"] = "SUCCESS";
+        if($id_supplier != "" && is_numeric($id_supplier)){
+            $this->load->model("m_supplier");
+            $this->m_supplier->set_id_submit_supplier($id_supplier);
+            $this->m_supplier->delete();
+        }
+        else{
+            $respond["status"] = "SUCCESS";
+            $respond["msg"] = validation_errors();
         }
         echo json_encode($respond);
     }

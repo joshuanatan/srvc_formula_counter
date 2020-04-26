@@ -11,8 +11,18 @@ class Supplier extends CI_Controller{
     public function __construct(){
         parent::__construct();
     }
+    public function remove_table_session($page){
+        if($this->session->page != $page){
+            $this->session->page = $page;
+            $this->session->orderBy = "";
+            $this->session->orderDirection = "";
+            $this->session->searchKey = "";
+            $this->session->page = "";
+        }
+    }
     public function index(){
         $this->check_session();
+        $this->remove_table_session("supplier");
         $this->load->view("req_include/head");
         $this->load->view("plugin/datatable/datatable-css");
         $this->load->view("req_include/page_open");
@@ -27,112 +37,5 @@ class Supplier extends CI_Controller{
         $this->load->view("req_include/page_close");
         $this->load->view("req_include/script");
         $this->load->view("plugin/datatable/datatable-js");
-    }
-    public function register(){
-        $config = array(
-            array(
-                "field" => "nama",
-                "label" => "Nama Supplier",
-                "rules" => "required"
-            ),
-            array(
-                "field" => "desc",
-                "label" => "Desc Supplier",
-                "rules" => "required"
-            ),
-            array(
-                "field" => "alamat",
-                "label" => "Alamat Supplier",
-                "rules" => "required"
-            ),
-            array(
-                "field" => "pic",
-                "label" => "Pic Supplier",
-                "rules" => "required"
-            ),
-            array(
-                "field" => "notelp",
-                "label" => "No Telp Supplier",
-                "rules" => "required"
-            ),
-        );
-        $this->form_validation->set_rules($config);
-        if($this->form_validation->run()){
-            $nama = $this->input->post("nama");
-            $desc = $this->input->post("desc");
-            $alamat = $this->input->post("alamat");
-            $pic = $this->input->post("pic");
-            $notelp = $this->input->post("notelp");
-
-            $this->load->model("m_supplier");
-            $this->m_supplier->set_nama_supp($nama);
-            $this->m_supplier->set_alamat_supp($alamat);
-            $this->m_supplier->set_pic_supp($pic);
-            $this->m_supplier->set_notelp_supp($notelp);
-            $this->m_supplier->set_desc_supp($desc);
-            $this->m_supplier->insert();
-        }
-        redirect("supplier");
-    }
-    public function update(){
-        $config = array(
-            array(
-                "field" => "id",
-                "label" => "ID Supplier",
-                "rules" => "required"
-            ),
-            array(
-                "field" => "nama",
-                "label" => "Nama Supplier",
-                "rules" => "required"
-            ),
-            array(
-                "field" => "desc",
-                "label" => "Desc Supplier",
-                "rules" => "required"
-            ),
-            array(
-                "field" => "alamat",
-                "label" => "Alamat Supplier",
-                "rules" => "required"
-            ),
-            array(
-                "field" => "pic",
-                "label" => "Pic Supplier",
-                "rules" => "required"
-            ),
-            array(
-                "field" => "notelp",
-                "label" => "No Telp Supplier",
-                "rules" => "required"
-            ),
-        );
-        $this->form_validation->set_rules($config);
-        if($this->form_validation->run()){
-            $id = $this->input->post("id");
-            $nama = $this->input->post("nama");
-            $desc = $this->input->post("desc");
-            $alamat = $this->input->post("alamat");
-            $pic = $this->input->post("pic");
-            $notelp = $this->input->post("notelp");
-
-            $this->load->model("m_supplier");
-            $this->m_supplier->set_id_submit_supplier($id);
-            $this->m_supplier->set_nama_supp($nama);
-            $this->m_supplier->set_alamat_supp($alamat);
-            $this->m_supplier->set_pic_supp($pic);
-            $this->m_supplier->set_notelp_supp($notelp);
-            $this->m_supplier->set_desc_supp($desc);
-            $this->m_supplier->update();
-        }
-        redirect("supplier");
-    }
-    public function delete($id_supplier){
-        if($id_supplier != "" && is_numeric($id_supplier)){
-            $this->load->model("m_supplier");
-            $this->m_supplier->set_id_submit_supplier($id_supplier);
-            $this->m_supplier->delete();
-        }
-        redirect("supplier");
     }
 }

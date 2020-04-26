@@ -1,5 +1,5 @@
 <div class = "col-lg-12">
-    <button type = "button" class = "btn btn-primary btn-sm" data-toggle = "modal" data-target = "#register_dialog" style = "margin-right:10px">Add Account</button>
+    <button type = "button" class = "btn btn-primary btn-sm" data-toggle = "modal" data-target = "#addSupplier" style = "margin-right:10px">Add Supplier</button>
     <div class = "align-middle text-center">
         <i style = "cursor:pointer;font-size:large;margin-left:10px" class = "text-primary md-edit"></i><b> - Edit </b>   
         <i style = "cursor:pointer;font-size:large;margin-left:10px" class = "text-danger md-delete"></i><b> - Delete </b>
@@ -39,7 +39,7 @@
                 <h4>Tambah Supplier</h4>
             </div>
             <div class = "modal-body">
-                <form action = "<?php echo base_url();?>supplier/register" method = "POST">
+                <form id = "register_form" method = "POST">
                     <div class = "form-group">
                         <h5>Nama Supplier</h5>
                         <input type = "text" class = "form-control" name = "nama">
@@ -62,7 +62,7 @@
                     </div>
                     <div class = "form-group">
                         <button type = "button" data-dismiss = "modal" class = "btn btn-danger btn-sm">Cancel</button>
-                        <button type = "submit" class = "btn btn-primary btn-sm">Submit</button>
+                        <button type = "button" onclick = "register_supplier()" class = "btn btn-primary btn-sm">Submit</button>
                     </div>
                 </form>
             </div>
@@ -76,7 +76,7 @@
                 <h4>Tambah Supplier</h4>
             </div>
             <div class = "modal-body">
-                <form action = "<?php echo base_url();?>supplier/update" method = "POST">
+                <form id = "edit_form" method = "POST">
                     <input type = "hidden" name = "id" id = "idEdit">
                     <div class = "form-group">
                         <h5>Nama Supplier</h5>
@@ -100,7 +100,7 @@
                     </div>
                     <div class = "form-group">
                         <button type = "button" data-dismiss = "modal" class = "btn btn-danger btn-sm">Cancel</button>
-                        <button type = "submit" class = "btn btn-primary btn-sm">Submit</button>
+                        <button type = "button" onclick = "update_supplier()" class = "btn btn-primary btn-sm">Submit</button>
                     </div>
                 </form>
             </div>
@@ -137,7 +137,7 @@
                 </table>
                 <div class = "row">
                     <button type = "button" class = "btn btn-sm btn-primary col-lg-3 col-sm-12 offset-lg-3" data-dismiss = "modal">Cancel</button>
-                    <a href = "<?php echo base_url();?>supplier/delete" id = "deleteButton" class = "btn btn-sm btn-danger col-lg-3">Delete</a>
+                    <button type = "button" onclick = "delete_supplier()" id = "deleteButton" class = "btn btn-sm btn-danger col-lg-3">Delete</a>
                 </div>
             </div>
         </div>
@@ -252,6 +252,52 @@
 <script>
     window.onload = function(){
         refresh();
+    }
+</script>
+<script>
+    function register_supplier(){
+        var form = $("#register_form")[0];
+        var data = new FormData(form);
+        $.ajax({
+            url:"<?php echo base_url();?>ws/supplier/register_cat",
+            type:"POST",
+            dataType:"JSON",
+            data:data,
+            processData:false,
+            contentType:false,
+            success:function(respond){
+                $("#addSupplier").modal("hide");
+                refresh(page);
+            }
+        });
+    }
+    function update_supplier(){
+        var form = $("#edit_form")[0];
+        var data = new FormData(form);
+        $.ajax({
+            url:"<?php echo base_url();?>ws/supplier/update_cat",
+            type:"POST",
+            dataType:"JSON",
+            data:data,
+            processData: false,
+            contentType: false,
+            success:function(respond){
+                $("#editSupplier").modal("hide");
+                refresh(page);
+            }
+        });
+    }
+    function delete_supplier(){
+        var id = $("#idEdit").val();
+        $.ajax({
+            url:"<?php echo base_url();?>ws/supplier/delete_cat/"+id,
+            type:"DELETE",
+            dataType:"JSON",
+            success:function(respond){
+                $("#deleteSupplier").modal("hide");
+                refresh(page);
+            }
+        });
     }
 </script>
 <script>
