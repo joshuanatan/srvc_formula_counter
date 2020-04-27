@@ -2566,4 +2566,336 @@ class Project extends CI_Controller{
             $this->m_belanja->insert();
         }
     }
+    public function import_lain(){
+        $item = array(
+            'Biaya koordinasi',
+            'Biaya keamanan',
+            'Sewa mobil 2 hari',
+            'Bensin mobil (total)',
+            'Uang makan 2 org 2 hr',
+            'Penginapan',
+            'Biaya tol (total)',
+            'Ongkos ojek mengembalikan mobil',
+            'Biaya keamanan',
+            'Biaya sambung baru',
+            'Biaya instalasi',
+            'Biaya tambah daya',
+            'Biaya keamanan',
+            'Biaya keamanan',
+            'Biaya keamanan',
+            'Biaya keamanan',
+            'Biaya keamanan',
+            'Biaya keamanan',
+            'Biaya keamanan',
+            'Biaya keamanan',
+            'Biaya keamanan',
+            'Ongkos kirim kayu',
+            'Tip serut kayu',
+            'Ongkos kirim besi',
+            'Biaya keamanan',
+            'Biaya keamanan',
+            'Biaya keamanan',
+            'LSM (keamanan cor)',
+            'Patroli (keamanan cor)',
+            'Abeng (keamanan cor)',
+            'Biaya keamanan',
+            'Pompa Air',
+            'Pompa Air',
+            'Pompa Air',
+            'Pompa Air',
+            'Pendalaman',
+            'Pendalaman',
+            'Pendalaman',
+            'Pendalaman',
+            'Pendalaman',
+            'Pendalaman'
+        );
+        $tgl = array(
+            '2020-01-17',
+            '',
+            '2020-01-24',
+            '',
+            '',
+            '',
+            '',
+            '',
+            '2020-01-25',
+            '2020-01-29',
+            '',
+            '',
+            '2020-02-01',
+            '2020-02-08',
+            '2020-02-15',
+            '2020-02-22',
+            '2020-02-28',
+            '2020-03-08',
+            '2020-03-14',
+            '2020-03-21',
+            '2020-03-28',
+            '2020-03-28',
+            '2020-03-28',
+            '2020-03-31',
+            '2020-04-04',
+            '2020-04-11',
+            '2020-04-18',
+            '2020-04-20',
+            '',
+            '',
+            '2020-04-25',
+            '2020-01-22',
+            '2020-01-25',
+            '2020-01-28',
+            '2020-03-25',
+            '2020-03-28',
+            '2020-03-30',
+            '2020-04-03',
+            '2020-04-06',
+            '2020-04-11',
+            '2020-04-13',
+            '2020-01-25',
+            '2020-02-03',
+            '2020-02-14',
+        );
+        $volume = array(
+            '1',
+            '1',
+            '1',
+            '1',
+            '1',
+            '1',
+            '1',
+            '1',
+            '1',
+            '1',
+            '1',
+            '1',
+            '1',
+            '1',
+            '1',
+            '1',
+            '1',
+            '1',
+            '1',
+            '1',
+            '1',
+            '1',
+            '1',
+            '1',
+            '1',
+            '1',
+            '1',
+            '1',
+            '1',
+            '1',
+            '1',
+            '1',
+            '1',
+            '1',
+            '1',
+            '1',
+            '1',
+            '1',
+            '1',
+            '1',
+            '1',
+            '1',
+            '1',
+            '1',
+        );
+        $satuan = array(
+            '-',
+            'mg',
+            '-',
+            '-',
+            '-',
+            '-',
+            '-',
+            '-',
+            'mg',
+            '-',
+            '-',
+            '-',
+            'mg',
+            'mg',
+            'mg',
+            'mg',
+            'mg',
+            'mg',
+            'mg',
+            'mg',
+            'mg',
+            'rit',
+            'ls',
+            'ls',
+            'mg',
+            'mg',
+            'mg',
+            'ls',
+            'ls',
+            'ls',
+            'mg',
+            '-',
+            '-',
+            '-',
+            '-',
+            '-',
+            '-',
+            '-',
+            '-',
+            '-',
+            '-',
+            '-',
+            '-',
+            '-',
+        );
+        $harga_satuan = array(
+            '2000000',
+            '150000',
+            '500000',
+            '285000',
+            '250000',
+            '152000',
+            '157500',
+            '25000',
+            '150000',
+            '2091000',
+            '450000',
+            '1273700',
+            '150000',
+            '150000',
+            '150000',
+            '150000',
+            '150000',
+            '150000',
+            '150000',
+            '150000',
+            '150000',
+            '150000',
+            '50000',
+            '2250000',
+            '150000',
+            '150000',
+            '150000',
+            '3000000',
+            '200000',
+            '100000',
+            '150000',
+            '1000000',
+            '2000000',
+            '2500000',
+            '1500000',
+            '1000000',
+            '1000000',
+            '500000',
+            '2000000',
+            '2000000',
+            '3000000',
+            '5000000',
+            '5000000',
+            '11000000',
+        );
+        $toko = array(
+            'No Name',
+            'No Name',
+            'No Name',
+            'No Name',
+            'No Name',
+            'No Name',
+            'No Name',
+            'No Name',
+            'No Name',
+            'PLN',
+            'PLN',
+            'PLN',
+            'No Name',
+            'No Name',
+            'No Name',
+            'No Name',
+            'No Name',
+            'No Name',
+            'No Name',
+            'No Name',
+            'No Name',
+            'No Name',
+            'No Name',
+            'No Name',
+            'No Name',
+            'No Name',
+            'No Name',
+            'No Name',
+            'No Name',
+            'No Name',
+            'No Name',
+            'No Name',
+            'No Name',
+            'No Name',
+            'No Name',
+            'No Name',
+            'No Name',
+            'No Name',
+            'No Name',
+            'No Name',
+            'No Name',
+            'No Name',
+            'No Name',
+            'No Name',
+        );
+        for($a = 0; $a<count($item); $a++){
+            $this->load->model("m_belanja");
+            $this->m_belanja->set_id_project("1");
+            $where = array(
+                "formula_attr_name" => $item[$a]
+            );
+            $field = array(
+                "id_submit_formula_attr"
+            );
+            $result = selectRow("mstr_formula_attr",$where,$field);
+            if($result->num_rows() > 0){
+                $result = $result->result_array();
+                $id_item = $result[0]["id_submit_formula_attr"];
+            }
+            else{
+                $data = array(
+                    "formula_attr_name" => $item[$a],
+                    "satuan_attr" => $satuan[$a],
+                    "harga_satuan_attr" => $harga_satuan[$a],
+                    "tipe_attr" => "UPAH",
+                    "status_formula_attr" => "ACTIVE",
+                    "formula_attr_last_modified" => date("Y-m-d H:i:s"),
+                    "id_last_modified" => 0
+                );
+                $id_item = insertRow("mstr_formula_attr",$data);
+            }
+            $this->m_belanja->set_id_item($id_item);
+            $where = array(
+                "nama_supp" => $toko[$a]
+            );
+            $field = array(
+                "id_submit_supplier"
+            );
+            $result = selectRow("mstr_supplier",$where,$field);
+            if($result->num_rows() > 0){
+                $result = $result->result_array();
+                $id_supplier = $result[0]["id_submit_supplier"];
+            }
+            else{
+                $data = array(
+                    "nama_supp" => $toko[$a],
+                    "supp_status" => "ACTIVE",
+                    "supp_last_modified" => date("Y-m-d H:i:s"),
+                    "id_last_modified" => 0,
+                );
+                $id_supplier = insertRow("mstr_supplier",$data);
+            }
+            $this->m_belanja->set_id_supplier($id_supplier);
+            $this->m_belanja->set_pengeluaran($volume[$a]*$harga_satuan[$a]);
+            $this->m_belanja->set_volume($volume[$a]);
+            $this->m_belanja->set_harga_satuan($harga_satuan[$a]);
+            if($tgl[$a] == ""){
+                $tgl[$a] = $tgl[$a-1];
+            }
+            $this->m_belanja->set_tgl_pengeluaran($tgl[$a]);
+            $this->m_belanja->insert();
+        }
+    }
 }
