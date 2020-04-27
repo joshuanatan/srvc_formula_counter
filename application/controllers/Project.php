@@ -1262,8 +1262,8 @@ class Project extends CI_Controller{
             10,
             8,
             2,
-            0,
-            0,
+            -2,
+            -1,
             1,
             3,
             1,
@@ -1429,9 +1429,9 @@ class Project extends CI_Controller{
             1,
             1,
 
+
         );
-        $harga_satuan = array(
-            15000,
+        $harga_satuan = array(15000,
             15000,
             15000,
             35000,
@@ -1788,6 +1788,7 @@ class Project extends CI_Controller{
             5000,
             450000,
             3300000,
+        
         );
         $toko = array(
             "Sinar Jaya", 
