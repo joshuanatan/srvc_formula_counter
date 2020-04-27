@@ -142,6 +142,9 @@ class Project extends CI_Controller{
                     $respond["content"][$a]["id_item"] = $result[$a]["id_item"];
                     $respond["content"][$a]["id_supplier"] = $result[$a]["id_supplier"];
                     $respond["content"][$a]["pengeluaran"] = $result[$a]["pengeluaran"];
+                    $respond["content"][$a]["tgl_pengeluaran"] = $result[$a]["tgl_pengeluaran"];
+                    $respond["content"][$a]["harga_satuan"] = $result[$a]["harga_satuan"];
+                    $respond["content"][$a]["volume"] = $result[$a]["volume"];
                     $respond["content"][$a]["status"] = $result[$a]["blnj_status"];
                     $respond["content"][$a]["last_modified"] = $result[$a]["blnj_last_modified"];
                     $respond["content"][$a]["project"] = $result[$a]["prj_name"];
@@ -184,6 +187,21 @@ class Project extends CI_Controller{
                 "label" => "",
                 "rules" => "required"
             ),
+            array(
+                "field" => "tgl_pengeluaran",
+                "label" => "",
+                "rules" => "required"
+            ),
+            array(
+                "field" => "harga_satuan",
+                "label" => "",
+                "rules" => "required"
+            ),
+            array(
+                "field" => "volume",
+                "label" => "",
+                "rules" => "required"
+            ),
         );
         $this->form_validation->set_rules($config);
         if($this->form_validation->run()){
@@ -191,21 +209,28 @@ class Project extends CI_Controller{
             $id_item = $this->input->post("id_item");
             $id_supplier = $this->input->post("id_supplier");
             $pengeluaran = $this->input->post("pengeluaran");
+            $tgl_pengeluaran = $this->input->post("tgl_pengeluaran");
+            $harga_satuan = $this->input->post("harga_satuan");
+            $volume = $this->input->post("volume");
             
             $this->load->model("m_belanja");
             $this->m_belanja->set_id_project($id_project);
             $this->m_belanja->set_id_item($id_item);
             $this->m_belanja->set_id_supplier($id_supplier);
             $this->m_belanja->set_pengeluaran($pengeluaran);
+            $this->m_belanja->set_tgl_pengeluaran($tgl_pengeluaran);
+            $this->m_belanja->set_harga_satuan($harga_satuan);
+            $this->m_belanja->set_volume($volume);
             if($this->m_belanja->insert()){
-                $respond["register_time"] = date("Y-m-d H:i:s");
             }
             else{
                 $respond["status"] = "ERROR";
+                $respond["msg"] = "Insert function error";
             }
         }
         else{
             $respond["status"] = "ERROR";
+            $respond["msg"] = validation_errors();
         }
         echo json_encode($respond);
     }
@@ -232,6 +257,21 @@ class Project extends CI_Controller{
                 "label" => "",
                 "rules" => "required"
             ),
+            array(
+                "field" => "tgl_pengeluaran",
+                "label" => "",
+                "rules" => "required"
+            ),
+            array(
+                "field" => "harga_satuan",
+                "label" => "",
+                "rules" => "required"
+            ),
+            array(
+                "field" => "volume",
+                "label" => "",
+                "rules" => "required"
+            ),
         );
         $this->form_validation->set_rules($config);
         if($this->form_validation->run()){
@@ -249,11 +289,17 @@ class Project extends CI_Controller{
             );
             $id_supplier = get1Value("mstr_supplier","id_submit_supplier",$where);
             $pengeluaran = $this->input->post("pengeluaran");
+            $tgl_pengeluaran = $this->input->post("tgl_pengeluaran");
+            $harga_satuan = $this->input->post("harga_satuan");
+            $volume = $this->input->post("volume");
             $this->load->model("m_belanja");
             $this->m_belanja->set_id_submit_belanja($id_belanja);
             $this->m_belanja->set_id_item($id_item);
             $this->m_belanja->set_id_supplier($id_supplier);
             $this->m_belanja->set_pengeluaran($pengeluaran);
+            $this->m_belanja->set_tgl_pengeluaran($tgl_pengeluaran);
+            $this->m_belanja->set_harga_satuan($harga_satuan);
+            $this->m_belanja->set_volume($volume);
             $this->m_belanja->update();
         }
         else{

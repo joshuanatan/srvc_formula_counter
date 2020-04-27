@@ -1,6 +1,6 @@
 <div class = "col-lg-12">
-    <h3><b><i><?php echo strtoupper($project[0]["prj_name"]);?></i></b> Daftar Pengeluaran</h3>
-    <button type = "button" class = "btn btn-primary btn-sm" onclick = "load_list_bahan();load_list_supplier()" data-toggle = "modal" data-target = "#tambah_pembayaran">Tambah Daftar Pengeluaran</button><br/><br/>
+    <h3><b><i><?php echo strtoupper($project[0]["prj_name"]);?></i></b> Daftar Pembayaran</h3>
+    <button type = "button" class = "btn btn-primary btn-sm" onclick = "load_list_bahan();load_list_supplier()" data-toggle = "modal" data-target = "#tambah_pembayaran">Tambah Daftar Pembayaran</button><br/><br/>
     <input type = "hidden" id = "id_proj" value = "<?php echo $project[0]["id_submit_project"];?>">
     <div class="col-xl-3 col-md-6" style="">
         <div class="card card-shadow" id="widgetLineareaOne">
@@ -9,7 +9,7 @@
                     <span class="float-left grey-700 font-size-30" id = "total_pengeluaran"></span>
                 </div>
                 <div class="mb-20 grey-500">
-                    Total Pengeluaran Belanja
+                    Total Pembayaran Belanja
                 </div>
             </div>
         </div>
@@ -18,8 +18,11 @@
         <thead>
             <tr>
                 <th class = "text-center" style = "font-weight:500">Nama Item</th>
+                <th class = "text-center" style = "font-weight:500">Volume</th>
+                <th class = "text-center" style = "font-weight:500">Harga Satuan</th>
+                <th class = "text-center" style = "font-weight:500">Pembayaran</th>
+                <th class = "text-center" style = "font-weight:500">Tanggal Pembayaran</th>
                 <th class = "text-center" style = "font-weight:500">Nama Supplier</th>
-                <th class = "text-center" style = "font-weight:500">Pengeluaran</th>
                 <th class = "text-center" style = "font-weight:500">Last Modified</th>
                 <th class = "text-center" style = "font-weight:500">Action</th>
             </tr>
@@ -50,13 +53,25 @@
                     </select>
                 </div>
                 <div class = "form-group">
+                    <h5>Volume</h5>
+                    <input type = "number" class = "form-control col-lg-3 col-sm-12" id = "volume">
+                </div>
+                <div class = "form-group">
+                    <h5>Harga Satuan</h5>
+                    <input type = "number" class = "form-control col-lg-3 col-sm-12" id = "harga_satuan">
+                </div>
+                <div class = "form-group">
+                    <h5>Pembayaran</h5>
+                    <input type = "text" class = "form-control" id = "pengeluaran">
+                </div>
+                <div class = "form-group">
+                    <h5>Tanggal Pembayaran</h5>
+                    <input type = "date" class = "form-control col-lg-3 col-sm-12" id = "tgl_pengeluaran">
+                </div>
+                <div class = "form-group">
                     <h5>Nama Supplier</h5>
                     <select class = "form-control" id = "supp_list" onchange = "toggle_supplier()">
                     </select>
-                </div>
-                <div class = "form-group">
-                    <h5>Pengeluaran</h5>
-                    <input type = "text" class = "form-control" id = "pengeluaran">
                 </div>
                 <hr/>
                 <div id = "supp_new_container">
@@ -105,15 +120,26 @@
                     </datalist>
                 </div>
                 <div class = "form-group">
+                    <h5>Volume</h5>
+                    <input type = "number" class = "form-control col-lg-3 col-sm-12" id = "volume_edit">
+                </div>
+                <div class = "form-group">
+                    <h5>Harga Satuan</h5>
+                    <input type = "number" class = "form-control col-lg-3 col-sm-12" id = "harga_satuan_edit">
+                </div>
+                <div class = "form-group">
+                    <h5>Pembayaran</h5>
+                    <input type = "text" class = "form-control" id = "pengeluaran_edit">
+                </div>
+                <div class = "form-group">
+                    <h5>Tanggal Pembayaran</h5>
+                    <input type = "date" class = "form-control col-lg-3 col-sm-12" id = "tgl_pengeluaran_edit">
+                </div>
+                <div class = "form-group">
                     <h5>Nama Supplier</h5>
-                    
                     <input type = "text" class = "form-control" list = "supp_list_edit" id = "nama_supp_edit">
                     <datalist id = "supp_list_edit">
                     </datalist>
-                </div>
-                <div class = "form-group">
-                    <h5>Pengeluaran</h5>
-                    <input type = "text" class = "form-control" id = "pengeluaran_edit">
                 </div>
                 <hr/>
                 <div class = "form-group">
@@ -140,6 +166,14 @@
                         <td id = "nama_item_delete"></td>
                     </tr>
                     <tr>
+                        <td>Volume</td>
+                        <td id = "volume_delete"></td>
+                    </tr>
+                    <tr>
+                        <td>Harga Satuan</td>
+                        <td id = "harga_satuan_delete"></td>
+                    </tr>
+                    <tr>
                         <td>Nama Supplier</td>
                         <td id = "nama_supp_delete"></td>
                     </tr>
@@ -147,6 +181,11 @@
                         <td>Pembayaran</td>
                         <td id = "pembayaran_delete"></td>
                     </tr>
+                    <tr>
+                        <td>Tanggal Pembayaran</td>
+                        <td id = "tgl_pembayaran_delete"></td>
+                    </tr>
+                    
                 </table>
                 <div class = "row">
                     <button type = "button" class = "btn btn-sm btn-primary col-lg-3 col-sm-12 offset-lg-3" data-dismiss = "modal">Cancel</button>
@@ -171,8 +210,11 @@
                     html += "<tr>";
                     html += "<input type = 'hidden' id = 'id_belanja"+a+"' value = '"+respond["content"][a]["id_belanja"]+"'>";
                     html += "<td class = 'align-middle text-center' id = 'text_item"+a+"'><input type = 'hidden' id = 'id_item"+a+"' value = '"+respond["content"][a]["id_item"]+"'>"+respond["content"][a]["item"]+"</td>";
-                    html += "<td class = 'align-middle text-center' id = 'text_supplier"+a+"'><input type = 'hidden' id = 'id_supplier"+a+"' value = '"+respond["content"][a]["id_supplier"]+"'>"+respond["content"][a]["supplier"]+"</td>";
+                    html += "<td class = 'align-middle text-center' id = 'text_volume"+a+"'><input type = 'hidden' id = 'volume"+a+"' value = '"+respond["content"][a]["volume"]+"'>"+respond["content"][a]["volume"]+"</td>";
+                    html += "<td class = 'align-middle text-center' id = 'text_harga_satuan"+a+"'><input type = 'hidden' id = 'harga_satuan"+a+"' value = '"+respond["content"][a]["harga_satuan"]+"'>"+respond["content"][a]["harga_satuan"]+"</td>";
                     html += "<td class = 'align-middle text-center' id = 'text_pengeluaran"+a+"'><input type = 'hidden' id = 'id_pengeluaran"+a+"' value = '"+respond["content"][a]["pengeluaran"]+"'>"+respond["content"][a]["pengeluaran"]+"</td>";
+                    html += "<td class = 'align-middle text-center' id = 'text_tgl_pengeluaran"+a+"'><input type = 'hidden' id = 'tgl_pengeluaran"+a+"' value = '"+respond["content"][a]["tgl_pengeluaran"]+"'>"+respond["content"][a]["tgl_pengeluaran"]+"</td>";
+                    html += "<td class = 'align-middle text-center' id = 'text_supplier"+a+"'><input type = 'hidden' id = 'id_supplier"+a+"' value = '"+respond["content"][a]["id_supplier"]+"'>"+respond["content"][a]["supplier"]+"</td>";
                     html += "<td class = 'align-middle text-center'>"+respond["content"][a]["last_modified"]+"</td>";
                     html += "<td class = 'align-middle text-center'><i onclick = 'load_list_bahan_edit();load_list_supplier_edit();load_edit_content("+a+")' data-toggle = 'modal' data-target = '#ubah_pembayaran' style = 'cursor:pointer;font-size:large' class = 'text-primary md-edit'></i> | <i onclick = 'load_delete_content("+a+")'data-toggle = 'modal' data-target = '#hapus_pembayaran' style = 'cursor:pointer;font-size:large' class = 'text-danger md-delete'></i></td>";
                 html += "</tr>";
@@ -274,22 +316,34 @@
         var supplier = $("#text_supplier"+row).text();
         var pengeluaran = $("#id_pengeluaran"+row).val();
         var id_belanja = $("#id_belanja"+row).val();
+        var tgl_pengeluaran = $("#tgl_pengeluaran"+row).val();
+        var harga_satuan = $("#harga_satuan"+row).val();
+        var volume = $("#volume"+row).val();
 
         $("#nama_item_edit").val(item);
         $("#nama_supp_edit").val(supplier);
         $("#pengeluaran_edit").val(pengeluaran);
         $("#id_belanja_edit").val(id_belanja);
+        $("#tgl_pengeluaran_edit").val(tgl_pengeluaran);
+        $("#harga_satuan_edit").val(harga_satuan);
+        $("#volume_edit").val(volume);
     }
     function load_delete_content(row){
         var id_pembayaran_delete = $("#id_belanja"+row).val();
         var nama_item_delete = $("#text_item"+row).text();
         var nama_supp_delete = $("#text_supplier"+row).text();
         var pembayaran_delete = $("#id_pengeluaran"+row).val();
+        var tgl_pembayaran_delete = $("#tgl_pengeluaran"+row).val();
+        var harga_satuan_delete = $("#harga_satuan"+row).val();
+        var volume_delete = $("#volume"+row).val();
 
         $("#id_pembayaran_delete").val(id_pembayaran_delete);
         $("#nama_item_delete").text(nama_item_delete);
         $("#nama_supp_delete").text(nama_supp_delete);
         $("#pembayaran_delete").text(pembayaran_delete);
+        $("#tgl_pembayaran_delete").text(tgl_pembayaran_delete);
+        $("#harga_satuan_delete").text(harga_satuan_delete);
+        $("#volume_delete").text(volume_delete);
     }
     function toggle_supplier(){
         var supp_id = $("#supp_list").val();
@@ -330,6 +384,9 @@
         var nama_supp = "";
         var nama_item = $("#attr_list option:selected").text();
         var pengeluaran = $("#pengeluaran").val();
+        var tgl_pengeluaran = $("#tgl_pengeluaran").val();
+        var harga_satuan = $("#harga_satuan").val();
+        var volume = $("#volume").val();
         if(parseInt(id_supplier) == 0){
             id_supplier = register_new_supp();
             nama_supp = $("#nama_supp_add").val();
@@ -346,7 +403,10 @@
                 id_project:id_project,
                 id_item:id_item,
                 id_supplier:id_supplier,
-                pengeluaran:pengeluaran
+                pengeluaran:pengeluaran,
+                tgl_pengeluaran:tgl_pengeluaran,
+                harga_satuan:harga_satuan,
+                volume:volume
             },
             success:function(respond){
                 if(respond["status"] == "SUCCESS"){
@@ -362,6 +422,9 @@
         var nama_item = $("#nama_item_edit").val();
         var nama_supp = $("#nama_supp_edit").val();
         var pengeluaran = $("#pengeluaran_edit").val();
+        var tgl_pengeluaran = $("#tgl_pengeluaran_edit").val();
+        var harga_satuan = $("#harga_satuan_edit").val();
+        var volume = $("#volume_edit").val();
         $.ajax({
             url:"<?php echo base_url();?>ws/project/update_belanja",
             type:"POST",
@@ -370,7 +433,10 @@
                 id_belanja:id_belanja,
                 nama_item:nama_item,
                 nama_supp:nama_supp,
-                pengeluaran:pengeluaran
+                pengeluaran:pengeluaran,
+                tgl_pengeluaran:tgl_pengeluaran,
+                harga_satuan:harga_satuan,
+                volume:volume
             },
             success:function(respond){
                 $("#ubah_pembayaran").modal("hide");
